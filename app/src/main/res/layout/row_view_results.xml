@@ -3,4 +3,135 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_margin="12dp"
+        android:background="@drawable/fixtures_background"
+        android:layout_height="wrap_content"/>
+
+
+    <RelativeLayout
+        android:layout_marginTop="8dp"
+        android:padding="16dp"
+        android:background="@drawable/fixtures_background"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/tv_TimeOfFixture"
+            android:layout_centerHorizontal="true"
+            android:text="Premier League"
+            android:layout_marginTop="1dp"
+            android:fontFamily="@font/poppins_regular"
+            android:textSize="14sp"
+            android:textColor="@color/yellow_main"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+        <TextView
+            android:id="@+id/date_of_Fixture"
+            android:layout_below="@id/tv_TimeOfFixture"
+            android:layout_centerHorizontal="true"
+            android:text="Jul 25"
+            android:layout_marginTop="5dp"
+            android:fontFamily="@font/poppins_light"
+            android:textSize="12sp"
+            android:textColor="@color/white"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+        <TextView
+            android:id="@+id/score"
+            android:layout_below="@id/date_of_Fixture"
+            android:layout_centerHorizontal="true"
+            android:text="3 : 0"
+            android:layout_marginTop="5dp"
+            android:fontFamily="@font/poppins_bold"
+            android:textSize="30sp"
+            android:textColor="@color/white"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+        <TextView
+            android:id="@+id/location"
+            android:layout_below="@id/date_of_Fixture"
+            android:layout_centerHorizontal="true"
+            android:text="Emirate Stadium London"
+            android:fontFamily="@font/poppins_regular"
+            android:textSize="12sp"
+            android:textColor="@color/white"
+            android:layout_marginTop="85dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+
+        <ImageView
+            android:id="@+id/ivHomeIcon"
+            android:layout_width="50dp"
+            android:layout_height="54dp"
+            android:layout_marginLeft="40dp"
+            android:layout_marginTop="40dp"
+            android:src="@drawable/iv_barcelona" />
+
+        <TextView
+            android:layout_marginTop="1dp"
+            android:id="@+id/home_team"
+            android:text="BARCELONA"
+            android:fontFamily="@font/poppins_semi_bold"
+            android:textSize="12sp"
+            android:textColor="@color/white"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="25dp"
+            android:layout_below="@+id/ivHomeIcon"/>
+
+        <TextView
+            android:id="@+id/Home"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/home_team"
+            android:layout_marginTop="1dp"
+            android:layout_marginLeft="48dp"
+            android:fontFamily="@font/poppins_light"
+            android:text="Home"
+            android:textColor="@color/white"
+            android:textSize="10sp" />
+
+
+        <ImageView
+            android:id="@+id/AwayIcon"
+            android:src="@drawable/iv_real_madrid"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginLeft="285dp"
+            android:layout_marginTop="40dp"/>
+
+        <TextView
+            android:id="@+id/away_team"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/AwayIcon"
+            android:layout_marginTop="3dp"
+            android:layout_marginLeft="270dp"
+            android:fontFamily="@font/poppins_semi_bold"
+            android:text="REAL MADRID"
+            android:textColor="@color/white"
+            android:textSize="12sp" />
+
+        <TextView
+            android:id="@+id/Away"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/away_team"
+            android:layout_marginTop="1dp"
+            android:layout_marginLeft="295dp"
+            android:fontFamily="@font/poppins_light"
+            android:text="Away"
+            android:textColor="@color/white"
+            android:textSize="10sp" />
+
+
+    </RelativeLayout>
+
+
+
 </androidx.cardview.widget.CardView>
