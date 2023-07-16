@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "829308165235",
+    "project_id": "futtalk-795b7",
+    "storage_bucket": "futtalk-795b7.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:829308165235:android:0ee7cef01159abff7a1e06",
+        "android_client_info": {
+          "package_name": "com.app.futtalk"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "829308165235-k1ahfle4oaqrrbctllua9aat2f69a8uj.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCNNh8lVyue9-mIWOqqfM4R0EwpdVNv62s"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "829308165235-k1ahfle4oaqrrbctllua9aat2f69a8uj.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

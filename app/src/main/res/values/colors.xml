@@ -7,4 +7,5 @@
     <color name="light_grey">#707070</color>
     <color name="yellow_main">#EFFF76</color>
     <color name="grey_main">#313131</color>
+    <color name="grey_secondary">#393939</color>
 </resources>
