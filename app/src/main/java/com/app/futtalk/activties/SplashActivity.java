@@ -1,4 +1,4 @@
-package com.app.futtalk;
+package com.app.futtalk.activties;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -6,6 +6,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.WindowManager;
+
+import com.app.futtalk.R;
+import com.google.firebase.auth.FirebaseAuth;
 
 public class SplashActivity extends AppCompatActivity {
 
@@ -20,8 +23,16 @@ public class SplashActivity extends AppCompatActivity {
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                Intent intent = new Intent(SplashActivity.this, LoginActivity.class);
-                startActivity(intent);
+                if (FirebaseAuth.getInstance().getCurrentUser() != null) {
+                    // The user is logged in already
+                    Intent intent = new Intent(SplashActivity.this, MainActivity.class);
+                    startActivity(intent);
+                } else {
+                    // The user isn't logged in
+                    Intent intent = new Intent(SplashActivity.this, LoginActivity.class);
+                    startActivity(intent);
+                }
+
                 finish();
                 // printToastMessage("After 3 seconds we moved to next screen");
             }

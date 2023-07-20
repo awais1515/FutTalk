@@ -1,4 +1,4 @@
-package com.app.futtalk;
+package com.app.futtalk.models;
 
 public class User {
 

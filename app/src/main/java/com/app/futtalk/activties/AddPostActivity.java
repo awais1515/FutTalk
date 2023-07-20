@@ -1,8 +1,10 @@
-package com.app.futtalk;
+package com.app.futtalk.activties;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+
+import com.app.futtalk.R;
 
 public class AddPostActivity extends AppCompatActivity {
 

@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".AddPostActivity"
+    tools:context=".activties.AddPostActivity"
     android:background="@color/black">
 
 <RelativeLayout
@@ -22,7 +22,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Live Feed"
-        android:fontFamily="@font/poppins_bolditalic"
+        android:fontFamily="@font/poppins_bold_italic"
         android:textSize="16sp"
         android:textColor="@color/white"
         android:layout_toRightOf="@+id/tv_LiveFeed"

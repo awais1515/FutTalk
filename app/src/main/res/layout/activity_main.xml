@@ -11,7 +11,7 @@
         android:layout_height="wrap_content"
         android:clipToPadding="true"
         android:background="@android:color/white"
-        android:padding="20dp"
+        android:padding="10dp"
         android:backgroundTint="@color/black"
         >
 
@@ -26,32 +26,26 @@
                 android:layout_height="wrap_content"
                 android:text="Home"
                 android:layout_centerVertical="true"
-                android:fontFamily="@font/poppins_bolditalic"
-                android:textSize="16sp"
+                android:fontFamily="@font/poppins_bold_italic"
+                android:textSize="15sp"
                 android:textColor="@color/white"
                 android:layout_centerHorizontal="true"
                 />
 
             <ImageButton
                 android:layout_centerVertical="true"
-                android:layout_width="20dp"
-                android:layout_height="18dp"
-                android:id="@+id/menuButton"
+                android:layout_width="16dp"
+                android:layout_height="16dp"
+                android:id="@+id/btnMenu"
                 android:background="@drawable/ic_menu"
                 />
-
-
-
-
-
-
 
         </RelativeLayout>
 
 
         <FrameLayout
-            android:layout_marginTop="16dp"
-            android:layout_marginBottom="16dp"
+            android:layout_marginTop="12dp"
+            android:layout_marginBottom="12dp"
             android:id="@+id/content"
             android:layout_below="@id/rl_top_bar"
             android:layout_above="@id/bottomNavigation"
@@ -67,7 +61,7 @@
             android:layout_width="match_parent"
             app:menu="@menu/main"
             android:layout_height="wrap_content"
-            android:background="black"
+            android:background="@color/black"
             app:itemIconTint="@color/white"
             app:itemTextColor="@color/white"/>
 
