@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/item_home"
+        android:title="Home"
+        android:icon="@drawable/ic_home"/>
+    <item
+        android:id="@+id/item_teams"
+        android:title="Teams"
+        android:icon="@drawable/ic_teams"/>
+    <item
+        android:id="@+id/item_fixtures"
+        android:title="Fixtures"
+        android:icon="@drawable/ic_fixtures"/>
+
+    <item
+        android:id="@+id/item_results"
+        android:title="Results"
+        android:icon="@drawable/ic_results"/>
+
+
+</menu>
