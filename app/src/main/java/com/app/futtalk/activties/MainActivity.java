@@ -1,28 +1,55 @@
 package com.app.futtalk.activties;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.Manifest;
+import android.app.Activity;
+import android.app.ProgressDialog;
+import android.content.Context;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.app.futtalk.R;
 import com.app.futtalk.fragments.FixturesFragment;
 import com.app.futtalk.fragments.HomeFragment;
 import com.app.futtalk.fragments.ResultsFragment;
 import com.app.futtalk.fragments.TeamsFragment;
+import com.bumptech.glide.Glide;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 public class MainActivity extends AppCompatActivity {
 
+    Context context;
     DrawerLayout drawerLayout;
     ActionBarDrawerToggle actionBarDrawerToggle;
     ImageView btnMenu;
@@ -31,6 +58,12 @@ public class MainActivity extends AppCompatActivity {
     TeamsFragment teamsFragment;
     FixturesFragment fixturesFragment;
     BottomNavigationView bottomNavigationView;
+
+
+
+    private ActivityResultLauncher<Intent> galleryImageResultListener;
+    private Uri imageFilePath;
+    CircleImageView ivProfilePic;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -79,6 +112,31 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
+
+        galleryImageResultListener = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
+            @Override
+            public void onActivityResult(ActivityResult result) {
+                if (result.getData() != null){
+                    imageFilePath= result.getData().getData();
+                    Glide.with(context)
+                            .load(imageFilePath)
+                            .centerCrop()
+                            .into(ivProfilePic);
+
+                    uploadPictureonFirebase();
+                }
+            }
+        }{
+
+        }
+        ivProfilePic.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (hasGalleryPermissions(MainActivity.this)){
+                    getImageFromGallery(galleryImageResultListener)
+                }
+            }
+        });
     }
 
     private void loadFragment(Fragment fragment) {
@@ -92,4 +150,73 @@ public class MainActivity extends AppCompatActivity {
         drawerLayout.addDrawerListener(actionBarDrawerToggle);
         actionBarDrawerToggle.syncState();
     }
+
+    protected void getImageFromGallery(ActivityResultLauncher<Intent>getImageUriFromGallery){
+        Intent intentGallery = new Intent(Intent.ACTION_PICK);
+        intentGallery.setType("image/*");
+        getImageUriFromGallery.launch((intentGallery));
+
+    }
+public static boolean hasGalleryPermissions(Activity activity){
+        if(Build.VERSION.SDK_INT>= Build.VERSION_CODES.TIRAMISU){
+            if (activity.checkSelfPermission(android.Manifest.permission.READ_MEDIA_IMAGES) == PackageManager.PERMISSION_GRANTED) {
+                return true;
+            } else {
+                // Ask for Permission
+                ActivityCompat.requestPermissions(activity, new String[]{android.Manifest.permission.READ_MEDIA_IMAGES}, 1);
+                return false;
+            }
+        } else {
+            if (activity.checkSelfPermission(android.Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
+                return true;
+            } else {
+                // Ask for Permission
+                ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 1);
+                return false;
+            }
+        }
+
+}
+private void uploadPictureonFirebase(){
+    ProgressDialog progressDialog= new ProgressDialog(context);
+    progressDialog.setCancelable(false);
+    progressDialog.setMessage("Uploading Picture...");
+    progressDialog.show();
+    FirebaseStorage firebaseStorage= FirebaseStorage.getInstance();
+    StorageReference storageReference= firebaseStorage.getReference("ProfilePicture").child(CURRENT_USER.getId());
+    storageReference.putFile(imageFilePath).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
+        @Override
+        public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
+            if (task.isSuccessful()) {
+                storageReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                    @Override
+                    public void onSuccess(Uri uri) {
+                        String URL = uri.toString();
+                        CURRENT_USER.setProfileUrl(URL);
+                        FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
+                        DatabaseReference databaseReference = firebaseDatabase.getReference("users").child(CURRENT_USER.getId());
+                        databaseReference.setValue(CURRENT_USER).addOnCompleteListener(new OnCompleteListener<Void>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Void> task) {
+                                if (task.isSuccessful()) {
+                                    printToastMessage("Profile picture updated successfully");
+                                    progressDialog.dismiss();
+                                } else {
+                                    printToastMessage("Failed to upload profile picture");
+                                    progressDialog.dismiss();
+                                }
+                            }
+                        });
+        }
+
+    }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+
+                    }
+                });
+            }else{
+                progressDialog.dismiss();
+                Toast.makeText(context, "Failed to upload the image", Toast.LENGTH_SHORT).show();
+            }
 }

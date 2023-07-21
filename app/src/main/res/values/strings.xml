@@ -11,5 +11,6 @@
     <string name="live_matches">Live Matches</string>
     <string name="upcoming_matches">Upcoming Matches</string>
     <string name="view_all">view all</string>
+    <string name="About_Me_txt">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</string>
 
 </resources>
