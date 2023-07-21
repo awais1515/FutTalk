@@ -1,12 +1,13 @@
 package com.app.futtalk.activties;
 
+import static com.app.futtalk.utils.FirebaseUtils.CURRENT_USER;
+
 import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
@@ -21,10 +22,11 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.app.futtalk.R;
@@ -32,6 +34,7 @@ import com.app.futtalk.fragments.FixturesFragment;
 import com.app.futtalk.fragments.HomeFragment;
 import com.app.futtalk.fragments.ResultsFragment;
 import com.app.futtalk.fragments.TeamsFragment;
+import com.app.futtalk.models.User;
 import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -39,15 +42,19 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends BaseActivity {
 
     Context context;
     DrawerLayout drawerLayout;
@@ -58,30 +65,59 @@ public class MainActivity extends AppCompatActivity {
     TeamsFragment teamsFragment;
     FixturesFragment fixturesFragment;
     BottomNavigationView bottomNavigationView;
-
-
-
+    CircleImageView ivProfilePic;
+    Button btnViewProfile;
     private ActivityResultLauncher<Intent> galleryImageResultListener;
     private Uri imageFilePath;
-    CircleImageView ivProfilePic;
+    private TextView tvName;
+    private TextView tvEmail;
+
+    public static boolean hasGalleryPermissions(Activity activity) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            if (activity.checkSelfPermission(android.Manifest.permission.READ_MEDIA_IMAGES) == PackageManager.PERMISSION_GRANTED) {
+                return true;
+            } else {
+                // Ask for Permission
+                ActivityCompat.requestPermissions(activity, new String[]{android.Manifest.permission.READ_MEDIA_IMAGES}, 1);
+                return false;
+            }
+        } else {
+            if (activity.checkSelfPermission(android.Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
+                return true;
+            } else {
+                // Ask for Permission
+                ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 1);
+                return false;
+            }
+        }
+
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         init();
+        getCurrentUserData();
         setListeners();
         setupDrawer();
     }
 
     private void init() {
+        context = this;
         drawerLayout = findViewById(R.id.drawer_layout);
         btnMenu = findViewById(R.id.btnMenu);
         bottomNavigationView = findViewById(R.id.bottomNavigation);
+        tvName = findViewById(R.id.tvName);
+        tvEmail = findViewById(R.id.tvEmail);
+        ivProfilePic = findViewById(R.id.ivProfilePic);
+        btnViewProfile = findViewById(R.id.btnViewProfile);
         homeFragment = new HomeFragment();
         resultsFragment = new ResultsFragment();
         teamsFragment = new TeamsFragment();
         fixturesFragment = new FixturesFragment();
         loadFragment(homeFragment);
+
     }
 
     private void setListeners() {
@@ -89,6 +125,15 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 drawerLayout.open();
+            }
+        });
+
+        btnViewProfile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(context, ProfileViewActivity.class);
+                startActivity(intent);
+                drawerLayout.close();
             }
         });
 
@@ -114,26 +159,25 @@ public class MainActivity extends AppCompatActivity {
         });
 
         galleryImageResultListener = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
-            @Override
-            public void onActivityResult(ActivityResult result) {
-                if (result.getData() != null){
-                    imageFilePath= result.getData().getData();
-                    Glide.with(context)
-                            .load(imageFilePath)
-                            .centerCrop()
-                            .into(ivProfilePic);
+                    @Override
+                    public void onActivityResult(ActivityResult result) {
+                        if (result.getData() != null) {
+                            imageFilePath = result.getData().getData();
+                            Glide.with(context)
+                                    .load(imageFilePath)
+                                    .centerCrop()
+                                    .into(ivProfilePic);
 
-                    uploadPictureonFirebase();
-                }
-            }
-        }{
+                            uploadPictureonFirebase();
+                        }
+                    }
+                });
 
-        }
         ivProfilePic.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (hasGalleryPermissions(MainActivity.this)){
-                    getImageFromGallery(galleryImageResultListener)
+                if (hasGalleryPermissions(MainActivity.this)) {
+                    getImageFromGallery(galleryImageResultListener);
                 }
             }
         });
@@ -151,72 +195,90 @@ public class MainActivity extends AppCompatActivity {
         actionBarDrawerToggle.syncState();
     }
 
-    protected void getImageFromGallery(ActivityResultLauncher<Intent>getImageUriFromGallery){
+    protected void getImageFromGallery(ActivityResultLauncher<Intent> getImageUriFromGallery) {
         Intent intentGallery = new Intent(Intent.ACTION_PICK);
         intentGallery.setType("image/*");
         getImageUriFromGallery.launch((intentGallery));
 
     }
-public static boolean hasGalleryPermissions(Activity activity){
-        if(Build.VERSION.SDK_INT>= Build.VERSION_CODES.TIRAMISU){
-            if (activity.checkSelfPermission(android.Manifest.permission.READ_MEDIA_IMAGES) == PackageManager.PERMISSION_GRANTED) {
-                return true;
-            } else {
-                // Ask for Permission
-                ActivityCompat.requestPermissions(activity, new String[]{android.Manifest.permission.READ_MEDIA_IMAGES}, 1);
-                return false;
-            }
-        } else {
-            if (activity.checkSelfPermission(android.Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
-                return true;
-            } else {
-                // Ask for Permission
-                ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 1);
-                return false;
-            }
-        }
 
-}
-private void uploadPictureonFirebase(){
-    ProgressDialog progressDialog= new ProgressDialog(context);
-    progressDialog.setCancelable(false);
-    progressDialog.setMessage("Uploading Picture...");
-    progressDialog.show();
-    FirebaseStorage firebaseStorage= FirebaseStorage.getInstance();
-    StorageReference storageReference= firebaseStorage.getReference("ProfilePicture").child(CURRENT_USER.getId());
-    storageReference.putFile(imageFilePath).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
-        @Override
-        public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
-            if (task.isSuccessful()) {
-                storageReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                    @Override
-                    public void onSuccess(Uri uri) {
-                        String URL = uri.toString();
-                        CURRENT_USER.setProfileUrl(URL);
-                        FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
-                        DatabaseReference databaseReference = firebaseDatabase.getReference("users").child(CURRENT_USER.getId());
-                        databaseReference.setValue(CURRENT_USER).addOnCompleteListener(new OnCompleteListener<Void>() {
-                            @Override
-                            public void onComplete(@NonNull Task<Void> task) {
-                                if (task.isSuccessful()) {
-                                    printToastMessage("Profile picture updated successfully");
-                                    progressDialog.dismiss();
-                                } else {
-                                    printToastMessage("Failed to upload profile picture");
-                                    progressDialog.dismiss();
+    private void uploadPictureonFirebase() {
+        ProgressDialog progressDialog = new ProgressDialog(context);
+        progressDialog.setCancelable(false);
+        progressDialog.setMessage("Uploading Picture...");
+        progressDialog.show();
+        FirebaseStorage firebaseStorage = FirebaseStorage.getInstance();
+        StorageReference storageReference = firebaseStorage.getReference("ProfilePicture").child(CURRENT_USER.getId());
+        storageReference.putFile(imageFilePath).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
+                if (task.isSuccessful()) {
+                    storageReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                        @Override
+                        public void onSuccess(Uri uri) {
+                            String URL = uri.toString();
+                            CURRENT_USER.setProfileUrl(URL);
+                            FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
+                            DatabaseReference databaseReference = firebaseDatabase.getReference("users").child(CURRENT_USER.getId());
+                            databaseReference.setValue(CURRENT_USER).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                @Override
+                                public void onComplete(@NonNull Task<Void> task) {
+                                    if (task.isSuccessful()) {
+                                        printToastMessage("Profile picture updated successfully");
+                                        progressDialog.dismiss();
+                                    } else {
+                                        printToastMessage("Failed to upload profile picture");
+                                        progressDialog.dismiss();
+                                    }
                                 }
-                            }
-                        });
-        }
+                            });
+                        }
 
-    }).addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
+                    }).addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
 
-                    }
-                });
-            }else{
-                progressDialog.dismiss();
-                Toast.makeText(context, "Failed to upload the image", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                } else {
+                    progressDialog.dismiss();
+                    Toast.makeText(context, "Failed to upload the image", Toast.LENGTH_SHORT).show();
+                }
             }
+        });
+    }
+
+    private void getCurrentUserData() {
+        ProgressDialog progressDialog = new ProgressDialog(context);
+        progressDialog.setCancelable(false);
+        progressDialog.setMessage("Loading...");
+        progressDialog.show();
+        final FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference ref = database.getReference("users").child(FirebaseAuth.getInstance().getUid());
+        ref.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                CURRENT_USER = snapshot.getValue(User.class);
+                tvName.setText(CURRENT_USER.getName());
+                tvEmail.setText(CURRENT_USER.getEmail());
+
+                if (CURRENT_USER.getProfileUrl() != null) {
+                    if (!CURRENT_USER.getProfileUrl().isEmpty()) {
+                        Glide.with(context)
+                                .load(CURRENT_USER.getProfileUrl())
+                                .centerCrop()
+                                .into(ivProfilePic);
+                    }
+
+                }
+                progressDialog.dismiss();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                printToastMessage(error.getMessage());
+                progressDialog.dismiss();
+            }
+        });
+    }
 }

@@ -6,7 +6,7 @@ import android.os.Bundle;
 
 import com.app.futtalk.R;
 
-public class AddPostActivity extends AppCompatActivity {
+public class AddPostActivity extends BaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

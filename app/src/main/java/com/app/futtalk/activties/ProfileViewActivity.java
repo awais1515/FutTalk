@@ -6,7 +6,7 @@ import android.os.Bundle;
 
 import com.app.futtalk.R;
 
-public class ViewProfile extends AppCompatActivity {
+public class ProfileViewActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

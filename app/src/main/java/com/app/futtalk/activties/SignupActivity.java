@@ -21,7 +21,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
-public class SignupActivity extends AppCompatActivity {
+public class SignupActivity extends BaseActivity {
 
     // Todo implement all the signup screen activity and user our EasyTodo App as a reference
     Context context;
@@ -151,8 +151,5 @@ public class SignupActivity extends AppCompatActivity {
                         }
                     }
                 });
-    }
-    private void printToastMessage(String message){
-        Toast.makeText(this, message, Toast.LENGTH_LONG).show();
     }
 }

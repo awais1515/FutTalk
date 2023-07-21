@@ -29,7 +29,7 @@ import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
-public class LoginActivity extends AppCompatActivity {
+public class LoginActivity extends BaseActivity {
 
     Button btnCreateAccount;
     Button btnLogin;
@@ -207,9 +207,7 @@ mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(this, ne
             }
         }
     }
-    private void printToastMessage(String message) {
-        Toast.makeText(this, message, Toast.LENGTH_LONG).show();
-    }
+
 
     private void printLogMessage(String message){Log.d("ToastMessage", message);
     }

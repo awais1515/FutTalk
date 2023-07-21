@@ -18,7 +18,7 @@
         android:layout_height="wrap_content">
 
         <TextView
-            android:id="@+id/tv_TimeOfFixture"
+            android:id="@+id/tvLeagueName"
             android:layout_centerHorizontal="true"
             android:text="Premier League"
             android:layout_marginTop="1dp"
@@ -28,8 +28,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
         <TextView
-            android:id="@+id/date_of_Fixture"
-            android:layout_below="@id/tv_TimeOfFixture"
+            android:id="@+id/tvDateOfFixture"
+            android:layout_below="@id/tvLeagueName"
             android:layout_centerHorizontal="true"
             android:text="Jul 25"
             android:layout_marginTop="5dp"
@@ -40,8 +40,8 @@
             android:layout_height="wrap_content"/>
 
         <TextView
-            android:id="@+id/score"
-            android:layout_below="@id/date_of_Fixture"
+            android:id="@+id/tvScore"
+            android:layout_below="@id/tvDateOfFixture"
             android:layout_centerHorizontal="true"
             android:text="3 : 0"
             android:layout_marginTop="5dp"
@@ -52,8 +52,8 @@
             android:layout_height="wrap_content"/>
 
         <TextView
-            android:id="@+id/location"
-            android:layout_below="@id/date_of_Fixture"
+            android:id="@+id/tvVenueName"
+            android:layout_below="@id/tvDateOfFixture"
             android:layout_centerHorizontal="true"
             android:text="Emirate Stadium London"
             android:fontFamily="@font/poppins_regular"
@@ -74,7 +74,7 @@
 
         <TextView
             android:layout_marginTop="1dp"
-            android:id="@+id/home_team"
+            android:id="@+id/tvHomeTeamName"
             android:text="BARCELONA"
             android:fontFamily="@font/poppins_semi_bold"
             android:textSize="12sp"
@@ -88,7 +88,7 @@
             android:id="@+id/Home"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/home_team"
+            android:layout_below="@+id/tvHomeTeamName"
             android:layout_marginTop="1dp"
             android:layout_marginLeft="48dp"
             android:fontFamily="@font/poppins_light"
@@ -98,7 +98,7 @@
 
 
         <ImageView
-            android:id="@+id/AwayIcon"
+            android:id="@+id/ivAwayIcon"
             android:src="@drawable/iv_real_madrid"
             android:layout_width="50dp"
             android:layout_height="50dp"
@@ -106,10 +106,10 @@
             android:layout_marginTop="40dp"/>
 
         <TextView
-            android:id="@+id/away_team"
+            android:id="@+id/tvAwayTeamName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/AwayIcon"
+            android:layout_below="@+id/ivAwayIcon"
             android:layout_marginTop="3dp"
             android:layout_marginLeft="270dp"
             android:fontFamily="@font/poppins_semi_bold"
@@ -121,7 +121,7 @@
             android:id="@+id/Away"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/away_team"
+            android:layout_below="@+id/tvAwayTeamName"
             android:layout_marginTop="1dp"
             android:layout_marginLeft="295dp"
             android:fontFamily="@font/poppins_light"

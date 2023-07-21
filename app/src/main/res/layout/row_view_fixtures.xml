@@ -15,7 +15,7 @@
         android:layout_height="wrap_content">
 
         <TextView
-            android:id="@+id/tv_TimeOfFixture"
+            android:id="@+id/tvLeagueName"
             android:layout_centerHorizontal="true"
             android:text="07:30"
             android:layout_marginTop="5dp"
@@ -25,8 +25,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
         <TextView
-            android:id="@+id/date_of_Fixture"
-            android:layout_below="@id/tv_TimeOfFixture"
+            android:id="@+id/tvDateOfFixture"
+            android:layout_below="@id/tvLeagueName"
             android:layout_centerHorizontal="true"
             android:text="Jul 25"
             android:layout_marginTop="5dp"
@@ -37,8 +37,8 @@
             android:layout_height="wrap_content"/>
 
         <TextView
-            android:id="@+id/location"
-            android:layout_below="@id/date_of_Fixture"
+            android:id="@+id/tvVenueName"
+            android:layout_below="@id/tvDateOfFixture"
             android:layout_centerHorizontal="true"
             android:text="Emirate Stadium London"
             android:fontFamily="@font/poppins_regular"
@@ -50,7 +50,7 @@
 
         <TextView
             android:layout_marginTop="14dp"
-            android:id="@+id/home_team"
+            android:id="@+id/tvHomeTeamName"
             android:text="BARCELONA"
             android:fontFamily="@font/poppins_semi_bold"
             android:textSize="12sp"
@@ -62,7 +62,7 @@
 
         <ImageView
             android:id="@+id/ivHomeIcon"
-            android:layout_toRightOf="@+id/home_team"
+            android:layout_toRightOf="@+id/tvHomeTeamName"
             android:src="@drawable/iv_barcelona"
             android:layout_width="50dp"
             android:layout_height="50dp"
@@ -71,7 +71,7 @@
 
         <TextView
             android:layout_marginTop="14dp"
-            android:id="@+id/away_team"
+            android:id="@+id/tvAwayTeamName"
             android:text="REAL MADRID"
             android:fontFamily="@font/poppins_semi_bold"
             android:textSize="12sp"
@@ -83,8 +83,8 @@
             android:layout_height="wrap_content"/>
 
         <ImageView
-            android:id="@+id/AwayIcon"
-            android:layout_toLeftOf="@+id/away_team"
+            android:id="@+id/ivAwayIcon"
+            android:layout_toLeftOf="@+id/tvAwayTeamName"
             android:src="@drawable/iv_real_madrid"
             android:layout_width="50dp"
             android:layout_height="50dp"
