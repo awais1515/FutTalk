@@ -25,6 +25,7 @@ import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -60,6 +61,8 @@ public class MainActivity extends BaseActivity {
     DrawerLayout drawerLayout;
     ActionBarDrawerToggle actionBarDrawerToggle;
     ImageView btnMenu;
+
+    TextView tvLogout;
     HomeFragment homeFragment;
     ResultsFragment resultsFragment;
     TeamsFragment teamsFragment;
@@ -67,6 +70,7 @@ public class MainActivity extends BaseActivity {
     BottomNavigationView bottomNavigationView;
     CircleImageView ivProfilePic;
     Button btnViewProfile;
+    ImageButton closeButton;
     private ActivityResultLauncher<Intent> galleryImageResultListener;
     private Uri imageFilePath;
     private TextView tvName;
@@ -110,8 +114,10 @@ public class MainActivity extends BaseActivity {
         bottomNavigationView = findViewById(R.id.bottomNavigation);
         tvName = findViewById(R.id.tvName);
         tvEmail = findViewById(R.id.tvEmail);
+        tvLogout= findViewById(R.id.tvLogout);
         ivProfilePic = findViewById(R.id.ivProfilePic);
         btnViewProfile = findViewById(R.id.btnViewProfile);
+        closeButton = findViewById(R.id.closeButton);
         homeFragment = new HomeFragment();
         resultsFragment = new ResultsFragment();
         teamsFragment = new TeamsFragment();
@@ -137,6 +143,14 @@ public class MainActivity extends BaseActivity {
             }
         });
 
+            closeButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intent = new Intent(context, MainActivity.class);
+                    startActivity(intent);
+                    drawerLayout.close();
+                }
+            });
         bottomNavigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
@@ -181,6 +195,16 @@ public class MainActivity extends BaseActivity {
                 }
             }
         });
+
+        tvLogout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                FirebaseAuth.getInstance().signOut();
+                Intent intent= new Intent(context, LoginActivity.class);
+                startActivity(intent);
+                finish();
+            }
+        });
     }
 
     private void loadFragment(Fragment fragment) {
@@ -219,7 +243,7 @@ public class MainActivity extends BaseActivity {
                             String URL = uri.toString();
                             CURRENT_USER.setProfileUrl(URL);
                             FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
-                            DatabaseReference databaseReference = firebaseDatabase.getReference("users").child(CURRENT_USER.getId());
+                            DatabaseReference databaseReference = firebaseDatabase. getReference("users").child(CURRENT_USER.getId());
                             databaseReference.setValue(CURRENT_USER).addOnCompleteListener(new OnCompleteListener<Void>() {
                                 @Override
                                 public void onComplete(@NonNull Task<Void> task) {
