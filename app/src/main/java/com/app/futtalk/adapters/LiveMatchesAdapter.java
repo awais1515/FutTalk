@@ -23,16 +23,19 @@ public class LiveMatchesAdapter extends RecyclerView.Adapter<LiveMatchesAdapter.
     private Context context;
     private List<LiveMatch> liveMatchList;
 
+    private int rowLayout;
 
-    public LiveMatchesAdapter(Context context, List<LiveMatch> liveMatchList) {
+
+    public LiveMatchesAdapter(Context context, List<LiveMatch> liveMatchList, int rowLayout) {
         this.context = context;
+        this.rowLayout = rowLayout;
         this.liveMatchList = liveMatchList;
     }
 
     @NonNull
     @Override
     public MyHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.row_view_live_match_home, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(rowLayout, parent, false);
         return new MyHolder(view);
     }
 

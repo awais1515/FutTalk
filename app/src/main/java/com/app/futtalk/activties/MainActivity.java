@@ -35,7 +35,6 @@ import com.app.futtalk.fragments.FixturesFragment;
 import com.app.futtalk.fragments.HomeFragment;
 import com.app.futtalk.fragments.ResultsFragment;
 import com.app.futtalk.fragments.TeamsFragment;
-import com.app.futtalk.models.User;
 import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -44,11 +43,8 @@ import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -102,7 +98,7 @@ public class MainActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         init();
-        getCurrentUserData();
+        setCurrentUserData();
         setListeners();
         setupDrawer();
     }
@@ -248,10 +244,10 @@ public class MainActivity extends BaseActivity {
                                 @Override
                                 public void onComplete(@NonNull Task<Void> task) {
                                     if (task.isSuccessful()) {
-                                        printToastMessage("Profile picture updated successfully");
+                                        showToastMessage("Profile picture updated successfully");
                                         progressDialog.dismiss();
                                     } else {
-                                        printToastMessage("Failed to upload profile picture");
+                                        showToastMessage("Failed to upload profile picture");
                                         progressDialog.dismiss();
                                     }
                                 }
@@ -272,37 +268,18 @@ public class MainActivity extends BaseActivity {
         });
     }
 
-    private void getCurrentUserData() {
-        ProgressDialog progressDialog = new ProgressDialog(context);
-        progressDialog.setCancelable(false);
-        progressDialog.setMessage("Loading...");
-        progressDialog.show();
-        final FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference ref = database.getReference("users").child(FirebaseAuth.getInstance().getUid());
-        ref.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                CURRENT_USER = snapshot.getValue(User.class);
-                tvName.setText(CURRENT_USER.getName());
-                tvEmail.setText(CURRENT_USER.getEmail());
+    private void setCurrentUserData() {
+        tvName.setText(CURRENT_USER.getName());
+        tvEmail.setText(CURRENT_USER.getEmail());
 
-                if (CURRENT_USER.getProfileUrl() != null) {
-                    if (!CURRENT_USER.getProfileUrl().isEmpty()) {
-                        Glide.with(context)
-                                .load(CURRENT_USER.getProfileUrl())
-                                .centerCrop()
-                                .into(ivProfilePic);
-                    }
-
-                }
-                progressDialog.dismiss();
+        if (CURRENT_USER.getProfileUrl() != null) {
+            if (!CURRENT_USER.getProfileUrl().isEmpty()) {
+                Glide.with(context)
+                        .load(CURRENT_USER.getProfileUrl())
+                        .centerCrop()
+                        .into(ivProfilePic);
             }
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                printToastMessage(error.getMessage());
-                progressDialog.dismiss();
-            }
-        });
+        }
     }
 }

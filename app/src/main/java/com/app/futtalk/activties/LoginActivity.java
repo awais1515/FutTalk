@@ -2,7 +2,6 @@ package com.app.futtalk.activties;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -13,7 +12,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.app.futtalk.R;
 import com.app.futtalk.models.User;
@@ -177,32 +175,32 @@ mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(this, ne
                                         if (task.isSuccessful()){
                                             Intent intent= new Intent(context, SignupActivity.class);
                                             startActivity(intent);
-                                            printToastMessage("Logged in Successfully");
+                                            showToastMessage("Logged in Successfully");
                                             progressDialog.dismiss();
                                         }
                                         else {
                                             progressDialog.dismiss();
-                                            printToastMessage("There was a problem updating user information");
+                                            showToastMessage("There was a problem updating user information");
                                         }
 
                                     }
                                 });
                             } else{
                                 progressDialog.dismiss();
-                                printToastMessage("Login failed");
+                                showToastMessage("Login failed");
                             }
                         }
                     });
                 }  else {
                     progressDialog.dismiss();
-                    printToastMessage("Sign in account is null");
+                    showToastMessage("Sign in account is null");
                 }
             } catch (Exception e) {
                 progressDialog.dismiss();
-                printToastMessage(e.getMessage());
+                showToastMessage(e.getMessage());
             }
             }else {
-                printToastMessage(signInAccountTask.getException().toString());
+                showToastMessage(signInAccountTask.getException().toString());
                 Log.d("ToastMessage", signInAccountTask.getException().toString());
             }
         }

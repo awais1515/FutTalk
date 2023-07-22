@@ -1,7 +1,6 @@
 package com.app.futtalk.activties;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
 import android.content.Intent;
@@ -10,7 +9,6 @@ import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import com.app.futtalk.R;
 import com.app.futtalk.models.User;
@@ -140,14 +138,14 @@ public class SignupActivity extends BaseActivity {
                                     if(task.isSuccessful()){
                                         Intent intent = new Intent(context, MainActivity.class);
                                         startActivity(intent);
-                                        printToastMessage("Account Successfully created");
+                                        showToastMessage("Account Successfully created");
                                     } else{
-                                        printToastMessage("Failed to print user data, please contact support");
+                                        showToastMessage("Failed to print user data, please contact support");
                                     }
                                 }
                             });
                         }else{
-                            printToastMessage("Failed to create account, please contact support");
+                            showToastMessage("Failed to create account, please contact support");
                         }
                     }
                 });

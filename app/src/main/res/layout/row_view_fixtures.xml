@@ -15,7 +15,7 @@
         android:layout_height="wrap_content">
 
         <TextView
-            android:id="@+id/tvLeagueName"
+            android:id="@+id/tvTime"
             android:layout_centerHorizontal="true"
             android:text="07:30"
             android:layout_marginTop="5dp"
@@ -26,7 +26,7 @@
             android:layout_height="wrap_content"/>
         <TextView
             android:id="@+id/tvDateOfFixture"
-            android:layout_below="@id/tvLeagueName"
+            android:layout_below="@id/tvTime"
             android:layout_centerHorizontal="true"
             android:text="Jul 25"
             android:layout_marginTop="5dp"

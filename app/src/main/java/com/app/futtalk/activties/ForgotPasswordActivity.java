@@ -20,7 +20,6 @@ import com.google.firebase.auth.FirebaseAuth;
 public class ForgotPasswordActivity extends BaseActivity {
 
     EditText etEmail;
-
     Button btnSubmit;
 
     @Override
@@ -31,23 +30,24 @@ public class ForgotPasswordActivity extends BaseActivity {
         setListeners();
     }
 
-    private void init(){
+    private void init() {
         etEmail.findViewById(R.id.etEmail);
         btnSubmit.findViewById(R.id.btnSubmit);
 
     }
-    private void setListeners(){
+
+    private void setListeners() {
         btnSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String email= etEmail.getText().toString().trim();
+                String email = etEmail.getText().toString().trim();
 
-                if(email.isEmpty()){
+                if (email.isEmpty()) {
                     etEmail.setError("Please enter your Email");
                     etEmail.requestFocus();
                     return;
                 }
-                if(Patterns.EMAIL_ADDRESS.matcher(email).matches()==false){
+                if (Patterns.EMAIL_ADDRESS.matcher(email).matches() == false) {
                     etEmail.setError("Please enter a valid Email address");
                     etEmail.requestFocus();
                     return;
@@ -57,33 +57,34 @@ public class ForgotPasswordActivity extends BaseActivity {
         });
 
     }
-    private void sendPasswordResetRequest(String email){
+
+    private void sendPasswordResetRequest(String email) {
         btnSubmit.setEnabled(false);
-        FirebaseAuth mAuth= FirebaseAuth.getInstance();
+        FirebaseAuth mAuth = FirebaseAuth.getInstance();
 
         mAuth.sendPasswordResetEmail(email).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 btnSubmit.setEnabled(true);
-                if(task.isSuccessful()){
+                if (task.isSuccessful()) {
                     showDialog();
-                } else{
+                } else {
                     Toast.makeText(ForgotPasswordActivity.this, "Invalid Email address", Toast.LENGTH_LONG).show();
                 }
             }
         });
     }
-private void showDialog(){
-    AlertDialog.Builder builder= new AlertDialog.Builder(this)
-            .setMessage("A password reset link has been sent to your Email")
-            .setCancelable(false)
-            .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialogInterface, int i) {
+    private void showDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this)
+                .setMessage("A password reset link has been sent to your Email")
+                .setCancelable(false)
+                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
 
-                }
-            });
-    AlertDialog confirmDialog =builder.create();
-    confirmDialog.show();
-}
+                    }
+                });
+        AlertDialog confirmDialog = builder.create();
+        confirmDialog.show();
+    }
 }
