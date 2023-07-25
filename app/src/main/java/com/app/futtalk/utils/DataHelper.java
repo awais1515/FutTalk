@@ -1,6 +1,7 @@
 package com.app.futtalk.utils;
 
 import com.app.futtalk.models.LiveMatch;
+import com.app.futtalk.models.Players;
 import com.app.futtalk.models.Team;
 import com.app.futtalk.models.UpcomingMatch;
 
@@ -88,5 +89,48 @@ public class DataHelper {
         return Arrays.asList(team1,team2,team3,team4);
     }
 
+    public static List<Players> getPlayerData(int count) {
 
+        Players players = new Players();
+        players.setName("L. Messi");
+        players.setAge(35);
+        players.setNationality("Argentina");
+        players.setPosition("CF");
+
+
+
+        List<Players> playersList =  Arrays.asList(players);
+
+        if (count >= playersList.size()) {
+            return  playersList;
+        } else {
+            List<Players> playerList = new ArrayList<>();
+            for (int i = 0; i <= count; i++) {
+                playersList.add(playersList.get(i));
+            }
+            return playersList;
+        }
+    }
+
+    public static List<Team> getTeamData(int count) {
+
+        Team teams = new Team();
+        teams.setName("Barcelona");
+        teams.getLogo();
+
+
+
+
+        List<Team> teamList =  Arrays.asList(teams);
+
+        if (count >= teamList.size()) {
+            return  teamList;
+        } else {
+            List<Team> teamsList = new ArrayList<>();
+            for (int i = 0; i <= count; i++) {
+                teamsList.add(teamsList.get(i));
+            }
+            return teamsList;
+        }
+    }
 }

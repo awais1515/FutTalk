@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/border_teams">
+
+        <RelativeLayout
+            android:id="@+id/RelativeLayout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+        <ImageView
+            android:id="@+id/iv_team_logo"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginBottom="10dp"
+            android:src="@drawable/iv_barcelona" />
+
+            <TextView
+                android:id="@+id/tv_team_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginEnd="20dp"
+                android:layout_marginBottom="20dp"
+                android:layout_toRightOf="@+id/iv_team_logo"
+                android:fontFamily="@font/poppins_bold"
+                android:text="BARCELONA"
+                android:textColor="@color/white"
+                android:textSize="15sp" />
+
+</RelativeLayout>
+
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:background="@drawable/ic_heart"
+        android:layout_margin="10dp"/>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_below="@+id/RelativeLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp">
+
+            <Button
+                android:id="@+id/btnLiveFeed"
+                android:layout_weight="1"
+                android:layout_margin="4dp"
+                android:backgroundTint="@color/green_main"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Live Feed"
+                android:textSize="11sp"
+                android:textColor="@color/white"
+                android:fontFamily="@font/poppins_regular"
+                android:drawableLeft="@drawable/ic_live_chat"/>
+
+            <Button
+                android:id="@+id/btnPlayers"
+                android:layout_weight="1"
+                android:layout_margin="4dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@color/green_main"
+                android:text="Players"
+                android:textSize="11sp"
+                android:textColor="@color/white"
+                android:fontFamily="@font/poppins_regular"
+                android:drawableLeft="@drawable/ic_teamplayers"/>
+            <Button
+                android:id="@+id/btnFixtures"
+                android:layout_weight="1"
+                android:layout_margin="4dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Fixtures"
+                android:textSize="11sp"
+                android:textColor="@color/white"
+                android:fontFamily="@font/poppins_regular"
+                android:drawableLeft="@drawable/ic_fixtures"
+                android:backgroundTint="@color/green_main"/>
+
+
+        </LinearLayout>
+</RelativeLayout>
+</RelativeLayout>

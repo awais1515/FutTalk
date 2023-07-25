@@ -13,6 +13,7 @@
     android:id="@+id/LinearLayoutTopBarPlayers">
 
     <ImageView
+        android:id="@+id/ivBack"
         android:layout_width="wrap_content"
         android:layout_height="20dp"
         android:src="@drawable/ic_backarrow"
