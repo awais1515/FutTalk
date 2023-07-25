@@ -1,76 +1,84 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    app:cardBackgroundColor="@color/light_grey">
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="0.3dp"
         android:background="@color/black">
-    <RelativeLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-       >
 
-    <de.hdodenhof.circleimageview.CircleImageView
-        android:id="@+id/player_profile_picture"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:scaleType="centerCrop"
-        android:src="@drawable/ic_player_picture"/>
 
-        <TextView
-            android:id="@+id/PlayerName"
+
+
+        <RelativeLayout
             android:layout_width="wrap_content"
             android:layout_height="50dp"
-            android:layout_centerInParent="true"
-            android:layout_marginLeft="10dp"
-            android:layout_toRightOf="@+id/player_profile_picture"
-            android:fontFamily="@font/poppins_regular"
-            android:gravity="center"
-            android:text=" P. Sandler"
-            android:textSize="10sp" />
-    </RelativeLayout>
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:gravity="center_vertical">
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
 
-    <RelativeLayout
-        android:layout_width="wrap_content"
-        android:layout_height="50dp"
-        android:layout_alignParentRight="true"
-        android:layout_centerVertical="true"
-        android:gravity="center_vertical">
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-        <TextView
-            android:id="@+id/PlayerAge"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="25"
-            android:fontFamily="@font/poppins_regular"
-            android:textSize="10sp"
-            android:layout_weight="1"
-            android:layout_marginRight="30dp"/>
-        <TextView
-            android:id="@+id/PlayerNationality"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Netherlands"
-            android:fontFamily="@font/poppins_regular"
-            android:textSize="10sp"
-            android:layout_weight="2"
-            android:layout_marginRight="30dp"/>
-        <TextView
-            android:id="@+id/PLayerPosition"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="DEF"
-            android:fontFamily="@font/poppins_regular"
-            android:textSize="10sp"
-            android:layout_weight="1"
-            android:layout_marginRight="10dp"/>
-        </LinearLayout>
-</RelativeLayout>
+                <RelativeLayout
+                    android:layout_weight="2"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content">
+
+                    <de.hdodenhof.circleimageview.CircleImageView
+                        android:id="@+id/player_profile_picture"
+                        android:layout_width="42dp"
+                        android:layout_height="42dp"
+                        android:layout_margin="8dp"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/ic_player_picture" />
+
+                    <TextView
+                        android:id="@+id/PlayerName"
+                        android:layout_width="wrap_content"
+                        android:layout_height="50dp"
+                        android:layout_centerInParent="true"
+                        android:layout_marginLeft="10dp"
+                        android:layout_toRightOf="@+id/player_profile_picture"
+                        android:fontFamily="@font/poppins_regular"
+                        android:gravity="center"
+                        android:text=" P. Sandler"
+                        android:textSize="10sp" />
+                </RelativeLayout>
+
+                <TextView
+                    android:id="@+id/PlayerAge"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:fontFamily="@font/poppins_regular"
+                    android:text="25"
+                    android:textSize="10sp" />
+
+                <TextView
+                    android:id="@+id/PlayerNationality"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:fontFamily="@font/poppins_regular"
+                    android:text="Netherlands"
+                    android:textSize="10sp" />
+
+                <TextView
+                    android:id="@+id/PLayerPosition"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:fontFamily="@font/poppins_regular"
+                    android:text="DEF"
+                    android:textSize="10sp" />
+            </LinearLayout>
+        </RelativeLayout>
     </RelativeLayout>
 </androidx.cardview.widget.CardView>

@@ -1,12 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    app:cardCornerRadius="10dp"
+    app:cardBackgroundColor="@color/grey_main"
+    android:layout_height="wrap_content">
 
     <RelativeLayout
+        android:padding="6dp"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@drawable/border_teams">
+        android:layout_height="wrap_content">
 
         <RelativeLayout
             android:id="@+id/RelativeLayout"
@@ -16,10 +19,6 @@
             android:id="@+id/iv_team_logo"
             android:layout_width="70dp"
             android:layout_height="70dp"
-            android:layout_marginStart="10dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginEnd="10dp"
-            android:layout_marginBottom="10dp"
             android:src="@drawable/iv_barcelona" />
 
             <TextView
@@ -39,59 +38,145 @@
 
 </RelativeLayout>
 
-    <ImageButton
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:background="@drawable/ic_heart"
-        android:layout_margin="10dp"/>
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:background="@drawable/ic_heart" />
 
         <LinearLayout
-            android:orientation="horizontal"
-            android:layout_below="@+id/RelativeLayout"
+            android:layout_marginTop="10dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="10dp">
+            android:layout_below="@+id/RelativeLayout"
+            android:orientation="horizontal">
 
-            <Button
+
+            <LinearLayout
                 android:id="@+id/btnLiveFeed"
-                android:layout_weight="1"
+                android:padding="6dp"
                 android:layout_margin="4dp"
-                android:backgroundTint="@color/green_main"
-                android:layout_width="wrap_content"
+                android:gravity="center"
+                android:background="@drawable/bg_btn_teams"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content">
+
+
+                <ImageView
+                    android:src="@drawable/ic_live_chat"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"/>
+
+                <TextView
+                    android:textSize="11sp"
+                    android:layout_centerInParent="true"
+                    android:layout_width="wrap_content"
+                    android:text="Live Feed"
+                    android:layout_marginLeft="10dp"
+                    android:textColor="@color/white"
+                    android:fontFamily="@font/poppins_regular"
+                    android:layout_height="wrap_content"/>
+
+            </LinearLayout>
+            <LinearLayout
+                android:id="@+id/btnPlayers"
+                android:padding="6dp"
+                android:layout_margin="4dp"
+                android:gravity="center"
+                android:background="@drawable/bg_btn_teams"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content">
+
+
+                <ImageView
+                    android:src="@drawable/ic_teamplayers"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"/>
+
+                <TextView
+                    android:textSize="11sp"
+                    android:layout_centerInParent="true"
+                    android:layout_width="wrap_content"
+                    android:text="Players"
+                    android:layout_marginLeft="10dp"
+                    android:textColor="@color/white"
+                    android:fontFamily="@font/poppins_regular"
+                    android:layout_height="wrap_content"/>
+
+            </LinearLayout>
+            <LinearLayout
+                android:id="@+id/btnFixtures"
+                android:padding="6dp"
+                android:layout_margin="4dp"
+                android:gravity="center"
+                android:background="@drawable/bg_btn_teams"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content">
+
+
+                <ImageView
+                    android:src="@drawable/ic_fixtures"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"/>
+
+                <TextView
+                    android:textSize="11sp"
+                    android:layout_centerInParent="true"
+                    android:layout_width="wrap_content"
+                    android:text="Fixtures"
+                    android:layout_marginLeft="10dp"
+                    android:textColor="@color/white"
+                    android:fontFamily="@font/poppins_regular"
+                    android:layout_height="wrap_content"/>
+
+            </LinearLayout>
+
+
+
+
+            <!--<Button
+                android:id="@+id/btnLiveFeed"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="Live Feed"
-                android:textSize="11sp"
-                android:textColor="@color/white"
+                android:layout_margin="4dp"
+                android:layout_weight="1"
+                android:backgroundTint="@color/green_main"
+                android:drawableLeft="@drawable/ic_live_chat"
                 android:fontFamily="@font/poppins_regular"
-                android:drawableLeft="@drawable/ic_live_chat"/>
+                android:text="Feed"
+                android:textColor="@color/white"
+                android:textSize="10sp" />
 
             <Button
                 android:id="@+id/btnPlayers"
-                android:layout_weight="1"
-                android:layout_margin="4dp"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_margin="4dp"
+                android:layout_weight="1"
                 android:backgroundTint="@color/green_main"
-                android:text="Players"
-                android:textSize="11sp"
-                android:textColor="@color/white"
+                android:drawableLeft="@drawable/ic_teamplayers"
                 android:fontFamily="@font/poppins_regular"
-                android:drawableLeft="@drawable/ic_teamplayers"/>
+                android:text="Player"
+                android:textColor="@color/white"
+                android:textSize="10sp" />
+
             <Button
                 android:id="@+id/btnFixtures"
-                android:layout_weight="1"
-                android:layout_margin="4dp"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="Fixtures"
-                android:textSize="11sp"
-                android:textColor="@color/white"
-                android:fontFamily="@font/poppins_regular"
+                android:layout_margin="4dp"
+                android:layout_weight="1"
+                android:backgroundTint="@color/green_main"
                 android:drawableLeft="@drawable/ic_fixtures"
-                android:backgroundTint="@color/green_main"/>
+                android:fontFamily="@font/poppins_regular"
+                android:text="Fixtures"
+                android:textColor="@color/white"
+                android:textSize="10sp" />-->
 
 
         </LinearLayout>
 </RelativeLayout>
-</RelativeLayout>
+</androidx.cardview.widget.CardView>

@@ -1,7 +1,6 @@
 package com.app.futtalk.fragments;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,10 +14,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.app.futtalk.R;
-import com.app.futtalk.activties.LiveFeedActivity;
-import com.app.futtalk.activties.PlayersActivity;
-import com.app.futtalk.activties.SingleClubFixturesActivity;
-import com.app.futtalk.adapters.LiveMatchesAdapter;
 import com.app.futtalk.adapters.TeamsAdapter;
 import com.app.futtalk.utils.DataHelper;
 
@@ -67,7 +62,7 @@ public class TeamsFragment extends Fragment {
     }
 
     private void setListeners() {
-        btnLiveFeed.setOnClickListener(new View.OnClickListener() {
+       /* btnLiveFeed.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(context, LiveFeedActivity.class);
@@ -89,7 +84,7 @@ public class TeamsFragment extends Fragment {
                 Intent intent = new Intent(context, SingleClubFixturesActivity.class);
                 startActivity(intent);
             }
-        });
+        });*/
     }
 
 }

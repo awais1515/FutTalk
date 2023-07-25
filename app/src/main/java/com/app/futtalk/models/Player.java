@@ -1,6 +1,6 @@
 package com.app.futtalk.models;
 
-public class Players {
+public class Player {
     private String name;
 
     private int age;
@@ -11,10 +11,10 @@ public class Players {
 
     private String playerImage;
 
-    public Players(){
+    public Player(){
 
     }
-    public Players(String name, int age, String nationality, String position, String playerImage){
+    public Player(String name, int age, String nationality, String position, String playerImage){
 
         this.name= name;
         this.age=age;
@@ -41,7 +41,7 @@ public class Players {
         this.age = age;
     }
 
-    public String getNationality(String nationality) {
+    public String getNationality() {
         return nationality;
     }
 

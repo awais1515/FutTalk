@@ -59,7 +59,7 @@ public class HomeFragment extends Fragment {
         recyclerViewUpcomingMatches = view.findViewById(R.id.recycler_view_fixtures);
         tvViewAllUpcomingMatches = view.findViewById(R.id.tv_all_upcoming_matches);
         recyclerViewUpcomingMatches.setLayoutManager((new LinearLayoutManager(getActivity())));
-        fixturesAdapter = new FixturesAdapter(getActivity(), DataHelper.getUpComingMatches(3), R.layout.row_view_fixtures);
+        fixturesAdapter = new FixturesAdapter(getActivity(), DataHelper.getUpComingMatches(1), R.layout.row_view_fixtures);
         recyclerViewUpcomingMatches.setAdapter(fixturesAdapter);
     }
 

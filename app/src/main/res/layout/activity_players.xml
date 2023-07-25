@@ -5,27 +5,29 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     tools:context=".activties.PlayersActivity">
-<LinearLayout
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_marginTop="10dp"
-    android:layout_marginLeft="10dp"
-    android:id="@+id/LinearLayoutTopBarPlayers">
 
-    <ImageView
-        android:id="@+id/ivBack"
-        android:layout_width="wrap_content"
-        android:layout_height="20dp"
-        android:src="@drawable/ic_backarrow"
-        android:layout_marginRight="25dp"/>
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:fontFamily="@font/poppins_bold_italic"
-        android:text="BARCELONA"
-        android:textColor="@color/white"
-        android:textSize="15sp"/>
-</LinearLayout>
+    <LinearLayout
+        android:id="@+id/LinearLayoutTopBarPlayers"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/ivBack"
+            android:layout_width="wrap_content"
+            android:layout_height="20dp"
+            android:layout_margin="16dp"
+            android:layout_marginRight="25dp"
+            android:src="@drawable/ic_backarrow" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:fontFamily="@font/poppins_bold_italic"
+            android:text="BARCELONA"
+            android:textColor="@color/white"
+            android:textSize="15sp" />
+    </LinearLayout>
 
     <LinearLayout
         android:id="@+id/LinearLayoutTeamLogo"
@@ -36,69 +38,66 @@
         android:gravity="center">
 
         <ImageView
-            android:layout_width="150dp"
-            android:layout_height="150dp"
+            android:layout_width="110dp"
+            android:layout_height="110dp"
             android:src="@drawable/iv_barcelona" />
     </LinearLayout>
 
 
-
     <RelativeLayout
+       android:layout_marginTop="16dp"
         android:id="@+id/PlayerInformationBar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/LinearLayoutTeamLogo">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="50dp"
-            android:layout_marginLeft="50dp"
-            android:fontFamily="@font/poppins_regular"
-            android:gravity="center"
-            android:text="Player"
-            android:textSize="10sp" />
 
-<RelativeLayout
-android:layout_width="wrap_content"
-android:layout_height="50dp"
-android:layout_alignParentRight="true"
-android:layout_centerVertical="true"
-android:gravity="center_vertical">
-<LinearLayout
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:orientation="horizontal">
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Age"
-        android:fontFamily="@font/poppins_regular"
-        android:textSize="10sp"
-        android:layout_weight="1"
-        android:layout_marginRight="30dp"/>
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Country"
-        android:fontFamily="@font/poppins_regular"
-        android:textSize="10sp"
-        android:layout_weight="2"
-        android:layout_marginRight="30dp"/>
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Position"
-        android:fontFamily="@font/poppins_regular"
-        android:textSize="10sp"
-        android:layout_weight="1"
-        android:layout_marginRight="10dp"/>
-</LinearLayout>
-</RelativeLayout>
-</RelativeLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/poppins_regular"
+                android:gravity="center"
+                android:text="Player"
+                android:layout_weight="2"
+                android:textSize="10sp" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:fontFamily="@font/poppins_regular"
+                android:text="Age"
+                android:textSize="10sp" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:fontFamily="@font/poppins_regular"
+                android:text="Country"
+                android:textSize="10sp" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:fontFamily="@font/poppins_regular"
+                android:text="Position"
+                android:textSize="10sp" />
+        </LinearLayout>
+    </RelativeLayout>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_view_Player_stats"
-        android:layout_below="@id/PlayerInformationBar"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent"
+        android:layout_below="@id/PlayerInformationBar"
+        android:background="@color/light_grey" />
 </RelativeLayout>

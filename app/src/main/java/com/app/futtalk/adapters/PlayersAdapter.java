@@ -11,21 +11,20 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.app.futtalk.R;
-import com.app.futtalk.models.Players;
-import com.app.futtalk.models.UpcomingMatch;
+import com.app.futtalk.models.Player;
 
 import java.util.List;
 
 public class PlayersAdapter extends RecyclerView.Adapter<PlayersAdapter.MyHolder>{
 
     private Context context;
-    private List<Players> playersList;
+    private List<Player> playerList;
     private int rowLayout;
 
-    public PlayersAdapter(Context context, List<Players> playersList, int rowLayout) {
+    public PlayersAdapter(Context context, List<Player> playerList, int rowLayout) {
         this.context = context;
         this.rowLayout = rowLayout;
-        this.playersList = playersList;
+        this.playerList = playerList;
     }
 
     @NonNull
@@ -37,18 +36,18 @@ public class PlayersAdapter extends RecyclerView.Adapter<PlayersAdapter.MyHolder
 
     @Override
     public void onBindViewHolder(@NonNull PlayersAdapter.MyHolder holder, int position) {
-        Players players = playersList.get(holder.getAdapterPosition());
+        Player player = playerList.get(holder.getAdapterPosition());
 
-        holder.tvName.setText(players.getName());
-        holder.tvNationality.setText(players.getName());
-        holder.tvAge.setText(players.getAge());
-        holder.tvPosition.setText(players.getPosition());
+        holder.tvName.setText(player.getName());
+        holder.tvNationality.setText(player.getNationality());
+        holder.tvAge.setText(String.valueOf(player.getAge()));
+        holder.tvPosition.setText(player.getPosition());
 
 
     }
 
     @Override
-    public int getItemCount() {return playersList.size();}
+    public int getItemCount() {return playerList.size();}
 
 
     class MyHolder extends RecyclerView.ViewHolder {

@@ -26,7 +26,7 @@ public class FixturesActivity extends AppCompatActivity {
         context = this;
         recyclerViewLiveMatches = findViewById(R.id.recycler_view);
         recyclerViewLiveMatches.setLayoutManager((new LinearLayoutManager(this)));
-        fixturesAdapter = new FixturesAdapter(this, DataHelper.getUpComingMatches(7), R.layout.row_view_live_match);
+        fixturesAdapter = new FixturesAdapter(this, DataHelper.getUpComingMatches(7), R.layout.row_view_fixtures);
         recyclerViewLiveMatches.setAdapter(fixturesAdapter);
         setListeners();
     }

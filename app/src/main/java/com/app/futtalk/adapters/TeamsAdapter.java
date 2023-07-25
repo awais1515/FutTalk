@@ -1,6 +1,7 @@
 package com.app.futtalk.adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,9 +12,10 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.app.futtalk.R;
+import com.app.futtalk.activties.FixturesActivity;
+import com.app.futtalk.activties.LiveFeedActivity;
+import com.app.futtalk.activties.PlayersActivity;
 import com.app.futtalk.models.Team;
-import com.app.futtalk.utils.TeamLogoUrls;
-import com.bumptech.glide.Glide;
 
 import java.util.List;
 
@@ -23,10 +25,7 @@ public class TeamsAdapter extends RecyclerView.Adapter<TeamsAdapter.MyHolder> {
     private List<Team> teamsList;
 
     private int rowLayout;
-    
-    private View.OnClickListener liveFeedClickListener;
-    private View.OnClickListener playersClickListener;
-    private View.OnClickListener fixturesClickListener;
+
 
 
     public TeamsAdapter(Context context, List<Team> teamsList, int rowLayout) {
@@ -52,26 +51,33 @@ public class TeamsAdapter extends RecyclerView.Adapter<TeamsAdapter.MyHolder> {
                 .centerCrop()
                 .into(holder.ivTeamLogo);
         */
-        holder.btnLiveFeed.setOnClickListener(liveFeedClickListener);
-        holder.btnPlayers.setOnClickListener(playersClickListener);
-        holder.btnFixtures.setOnClickListener(fixturesClickListener);
+        holder.btnLiveFeed.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(context, LiveFeedActivity.class);
+                context.startActivity(intent);
+            }
+        });
+        holder.btnPlayers.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(context, PlayersActivity.class);
+                context.startActivity(intent);
+            }
+        });
+        holder.btnFixtures.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(context, FixturesActivity.class);
+                context.startActivity(intent);
+            }
+        });
 
     }
 
     @Override
     public int getItemCount() {return teamsList.size();}
 
-    public void setLiveFeedClickListener(View.OnClickListener listener) {
-        this.liveFeedClickListener = listener;
-    }
-
-    public void setPlayersClickListener(View.OnClickListener listener) {
-        this.playersClickListener = listener;
-    }
-
-    public void setFixturesClickListener(View.OnClickListener listener) {
-        this.fixturesClickListener = listener;
-    }
 
     class MyHolder extends RecyclerView.ViewHolder {
         public View btnLiveFeed;
@@ -85,7 +91,9 @@ public class TeamsAdapter extends RecyclerView.Adapter<TeamsAdapter.MyHolder> {
             super(itemView);
             ivTeamLogo = itemView.findViewById(R.id.iv_team_logo);
             tvTeamName = itemView.findViewById(R.id.tv_team_name);
-
+            btnLiveFeed = itemView.findViewById(R.id.btnLiveFeed);
+            btnPlayers = itemView.findViewById(R.id.btnPlayers);
+            btnFixtures = itemView.findViewById(R.id.btnFixtures);
         }
 
     }
