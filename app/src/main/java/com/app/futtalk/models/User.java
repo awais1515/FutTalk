@@ -1,11 +1,16 @@
 package com.app.futtalk.models;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class User {
 
     private String id;
     private String name;
     private String email;
     private String profileUrl;
+    private String bio;
+    private List<String> favourites = new ArrayList<>();
 
     public User() {
     }
@@ -47,5 +52,21 @@ public class User {
 
     public void setProfileUrl(String profileUrl) {
         this.profileUrl = profileUrl;
+    }
+
+    public void setBio(String bio) {
+        this.bio = bio;
+    }
+
+    public String getBio() {
+        return bio;
+    }
+
+    public List<String> getFavourites() {
+        return favourites;
+    }
+
+    public void setFavourites(List<String> favourites) {
+        this.favourites = favourites;
     }
 }

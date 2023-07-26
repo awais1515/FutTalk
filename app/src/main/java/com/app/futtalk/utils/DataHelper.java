@@ -108,9 +108,6 @@ public class DataHelper {
         teams.setName("Barcelona");
         teams.getLogo();
 
-
-
-
         List<Team> teamList =  Arrays.asList(teams);
 
         if (count >= teamList.size()) {
@@ -130,8 +127,8 @@ public class DataHelper {
 
         Results results1 = new Results();
         results1.setId("1");
-        results1.setHomeTeam(String.valueOf(getAllTeams().get(0)));
-        results1.setAwayTeam(String.valueOf(getAllTeams().get(1)));
+        results1.setHomeTeam(getAllTeams().get(0));
+        results1.setAwayTeam(getAllTeams().get(1));
         results1.setLeagueName("Royal Premium League");
         results1.setVenue("Emirates Stadium London");
         results1.setDate("Jul 21");
@@ -140,8 +137,8 @@ public class DataHelper {
 
         Results results2 = new Results();
         results2.setId("2");
-        results2.setHomeTeam(String.valueOf(getAllTeams().get(2)));
-        results2.setAwayTeam(String.valueOf(getAllTeams().get(3)));
+        results2.setHomeTeam(getAllTeams().get(2));
+        results2.setAwayTeam(getAllTeams().get(3));
         results2.setLeagueName("Spain Premium League");
         results2.setVenue("Estadio Da Luz");
         results2.setDate("Jul 21");

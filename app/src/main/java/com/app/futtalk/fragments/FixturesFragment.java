@@ -34,13 +34,14 @@ public class FixturesFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        init();
+        init(view);
     }
 
-    private void init(){
+    private void init(View view){
         context= getActivity();
-        recyclerViewFixtures.setLayoutManager((new LinearLayoutManager(getActivity(),LinearLayoutManager.HORIZONTAL, false)));
-        fixturesAdapter = new FixturesAdapter(getActivity(), DataHelper.getUpComingMatches(7), R.layout.row_view_fixtures);
+        recyclerViewFixtures = view.findViewById(R.id.recycler_view_fixtures);
+        recyclerViewFixtures.setLayoutManager((new LinearLayoutManager(getActivity())));
+        fixturesAdapter = new FixturesAdapter(context, DataHelper.getUpComingMatches(7), R.layout.row_view_fixtures);
         recyclerViewFixtures.setAdapter(fixturesAdapter);
 
     }

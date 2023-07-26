@@ -52,13 +52,14 @@ import com.google.firebase.storage.UploadTask;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class MainActivity extends BaseActivity {
-
     Context context;
     DrawerLayout drawerLayout;
     ActionBarDrawerToggle actionBarDrawerToggle;
+    ActivityResultLauncher<Intent> getImageUriFromGallery;
     ImageView btnMenu;
 
     TextView tvLogout;
+    TextView tvScreenTitle;
     HomeFragment homeFragment;
     ResultsFragment resultsFragment;
     TeamsFragment teamsFragment;
@@ -67,31 +68,10 @@ public class MainActivity extends BaseActivity {
     CircleImageView ivProfilePic;
     Button btnViewProfile;
     ImageButton closeButton;
-    private ActivityResultLauncher<Intent> galleryImageResultListener;
+    //private ActivityResultLauncher<Intent> galleryImageResultListener;
     private Uri imageFilePath;
     private TextView tvName;
     private TextView tvEmail;
-
-    public static boolean hasGalleryPermissions(Activity activity) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            if (activity.checkSelfPermission(android.Manifest.permission.READ_MEDIA_IMAGES) == PackageManager.PERMISSION_GRANTED) {
-                return true;
-            } else {
-                // Ask for Permission
-                ActivityCompat.requestPermissions(activity, new String[]{android.Manifest.permission.READ_MEDIA_IMAGES}, 1);
-                return false;
-            }
-        } else {
-            if (activity.checkSelfPermission(android.Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
-                return true;
-            } else {
-                // Ask for Permission
-                ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 1);
-                return false;
-            }
-        }
-
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -110,7 +90,8 @@ public class MainActivity extends BaseActivity {
         bottomNavigationView = findViewById(R.id.bottomNavigation);
         tvName = findViewById(R.id.tvName);
         tvEmail = findViewById(R.id.tvEmail);
-        tvLogout= findViewById(R.id.tvLogout);
+        tvLogout = findViewById(R.id.tvLogout);
+        tvScreenTitle = findViewById(R.id.tvScreenTitle);
         ivProfilePic = findViewById(R.id.ivProfilePic);
         btnViewProfile = findViewById(R.id.btnViewProfile);
         closeButton = findViewById(R.id.closeButton);
@@ -118,7 +99,7 @@ public class MainActivity extends BaseActivity {
         resultsFragment = new ResultsFragment();
         teamsFragment = new TeamsFragment();
         fixturesFragment = new FixturesFragment();
-        loadFragment(homeFragment);
+        loadFragment(homeFragment, getString(R.string.home_frag_title));
 
     }
 
@@ -135,15 +116,12 @@ public class MainActivity extends BaseActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(context, ProfileViewActivity.class);
                 startActivity(intent);
-                drawerLayout.close();
             }
         });
 
             closeButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Intent intent = new Intent(context, MainActivity.class);
-                    startActivity(intent);
                     drawerLayout.close();
                 }
             });
@@ -151,16 +129,16 @@ public class MainActivity extends BaseActivity {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 if (item.getItemId() == R.id.item_home) {
-                    loadFragment(homeFragment);
+                    loadFragment(homeFragment, getString(R.string.home_frag_title));
                     return true;
                 } else if (item.getItemId() == R.id.item_teams) {
-                    loadFragment(teamsFragment);
+                    loadFragment(teamsFragment, getString(R.string.teams_frag_title));
                     return true;
                 } else if (item.getItemId() == R.id.item_fixtures) {
-                    loadFragment(fixturesFragment);
+                    loadFragment(fixturesFragment, getString(R.string.fixtures_frag_title));
                     return true;
                 } else if (item.getItemId() == R.id.item_results) {
-                    loadFragment(resultsFragment);
+                    loadFragment(resultsFragment, getString(R.string.results_frag_title));
                     return true;
                 } else {
                     return false;
@@ -168,27 +146,24 @@ public class MainActivity extends BaseActivity {
             }
         });
 
-        galleryImageResultListener = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
-                    @Override
-                    public void onActivityResult(ActivityResult result) {
-                        if (result.getData() != null) {
-                            imageFilePath = result.getData().getData();
-                            Glide.with(context)
-                                    .load(imageFilePath)
-                                    .centerCrop()
-                                    .into(ivProfilePic);
-
-                            uploadPictureonFirebase();
-                        }
-                    }
-                });
+        getImageUriFromGallery = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
+            @Override
+            public void onActivityResult(ActivityResult result) {
+                if (result.getData() != null) {
+                    imageFilePath = result.getData().getData();
+                    Glide.with(context)
+                            .load(imageFilePath)
+                            .centerCrop()
+                            .into(ivProfilePic);
+                    uploadPictureOnFirebase();
+                }
+            }
+        });
 
         ivProfilePic.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (hasGalleryPermissions(MainActivity.this)) {
-                    getImageFromGallery(galleryImageResultListener);
-                }
+                getImageFromGallery(getImageUriFromGallery);
             }
         });
 
@@ -201,12 +176,18 @@ public class MainActivity extends BaseActivity {
                 finish();
             }
         });
+
     }
 
-    private void loadFragment(Fragment fragment) {
+    private void loadFragment(Fragment fragment, String title) {
+        setTitle(title);
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         fragmentTransaction.replace(R.id.content, fragment);
         fragmentTransaction.commit();
+    }
+
+    private void setTitle(String title) {
+        tvScreenTitle.setText(title);
     }
 
     private void setupDrawer() {
@@ -222,7 +203,8 @@ public class MainActivity extends BaseActivity {
 
     }
 
-    private void uploadPictureonFirebase() {
+
+    private void uploadPictureOnFirebase() {
         ProgressDialog progressDialog = new ProgressDialog(context);
         progressDialog.setCancelable(false);
         progressDialog.setMessage("Uploading Picture...");

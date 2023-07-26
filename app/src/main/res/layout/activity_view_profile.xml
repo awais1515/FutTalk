@@ -13,8 +13,8 @@
 
     <ImageButton
         android:id="@+id/closeViewProfileButton"
-        android:layout_width="10dp"
-        android:layout_height="9dp"
+        android:layout_width="16dp"
+        android:layout_height="16dp"
         android:background="@drawable/ic_close" />
 </RelativeLayout>
     <LinearLayout
@@ -78,7 +78,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/poppins_regular"
-                    android:text="Posts 219"
+                    android:text="Posts 0"
                     android:textColor="@color/white"
                     android:textSize="16sp"
                     android:layout_centerHorizontal="true"
@@ -97,7 +97,7 @@
                 android:layout_marginLeft="14dp"
                 android:drawablePadding="6dp"
                 android:gravity="bottom"
-                android:text="Likes 4.5k"
+                android:text="Likes 0"
                 android:textSize="16sp"
                 android:textColor="@color/white"
                 android:layout_centerVertical="true"
@@ -110,8 +110,10 @@
 
     </LinearLayout>
 
+
+
     <TextView
-        android:id="@+id/tvAboutMe"
+        android:id="@+id/tvTitleAboutMe"
         android:layout_below="@+id/LinearLayoutProfile"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -121,8 +123,8 @@
         android:fontFamily="@font/poppins_semi_bold"
         />
     <TextView
-        android:id="@+id/profile_bio"
-        android:layout_below="@+id/tvAboutMe"
+        android:id="@+id/tv_profile_bio"
+        android:layout_below="@+id/tvTitleAboutMe"
         android:textColor="@color/white"
         android:textSize="12sp"
         android:fontFamily="@font/poppins_light"
@@ -132,8 +134,8 @@
         android:layout_marginTop="5dp"/>
 
     <TextView
-        android:id="@+id/tvFavoriteTeams"
-        android:layout_below="@+id/profile_bio"
+        android:id="@+id/tvTitleFavoriteTeams"
+        android:layout_below="@+id/tv_profile_bio"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Favorite Teams"
@@ -142,38 +144,15 @@
         android:fontFamily="@font/poppins_semi_bold"
         />
 
-    <LinearLayout
+    <com.google.android.material.chip.ChipGroup
+        android:id="@+id/chipGroup"
         android:orientation="horizontal"
-        android:layout_below="@+id/tvFavoriteTeams"
+        android:layout_below="@+id/tvTitleFavoriteTeams"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <Button
-            android:layout_weight="1"
-            android:layout_margin="2dp"
-            android:backgroundTint="@color/yellow_main"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
 
-        <Button
-            android:textSize="20sp"
-            android:textStyle="bold"
-            android:layout_weight="1"
-            android:layout_margin="2dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:backgroundTint="@color/grey_main"/>
-        <Button
-            android:textSize="20sp"
-            android:textStyle="bold"
-            android:layout_weight="1"
-            android:layout_margin="2dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:backgroundTint="@color/grey_main"/>
-
-
-    </LinearLayout>
+    </com.google.android.material.chip.ChipGroup>
 
     <Button
         android:id="@+id/btnLogout"

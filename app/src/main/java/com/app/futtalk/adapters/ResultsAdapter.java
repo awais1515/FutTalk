@@ -40,8 +40,8 @@ public class ResultsAdapter extends RecyclerView.Adapter<ResultsAdapter.MyHolder
     @Override
     public void onBindViewHolder(@NonNull MyHolder holder, int position) {
         Results results = resultsList.get(holder.getAdapterPosition());
-        holder.tvHomeTeamName.setText(results.getHomeTeam());
-        holder.tvAwayTeamName.setText(results.getAwayTeam());
+        holder.tvHomeTeamName.setText(results.getHomeTeam().getName());
+        holder.tvAwayTeamName.setText(results.getAwayTeam().getName());
         holder.tvDate.setText(results.getDate());
         holder.tvVenueName.setText(results.getVenue());
     }

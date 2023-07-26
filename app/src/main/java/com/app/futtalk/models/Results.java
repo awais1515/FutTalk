@@ -6,8 +6,8 @@ public class Results {
     private String leagueName;
     private String venue;
     private String date;
-    private String homeTeam;
-    private String awayTeam;
+    private Team homeTeam;
+    private Team awayTeam;
     private int homeTeamScore;
     private int awayTeamScore;
 
@@ -26,8 +26,8 @@ public class Results {
         this.leagueName = leagueName;
         this.venue = venue;
         this.date = date;
-        this.homeTeam = String.valueOf(homeTeam);
-        this.awayTeam = String.valueOf(awayTeam);
+        this.homeTeam = homeTeam;
+        this.awayTeam = awayTeam;
         this.homeTeamScore = homeTeamScore;
         this.awayTeamScore = awayTeamScore;
 
@@ -65,19 +65,19 @@ public class Results {
         this.date = date;
     }
 
-    public String getHomeTeam() {
+    public Team getHomeTeam() {
         return homeTeam;
     }
 
-    public void setHomeTeam(String homeTeam) {
+    public void setHomeTeam(Team homeTeam) {
         this.homeTeam = homeTeam;
     }
 
-    public String getAwayTeam() {
+    public Team getAwayTeam() {
         return awayTeam;
     }
 
-    public void setAwayTeam(String awayTeam) {
+    public void setAwayTeam(Team awayTeam) {
         this.awayTeam = awayTeam;
     }
 

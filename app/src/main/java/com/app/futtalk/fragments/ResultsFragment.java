@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.app.futtalk.R;
+import com.app.futtalk.adapters.ResultsAdapter;
 import com.app.futtalk.adapters.TeamsAdapter;
 import com.app.futtalk.utils.DataHelper;
 
@@ -20,7 +21,7 @@ public class ResultsFragment extends Fragment {
 
     private Context context;
     private RecyclerView recyclerViewResults;
-    private TeamsAdapter resultsAdapter;
+    private ResultsAdapter resultsAdapter;
 
     @Nullable
     @Override
@@ -31,13 +32,14 @@ public class ResultsFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        init();
+        init(view);
     }
 
-     private void init(){
-         context=getActivity();
-         recyclerViewResults.setLayoutManager((new LinearLayoutManager(getActivity(),LinearLayoutManager.HORIZONTAL, false)));
-         resultsAdapter = new TeamsAdapter(getActivity(), DataHelper.getTeamData(7), R.layout.row_view_results);
+     private void init(View view){
+         context = getActivity();
+         recyclerViewResults = view.findViewById(R.id.recycler_view_results);
+         recyclerViewResults.setLayoutManager((new LinearLayoutManager(getActivity())));
+         resultsAdapter = new ResultsAdapter(context, DataHelper.getResults(7), R.layout.row_view_results);
          recyclerViewResults.setAdapter(resultsAdapter);
      }
 
