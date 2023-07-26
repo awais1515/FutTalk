@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    tools:context=".activties.CommentsActivity"
+    android:backgroundTint="@color/black"
+    >
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/LinearLayoutProfile"
+        >
+        <RelativeLayout
+            android:layout_width="50dp"
+            android:layout_height="wrap_content">
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/iv_profile_picture"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginBottom="8dp"
+                android:scaleType="centerCrop"
+                android:src="@drawable/iv_profile_picture"
+                app:civ_border_color="@color/white" />
+
+<TextView
+    android:id="@+id/tvProfileName"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:text="Dante"
+    android:layout_centerInParent="true"
+    android:layout_below="@+id/iv_profile_picture"/>
+        </RelativeLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="50dp"
+        android:layout_toRightOf="@id/LinearLayoutProfile"
+
+        >
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/fixtures_background"
+        android:paddingTop="16dp"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        android:paddingBottom="4dp">
+        <TextView
+            android:id="@+id/Comment_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Hello Franky! It was a wonderful game of football!"/>
+
+<RelativeLayout
+    android:layout_below="@+id/Comment_text"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="10dp"
+    android:gravity="right">
+
+    <RelativeLayout
+        android:id="@+id/btnViewReplies"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:layout_marginTop="4dp"
+        android:layout_marginBottom="4dp"
+        android:background="@drawable/bg_btn_teams"
+        android:gravity="center"
+        android:layout_centerHorizontal="true"
+        android:padding="4dp">
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_marginLeft="10dp"
+            android:fontFamily="@font/poppins_regular"
+            android:text="5 Replies"
+            android:textColor="@color/white"
+            android:textSize="11sp" />
+
+    </RelativeLayout>
+    <RelativeLayout
+        android:id="@+id/timePassed"
+        android:padding="6dp"
+        android:layout_margin="4dp"
+        android:gravity="center"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@+id/btnViewReplies">
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_marginLeft="10dp"
+            android:fontFamily="@font/poppins_regular"
+            android:text="5 mins ago"
+            android:textColor="@color/white"
+            android:textSize="11sp" />
+
+    </RelativeLayout>
+</RelativeLayout>
+    </RelativeLayout>
+    </LinearLayout>
+</androidx.cardview.widget.CardView>
