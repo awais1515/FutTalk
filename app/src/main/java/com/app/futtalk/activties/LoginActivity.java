@@ -15,6 +15,7 @@ import android.widget.TextView;
 
 import com.app.futtalk.R;
 import com.app.futtalk.models.User;
+import com.app.futtalk.utils.DbReferences;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.common.api.ApiException;
@@ -168,7 +169,7 @@ mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(this, ne
                                 user.setEmail(mAuth.getCurrentUser().getDisplayName());
                                 user.setName(mAuth.getCurrentUser().getEmail());
                                 FirebaseDatabase firebaseDatabase= FirebaseDatabase.getInstance();
-                                DatabaseReference databaseReference= firebaseDatabase.getReference("users").child(mAuth.getUid());
+                                DatabaseReference databaseReference= firebaseDatabase.getReference(DbReferences.USERS_REFERENCE).child(mAuth.getUid());
                                 databaseReference.setValue(user).addOnCompleteListener(new OnCompleteListener<Void>() {
                                     @Override
                                     public void onComplete(@NonNull Task<Void> task) {
