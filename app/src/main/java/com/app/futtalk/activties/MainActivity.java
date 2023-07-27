@@ -176,7 +176,29 @@ public class MainActivity extends BaseActivity {
                 finish();
             }
         });
+        findViewById(R.id.tvAboutUs).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(context, AboutUsActivity.class);
+                startActivity(intent);
+            }
+        });
 
+        findViewById(R.id.tvContactUs).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(context, ContactUsActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        findViewById(R.id.tvPrivacyPolicy).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(context, PrivacyPolicyActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 
     private void loadFragment(Fragment fragment, String title) {
