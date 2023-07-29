@@ -54,8 +54,6 @@ public class EditProfileActivity extends BaseActivity {
     private ActivityResultLauncher<Intent> getImageUriFromGallery;
     private Uri imageFilePath;
 
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
