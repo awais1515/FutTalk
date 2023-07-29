@@ -7,10 +7,11 @@ import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -18,6 +19,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -36,20 +38,16 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
-import java.util.Currency;
-import java.util.List;
-
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class EditProfileActivity extends BaseActivity {
 
 
     Context context;
-    private Button btnAdd;
+    private ImageView btnAdd;
     private Button btnSave;
     private EditText etName;
     private EditText etBio;
-    private EditText etFavourite;
     private TextView tvFavouritesTitle;
     private CircleImageView ivProfilePic;
     private ChipGroup chipGroup;
@@ -69,11 +67,10 @@ public class EditProfileActivity extends BaseActivity {
 
     private void init() {
         context = this;
-        btnAdd = findViewById(R.id.btn_add_favourite);
+        btnAdd = findViewById(R.id.btn_add);
         btnSave = findViewById(R.id.btn_save);
         etName = findViewById(R.id.etName);
         etBio = findViewById(R.id.etBio);
-        etFavourite = findViewById(R.id.etFavourite);
         ivProfilePic = findViewById(R.id.ivProfilePic);
         chipGroup = findViewById(R.id.chipGroup);
         tvFavouritesTitle = findViewById(R.id.tv_favourite_title);
@@ -83,20 +80,7 @@ public class EditProfileActivity extends BaseActivity {
         btnAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(!etFavourite.getText().toString().trim().isEmpty()) {
-                    tvFavouritesTitle.setVisibility(View.VISIBLE);
-                    Chip chip = (Chip) getLayoutInflater().inflate(R.layout.chip, null);
-                    chip.setText(etFavourite.getText().toString());
-                    chip.setOnCloseIconClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            chipGroup.removeView(view);
-                        }
-                    });
-                    chipGroup.addView(chip);
-                    etFavourite.clearFocus();
-                    etFavourite.setText("");
-                }
+                showInputDialog();
             }
         });
 
@@ -131,6 +115,44 @@ public class EditProfileActivity extends BaseActivity {
         });
     }
 
+    private void showInputDialog() {
+        LayoutInflater inflater = LayoutInflater.from(this);
+        View dialogView = inflater.inflate(R.layout.dialog_layout, null);
+        final EditText inputEditText = dialogView.findViewById(R.id.edit_text_input);
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setView(dialogView)
+                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        String enteredText = inputEditText.getText().toString();
+                        if (!enteredText.isEmpty()) {
+                            // Process the entered text here (e.g., save it to a variable or use it as needed)
+                            Chip chip = (Chip) getLayoutInflater().inflate(R.layout.chip, null);
+                            chip.setText(enteredText);
+                            chip.setOnCloseIconClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    chipGroup.removeView(view);
+                                }
+                            });
+                            chipGroup.addView(chip);
+                        } else {
+                            Toast.makeText(EditProfileActivity.this, "Please enter some text", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                })
+                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                    }
+                });
+
+        AlertDialog alertDialog = builder.create();
+        alertDialog.show();
+    }
+
     private void updateUserProfile() {
         String name = etName.getText().toString().trim();
         String bio = etBio.getText().toString().trim();
@@ -143,14 +165,16 @@ public class EditProfileActivity extends BaseActivity {
                 CURRENT_USER.getFavourites().add(chip.getText().toString());
             }
         }
-
+        showProgressDialog("Saving...");
         FirebaseDatabase.getInstance().getReference(DbReferences.USERS_REFERENCE).child(CURRENT_USER.getId()).setValue(CURRENT_USER).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
+                closeProgressDialog();
                 if (task.isSuccessful()) {
-
+                    showToastMessage("Updated Successfully");
+                    finish();
                 } else {
-
+                    showToastMessage("Failed to save updated information");
                 }
             }
         });
@@ -258,7 +282,6 @@ public class EditProfileActivity extends BaseActivity {
         Intent intentGallery = new Intent(Intent.ACTION_PICK);
         intentGallery.setType("image/*");
         getImageUriFromGallery.launch((intentGallery));
-
     }
 
 }
