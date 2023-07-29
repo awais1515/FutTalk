@@ -22,7 +22,6 @@ public class ProfileViewActivity extends BaseActivity {
 
     Context context;
     ImageButton closeButton;
-    Button btnLogOut;
 
     private TextView tvName;
     private TextView tvEmail;
@@ -55,7 +54,6 @@ public class ProfileViewActivity extends BaseActivity {
         tvFavouritesTitle = findViewById(R.id.tvTitleFavoriteTeams);
         ivProfilePic = findViewById(R.id.ivProfilePic);
         closeButton = findViewById(R.id.closeViewProfileButton);
-        btnLogOut = findViewById(R.id.btnLogout);
         chipGroup = findViewById(R.id.chipGroup);
     }
 
@@ -71,17 +69,6 @@ public class ProfileViewActivity extends BaseActivity {
             @Override
             public void onClick(View view) {
                 finish();
-            }
-        });
-
-        btnLogOut.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                FirebaseAuth.getInstance().signOut();
-                Intent intent= new Intent(context, LoginActivity.class);
-                startActivity(intent);
-                finish();
-
             }
         });
     }

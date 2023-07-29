@@ -151,20 +151,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-
     </com.google.android.material.chip.ChipGroup>
 
-    <Button
-        android:id="@+id/btnLogout"
-        android:layout_width="150dp"
-        android:layout_height="wrap_content"
-        android:backgroundTint="@color/green_main"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:text="Log Out"
-        android:fontFamily="@font/poppins_semi_bold"
-        android:textColor="@color/white"
-        android:textSize="16sp"
-        android:layout_marginTop="10dp"/>
 
 </RelativeLayout>
