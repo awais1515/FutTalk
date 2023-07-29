@@ -48,7 +48,7 @@ public class EditProfileActivity extends BaseActivity {
     private Button btnSave;
     private EditText etName;
     private EditText etBio;
-    private TextView tvFavouritesTitle;
+    private TextView tvNoFavouriteMessage;
     private CircleImageView ivProfilePic;
     private ChipGroup chipGroup;
     private ActivityResultLauncher<Intent> getImageUriFromGallery;
@@ -73,10 +73,17 @@ public class EditProfileActivity extends BaseActivity {
         etBio = findViewById(R.id.etBio);
         ivProfilePic = findViewById(R.id.ivProfilePic);
         chipGroup = findViewById(R.id.chipGroup);
-        tvFavouritesTitle = findViewById(R.id.tv_favourite_title);
+        tvNoFavouriteMessage = findViewById(R.id.tv_no_favourite_message);
     }
 
     private void setListeners() {
+
+        findViewById(R.id.ivBack).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
         btnAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -127,16 +134,8 @@ public class EditProfileActivity extends BaseActivity {
                     public void onClick(DialogInterface dialog, int which) {
                         String enteredText = inputEditText.getText().toString();
                         if (!enteredText.isEmpty()) {
-                            // Process the entered text here (e.g., save it to a variable or use it as needed)
-                            Chip chip = (Chip) getLayoutInflater().inflate(R.layout.chip, null);
-                            chip.setText(enteredText);
-                            chip.setOnCloseIconClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View view) {
-                                    chipGroup.removeView(view);
-                                }
-                            });
-                            chipGroup.addView(chip);
+                            tvNoFavouriteMessage.setVisibility(View.GONE);
+                            addChip(enteredText);
                         } else {
                             Toast.makeText(EditProfileActivity.this, "Please enter some text", Toast.LENGTH_SHORT).show();
                         }
@@ -217,8 +216,8 @@ public class EditProfileActivity extends BaseActivity {
         etName.setText(CURRENT_USER.getName());
         etBio.setText(CURRENT_USER.getBio());
         if(CURRENT_USER.getFavourites().size() > 0) {
-            // Todo show favourites here
-            tvFavouritesTitle.setVisibility(View.VISIBLE);
+            tvNoFavouriteMessage.setVisibility(View.GONE);
+            addFavourites();
         }
 
         if (CURRENT_USER.getProfileUrl() != null) {
@@ -282,6 +281,24 @@ public class EditProfileActivity extends BaseActivity {
         Intent intentGallery = new Intent(Intent.ACTION_PICK);
         intentGallery.setType("image/*");
         getImageUriFromGallery.launch((intentGallery));
+    }
+
+    private void addFavourites() {
+        for (String favouriteTeam : CURRENT_USER.getFavourites()) {
+            addChip(favouriteTeam);
+        }
+    }
+
+    private void addChip(String text) {
+        Chip chip = (Chip) getLayoutInflater().inflate(R.layout.row_chip, null);
+        chip.setText(text.trim());
+        chip.setOnCloseIconClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                chipGroup.removeView(view);
+            }
+        });
+        chipGroup.addView(chip);
     }
 
 }

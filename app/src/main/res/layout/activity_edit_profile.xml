@@ -124,6 +124,24 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"/>
 
+                <ImageView
+                    android:id="@+id/btn_add"
+                    android:src="@drawable/ic_add"
+                    android:layout_alignParentRight="true"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"/>
+
+
+                <TextView
+                    android:id="@+id/tv_no_favourite_message"
+                    android:text="No favourite team added"
+                    android:layout_marginTop="30dp"
+                    android:alpha="0.5"
+                    android:layout_centerHorizontal="true"
+                    android:layout_below="@id/tv_favourite_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+
                 <com.google.android.material.chip.ChipGroup
                     android:id="@+id/chipGroup"
                     android:layout_below="@id/tv_favourite_title"
@@ -131,14 +149,6 @@
                     android:layout_height="wrap_content"
                     android:orientation="horizontal">
                 </com.google.android.material.chip.ChipGroup>
-
-
-                <ImageView
-                    android:id="@+id/btn_add"
-                    android:src="@drawable/ic_add"
-                    android:layout_alignParentRight="true"
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"/>
 
 
             </RelativeLayout>

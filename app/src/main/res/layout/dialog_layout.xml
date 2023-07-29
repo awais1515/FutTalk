@@ -9,6 +9,7 @@
         android:id="@+id/edit_text_input"
         android:layout_width="match_parent"
         android:fontFamily="@font/poppins_regular"
+        android:inputType="textCapWords"
         android:layout_height="wrap_content"
         android:hint="Enter Team Name" />
 

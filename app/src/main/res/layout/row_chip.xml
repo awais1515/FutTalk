@@ -5,6 +5,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     style="@style/Widget.MaterialComponents.Chip.Entry"
     app:closeIconTint="#FF654B"
+    app:chipBackgroundColor="@color/black"
+    app:chipStrokeColor="@color/yellow_main"
+    app:chipStrokeWidth="0.7dp"
     android:textIsSelectable="false"
     app:closeIcon="@drawable/ic_remove">
 

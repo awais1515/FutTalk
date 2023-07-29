@@ -2,21 +2,18 @@ package com.app.futtalk.activties;
 
 import static com.app.futtalk.utils.FirebaseUtils.CURRENT_USER;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.app.futtalk.R;
 import com.bumptech.glide.Glide;
+import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
-import com.google.firebase.auth.FirebaseAuth;
 
 public class ProfileViewActivity extends BaseActivity {
 
@@ -85,7 +82,7 @@ public class ProfileViewActivity extends BaseActivity {
         }
 
         if(CURRENT_USER.getFavourites().size() > 0) {
-            // Todo show favourites here
+            addFavourites();
         } else {
             tvFavouritesTitle.setVisibility(View.GONE);
             chipGroup.setVisibility(View.GONE);
@@ -101,5 +98,15 @@ public class ProfileViewActivity extends BaseActivity {
             }
 
         }
+    }
+
+    private void addFavourites() {
+        for (String favouriteTeam : CURRENT_USER.getFavourites()) {
+            Chip chip = (Chip) getLayoutInflater().inflate(R.layout.row_chip, null);
+            chip.setText(favouriteTeam);
+            chip.setCloseIconVisible(false);
+            chipGroup.addView(chip);
+        }
+
     }
 }
