@@ -105,6 +105,7 @@ public class ProfileViewActivity extends BaseActivity {
             Chip chip = (Chip) getLayoutInflater().inflate(R.layout.row_chip, null);
             chip.setText(favouriteTeam);
             chip.setCloseIconVisible(false);
+            chip.setCheckable(false);
             chipGroup.addView(chip);
         }
 

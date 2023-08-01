@@ -42,9 +42,9 @@ public class TeamsAdapter extends RecyclerView.Adapter<TeamsAdapter.MyHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull MyHolder holder, int position) {
-        Team teams = teamsList.get(holder.getAdapterPosition());
+        Team team = teamsList.get(holder.getAdapterPosition());
 
-        holder.tvTeamName.setText(teams.getName());
+        holder.tvTeamName.setText(team.getName());
 
         /* Glide.with(context)
                 .load(Team.getLogo())
@@ -55,6 +55,7 @@ public class TeamsAdapter extends RecyclerView.Adapter<TeamsAdapter.MyHolder> {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(context, LiveFeedActivity.class);
+                intent.putExtra("team", team);
                 context.startActivity(intent);
             }
         });

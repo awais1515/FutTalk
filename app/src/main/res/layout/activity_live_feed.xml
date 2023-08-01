@@ -64,6 +64,7 @@
             >
 
             <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/ivProfilePic"
                 android:src="@drawable/ic_user"
                 android:alpha="0.9"
                 android:layout_width="34dp"

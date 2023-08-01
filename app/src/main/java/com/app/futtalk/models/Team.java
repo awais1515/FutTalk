@@ -1,6 +1,8 @@
 package com.app.futtalk.models;
 
-public class Team {
+import java.io.Serializable;
+
+public class Team implements Serializable {
     private String id;
     private String name;
     private String logo;

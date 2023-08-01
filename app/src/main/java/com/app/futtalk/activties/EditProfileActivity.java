@@ -163,7 +163,7 @@ public class EditProfileActivity extends BaseActivity {
             }
         }
         showProgressDialog("Saving...");
-        FirebaseDatabase.getInstance().getReference(DbReferences.USERS_REFERENCE).child(CURRENT_USER.getId()).setValue(CURRENT_USER).addOnCompleteListener(new OnCompleteListener<Void>() {
+        FirebaseDatabase.getInstance().getReference(DbReferences.USERS).child(CURRENT_USER.getId()).setValue(CURRENT_USER).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 closeProgressDialog();
@@ -290,6 +290,7 @@ public class EditProfileActivity extends BaseActivity {
     private void addChip(String text) {
         Chip chip = (Chip) getLayoutInflater().inflate(R.layout.row_chip, null);
         chip.setText(text.trim());
+        chip.setCheckable(false);
         chip.setOnCloseIconClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -298,5 +299,7 @@ public class EditProfileActivity extends BaseActivity {
         });
         chipGroup.addView(chip);
     }
+
+
 
 }

@@ -169,7 +169,7 @@ mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(this, ne
                                 user.setEmail(mAuth.getCurrentUser().getDisplayName());
                                 user.setName(mAuth.getCurrentUser().getEmail());
                                 FirebaseDatabase firebaseDatabase= FirebaseDatabase.getInstance();
-                                DatabaseReference databaseReference= firebaseDatabase.getReference(DbReferences.USERS_REFERENCE).child(mAuth.getUid());
+                                DatabaseReference databaseReference= firebaseDatabase.getReference(DbReferences.USERS).child(mAuth.getUid());
                                 databaseReference.setValue(user).addOnCompleteListener(new OnCompleteListener<Void>() {
                                     @Override
                                     public void onComplete(@NonNull Task<Void> task) {
