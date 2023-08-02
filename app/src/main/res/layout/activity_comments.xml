@@ -1,118 +1,88 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    tools:context=".activties.CommentsActivity"
-    android:backgroundTint="@color/black"
-    >
+    android:scrollbars="none"
+    android:layout_height="match_parent"
+    android:background="@color/black">
 
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/LinearLayoutProfile"
-        >
-        <RelativeLayout
-            android:layout_width="50dp"
-            android:layout_height="wrap_content">
-
-            <de.hdodenhof.circleimageview.CircleImageView
-                android:id="@+id/iv_profile_picture"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginEnd="8dp"
-                android:layout_marginBottom="8dp"
-                android:scaleType="centerCrop"
-                android:src="@drawable/iv_profile_picture"
-                app:civ_border_color="@color/white" />
-
-<TextView
-    android:id="@+id/tvProfileName"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:text="Dante"
-    android:layout_centerInParent="true"
-    android:layout_below="@+id/iv_profile_picture"/>
-        </RelativeLayout>
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="50dp"
-        android:layout_toRightOf="@id/LinearLayoutProfile"
-
-        >
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@drawable/fixtures_background"
-        android:paddingTop="16dp"
-        android:paddingLeft="16dp"
-        android:paddingRight="16dp"
-        android:paddingBottom="4dp">
-        <TextView
-            android:id="@+id/Comment_text"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:id="@+id/LinearLayoutTopBar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp">
+
+        <ImageButton
+            android:id="@+id/ivBackArrow"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Hello Franky! It was a wonderful game of football!"/>
+            android:background="@drawable/ic_backarrow"
+            android:layout_alignParentLeft="true"
+            android:layout_gravity="center_vertical" />
+            <TextView
+                android:id="@+id/tvComments"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/poppins_bold_italic"
+                android:text="Comments"
+                android:layout_gravity="center_vertical"
+                android:textColor="@color/white"
+                android:textSize="16sp"
+                android:paddingLeft="20dp"
+                 />
+        </LinearLayout>
 
-<RelativeLayout
-    android:layout_below="@+id/Comment_text"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_marginTop="10dp"
-    android:gravity="right">
-
-    <RelativeLayout
-        android:id="@+id/btnViewReplies"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:layout_marginTop="4dp"
-        android:layout_marginBottom="4dp"
-        android:background="@drawable/bg_btn_teams"
-        android:gravity="center"
-        android:layout_centerHorizontal="true"
-        android:padding="4dp">
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recycler_view_comments"
+            android:layout_width="match_parent"
+            android:layout_height="685dp"
+            android:layout_below="@id/LinearLayoutTopBar">
+        </androidx.recyclerview.widget.RecyclerView>
 
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:layout_marginLeft="10dp"
-            android:fontFamily="@font/poppins_regular"
-            android:text="5 Replies"
-            android:textColor="@color/white"
-            android:textSize="11sp" />
+        <LinearLayout
+            android:layout_alignParentBottom="true"
+            android:id="@+id/AddComment"
+            android:padding="6dp"
+            android:layout_margin="4dp"
+            android:gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="50dp">
 
+           <RelativeLayout
+               android:layout_width="match_parent"
+               android:layout_height="50dp"
+               android:background="@drawable/bg_add_comment">
+
+               <EditText
+                   android:layout_width="wrap_content"
+                   android:layout_height="wrap_content"
+                   android:hint="Add your Comment..."
+                   android:backgroundTint="@color/white"
+                   android:layout_centerVertical="true"
+                   android:layout_marginLeft="20dp"
+                   android:inputType="textCapSentences|textMultiLine"
+                   android:textColorHint="@color/grey_main"
+                   android:fontFamily="@font/poppins_regular"
+                   android:textColor="@color/white"
+                   android:textSize="11sp" />
+               <ImageView
+                   android:id="@+id/SendComment"
+                   android:src="@drawable/ic_send_comment"
+                   android:layout_alignParentRight="true"
+                   android:layout_centerVertical="true"
+                   android:layout_width="24dp"
+                   android:layout_marginRight="10dp"
+                   android:layout_height="24dp"/>
+           </RelativeLayout>
+
+
+        </LinearLayout>
     </RelativeLayout>
-    <RelativeLayout
-        android:id="@+id/timePassed"
-        android:padding="6dp"
-        android:layout_margin="4dp"
-        android:gravity="center"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_toRightOf="@+id/btnViewReplies">
 
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:layout_marginLeft="10dp"
-            android:fontFamily="@font/poppins_regular"
-            android:text="5 mins ago"
-            android:textColor="@color/white"
-            android:textSize="11sp" />
+</ScrollView>
 
-    </RelativeLayout>
-</RelativeLayout>
-    </RelativeLayout>
-    </LinearLayout>
-</androidx.cardview.widget.CardView>

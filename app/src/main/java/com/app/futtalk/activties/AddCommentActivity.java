@@ -1,40 +1,43 @@
 package com.app.futtalk.activties;
 
 import static com.app.futtalk.utils.FirebaseUtils.CURRENT_USER;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+
 import android.content.Context;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
-
 import com.app.futtalk.R;
+import com.app.futtalk.models.Comment;
 import com.app.futtalk.models.FeedPost;
-import com.app.futtalk.models.Team;
 import com.app.futtalk.utils.DbReferences;
 import com.app.futtalk.utils.Utils;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.Date;
+
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class AddPostActivity extends BaseActivity {
+public class AddCommentActivity extends BaseActivity {
 
     private Context context;
-    private EditText etStory;
-    private TextView tvTeamName;
+    private EditText etComment;
     private CircleImageView ivProfilePic;
-    private Button btnPublish;
-    private Team team;
+    private ImageView iv_send_comment;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_add_post);
-        team = (Team) getIntent().getSerializableExtra("team");
+        setContentView(R.layout.activity_add_comment);
         init();
         setData();
         setListeners();
@@ -42,68 +45,63 @@ public class AddPostActivity extends BaseActivity {
 
     private void init() {
         context = this;
-        tvTeamName = findViewById(R.id.tv_team_name);
-        etStory = findViewById(R.id.etStory);
+        etComment = findViewById(R.id.etComment);
         ivProfilePic = findViewById(R.id.ivProfilePic);
-        btnPublish = findViewById(R.id.btnPublish);
+        iv_send_comment = findViewById(R.id.iv_send_comment);
     }
 
     private void setListeners() {
-        findViewById(R.id.ivBack).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-               finish();
-            }
-        });
-
-        btnPublish.setOnClickListener(new View.OnClickListener() {
+        iv_send_comment.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (isValid()) {
-                    publishStory();
+                    publishComment();
                 }
             }
         });
     }
 
     private void setData() {
-        tvTeamName.setText(team.getName());
         Utils.setPicture(this, ivProfilePic, CURRENT_USER.getProfileUrl());
     }
 
     private boolean isValid() {
-        String textStory = etStory.getText().toString().trim();
+        String textStory = etComment.getText().toString().trim();
         if (textStory.isEmpty()) {
-            showToastMessage("Please write a story");
+            showToastMessage("Please write a Comment");
             return false;
         }
 
         if (textStory.length() < 10) {
-            showToastMessage("your story must contain at least 10 characters");
+            showToastMessage("your comment must contain at least 10 characters");
             return false;
         }
         return true;
     }
 
-    private void publishStory() {
-        String textStory = etStory.getText().toString().trim();
-        FeedPost feedPost = new FeedPost();
-        feedPost.setText(textStory);
-        feedPost.setDateTime(new Date().toString());
-        feedPost.setUid(CURRENT_USER.getId());
+    private void publishComment() {
+        String textComment = etComment.getText().toString().trim();
+        String dateTime = new Date().toString();
+        Comment comment = new Comment();
+        comment.setUid(CURRENT_USER.getId());
+        comment.setText(textComment);
+        comment.setDateTime(dateTime);
 
         showProgressDialog("Publishing...");
-        FirebaseDatabase.getInstance().getReference(DbReferences.FEED).child(team.getName()).push().setValue(feedPost).addOnCompleteListener(new OnCompleteListener<Void>() {
+        DatabaseReference comments = FirebaseDatabase.getInstance().getReference("comments");
+        comments.push().setValue(comment).addOnCompleteListener(new OnCompleteListener<Void>() {
+
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 closeProgressDialog();
                 if (task.isSuccessful()) {
-                    showToastMessage("Story published successfully");
+                    showToastMessage("Comment published successfully");
                     finish();
                 } else {
-                    showToastMessage("Failed to publish the story");
+                    showToastMessage("Failed to publish the comment");
                 }
             }
         });
+        }
     }
-}
+
