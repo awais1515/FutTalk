@@ -34,9 +34,9 @@
                 android:id="@+id/tvProfileName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Dante"
+                android:layout_below="@+id/iv_profile_picture"
                 android:layout_centerInParent="true"
-                android:layout_below="@+id/iv_profile_picture"/>
+                android:text="Dante" />
         </RelativeLayout>
     </LinearLayout>
 
@@ -98,17 +98,21 @@
                         android:textSize="11sp" />
 
                 </RelativeLayout>
+
                 <RelativeLayout
-                    android:id="@+id/timePassed"
-                    android:padding="6dp"
-                    android:layout_margin="4dp"
-                    android:gravity="center"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_toRightOf="@+id/btnViewReplies">
+                    android:layout_marginStart="4dp"
+                    android:layout_marginTop="4dp"
+                    android:layout_marginEnd="4dp"
+                    android:layout_marginBottom="4dp"
+                    android:layout_toRightOf="@+id/btnViewReplies"
+                    android:gravity="center"
+                    android:padding="6dp">
 
 
                     <TextView
+                        android:id="@+id/timePassed"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerInParent="true"

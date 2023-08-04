@@ -1,6 +1,8 @@
 package com.app.futtalk.models;
 
-public class Comment {
+import java.io.Serializable;
+
+public class Comment implements Serializable {
     private String id;
     private String uid;
     private String text;

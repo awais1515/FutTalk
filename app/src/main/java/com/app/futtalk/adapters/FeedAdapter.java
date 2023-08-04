@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.app.futtalk.R;
 import com.app.futtalk.activties.CommentsActivity;
 import com.app.futtalk.models.FeedPost;
+import com.app.futtalk.models.Team;
 import com.app.futtalk.models.User;
 import com.app.futtalk.utils.DbReferences;
 import com.app.futtalk.utils.FirebaseUtils;
@@ -28,14 +29,15 @@ import java.util.List;
 public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.MyHolder>{
     private Context context;
     private List<FeedPost> feedPosts;
-
+    private Team team;
     private int rowLayout;
 
 
-    public FeedAdapter(Context context, List<FeedPost> feedPosts, int rowLayout) {
+    public FeedAdapter(Context context, Team team, List<FeedPost> feedPosts, int rowLayout) {
         this.context = context;
         this.rowLayout = rowLayout;
         this.feedPosts = feedPosts;
+        this.team = team;
     }
 
     @NonNull
@@ -70,6 +72,8 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.MyHolder>{
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(context, CommentsActivity.class);
+                intent.putExtra("team", team);
+                intent.putExtra("feedPost", feedPost);
                 context.startActivity(intent);
             }
         });
@@ -86,7 +90,7 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.MyHolder>{
                     feedPost.getLikes().add(FirebaseUtils.CURRENT_USER.getId());
                     notifyDataSetChanged();
                 }
-                FirebaseDatabase.getInstance().getReference(DbReferences.FEED).child(feedPost.getUid()).setValue(feedPost);
+                FirebaseDatabase.getInstance().getReference(DbReferences.FEED).child(team.getName()).child(feedPost.getId()).setValue(feedPost);
             }
         });
     }

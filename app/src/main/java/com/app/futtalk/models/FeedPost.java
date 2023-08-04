@@ -1,17 +1,18 @@
 package com.app.futtalk.models;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-public class FeedPost {
+public class FeedPost implements Serializable{
     private String id;
     private String uid;
     private String text;
     private String dateTime;
     private List<Comment> comments = new ArrayList<>();
-    private Set<String> likes = new HashSet<>();
+    private List<String> likes = new ArrayList<>();
 
     public String getId() {
         return id;
@@ -53,11 +54,11 @@ public class FeedPost {
         this.comments = comments;
     }
 
-    public Set<String> getLikes() {
+    public List<String> getLikes() {
         return likes;
     }
 
-    public void setLikes(Set<String> likes) {
+    public void setLikes(List<String> likes) {
         this.likes = likes;
     }
 }

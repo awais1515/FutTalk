@@ -50,7 +50,7 @@ public class Utils {
         } else if (minutes > 0) {
             return minutes + (minutes == 1 ? " minute ago" : " minutes ago");
         } else {
-            return seconds + (seconds == 1 ? " second ago" : " seconds ago");
+            return "few seconds ago";
         }
     }
 }
