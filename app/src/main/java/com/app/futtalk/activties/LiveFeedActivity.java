@@ -72,6 +72,15 @@ public class LiveFeedActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
+        findViewById(R.id.tvComments).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent= new Intent(context, CommentsActivity.class);
+                intent.putExtra("team", team);
+                startActivity(intent);
+            }
+        });
     }
 
     private void setData() {
