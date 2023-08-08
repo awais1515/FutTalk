@@ -57,6 +57,7 @@ public class CommentsActivity extends BaseActivity {
 
 
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -127,7 +128,7 @@ public class CommentsActivity extends BaseActivity {
         //Utils.setPicture(this, ivProfilePic, CURRENT_USER.getProfileUrl());
     }
 
-    private void fetchComments() {
+    public void fetchComments() {
         FirebaseDatabase.getInstance().getReference(FEED).child(team.getName()).child(feedPost.getId()).child(COMMENTS).addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
@@ -173,6 +174,7 @@ public class CommentsActivity extends BaseActivity {
             ivSend.setVisibility(View.VISIBLE);
         }
     }
+
 
 
 }

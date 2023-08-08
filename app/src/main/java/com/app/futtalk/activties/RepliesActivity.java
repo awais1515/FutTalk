@@ -14,6 +14,8 @@ import android.content.Context;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.app.futtalk.R;
@@ -48,6 +50,10 @@ public class RepliesActivity extends BaseActivity {
     private FeedPost feedPost;
     private Comment comment;
     private TextView tvNoReplyFound;
+    private ImageView ivSend;
+    private ProgressBar progressBar;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,6 +77,8 @@ public class RepliesActivity extends BaseActivity {
         repliesAdapter= new RepliesAdapter(context, comment.getReplies(), R.layout.row_replies);
         recyclerView.setLayoutManager(new LinearLayoutManager(context));
         recyclerView.setAdapter(repliesAdapter);
+        ivSend = findViewById(R.id.ivSendReply);
+        progressBar = findViewById(R.id.progressBar);
 
     }
 
@@ -98,6 +106,7 @@ public class RepliesActivity extends BaseActivity {
         reply.setDateTime(new Date().toString());
         reply.setText(replies);
         comment.getReplies().add(reply);
+        showPublishInProgress(true);
         FirebaseDatabase.getInstance().getReference(FEED).child(team.getName()).child(feedPost.getId()).child(comment.getId()).setValue(comment).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
@@ -109,10 +118,31 @@ public class RepliesActivity extends BaseActivity {
                 }
             }
         });
+        etReply.setText("");
     }
     private void setData() {
-        //Utils.setPicture(this, ivProfilePic, CURRENT_USER.getProfileUrl());
+        TextView tvCommentText = findViewById(R.id.Comment_text);
+        tvCommentText.setText(comment.getText());
+        TextView tvTimePassed = findViewById(R.id.timePassed);
+        comment.setDateTime(new Date().toString());
+        comment.setUid(FirebaseUtils.CURRENT_USER.getId());
+
 
     }
+
+    public void showPublishInProgress( boolean isPublishing){
+        if (isPublishing){
+            ivSend.setVisibility(View.INVISIBLE);
+            progressBar.setVisibility(View.VISIBLE);
+
+        } else{
+            ivSend.setVisibility(View.VISIBLE);
+            progressBar.setVisibility(View.INVISIBLE);
+        }
+
+
+    }
+
+
 
 }
