@@ -12,8 +12,11 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.app.futtalk.R;
@@ -22,12 +25,15 @@ import com.app.futtalk.models.Comment;
 import com.app.futtalk.models.FeedPost;
 import com.app.futtalk.models.Team;
 import com.app.futtalk.utils.FirebaseUtils;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -43,6 +49,9 @@ public class CommentsActivity extends BaseActivity {
     private EditText etComment;
     private Team team;
     private FeedPost feedPost;
+
+    private ImageView ivSend;
+    private ProgressBar progressBar;
 
     private TextView tvNoCommentFound;
 
@@ -64,9 +73,11 @@ public class CommentsActivity extends BaseActivity {
         ivProfilePic = findViewById(R.id.ivProfilePic);
         etComment = findViewById(R.id.etComment);
         tvNoCommentFound = findViewById(R.id.tvNoComment);
+        ivSend = findViewById(R.id.ivSendComment);
+        progressBar = findViewById(R.id.progressBar);
         recyclerView = findViewById(R.id.recycler_view_comments);
         commentList = new ArrayList<>();
-        commentsAdapter = new CommentsAdapter(context, commentList, R.layout.row_comment);
+        commentsAdapter = new CommentsAdapter(context, commentList, team, feedPost, R.layout.row_comment);
         recyclerView.setLayoutManager(new LinearLayoutManager(context));
         recyclerView.setAdapter(commentsAdapter);
 
@@ -80,7 +91,7 @@ public class CommentsActivity extends BaseActivity {
                 finish();
             }
         });
-        findViewById(R.id.ivSendComment).setOnClickListener(new View.OnClickListener() {
+        ivSend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 String comment = etComment.getText().toString().trim();
@@ -97,7 +108,18 @@ public class CommentsActivity extends BaseActivity {
         comment.setDateTime(new Date().toString());
         comment.setText(commentText);
         feedPost.getComments().add(comment);
-        FirebaseDatabase.getInstance().getReference(FEED).child(team.getName()).child(feedPost.getId()).setValue(feedPost);
+        showPublishInProgress(true);
+        FirebaseDatabase.getInstance().getReference(FEED).child(team.getName()).child(feedPost.getId()).setValue(feedPost).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                showPublishInProgress(false);
+                if(task.isSuccessful()) {
+                    etComment.setText("");
+                } else {
+                    showToastMessage("Failed to publish comment");
+                }
+            }
+        });
         etComment.setText("");
     }
 
@@ -111,6 +133,8 @@ public class CommentsActivity extends BaseActivity {
             public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
                 tvNoCommentFound.setVisibility(View.GONE);
                 Comment comment = snapshot.getValue(Comment.class);
+                comment.setId(snapshot.getKey());
+                Collections.reverse(comment.getReplies());
                 commentList.add(0, comment);
                 commentsAdapter.notifyDataSetChanged();
 
@@ -138,6 +162,16 @@ public class CommentsActivity extends BaseActivity {
         });
 
 
+    }
+
+    public void showPublishInProgress(boolean isPublishing) {
+        if (isPublishing) {
+            ivSend.setVisibility(View.INVISIBLE);
+            progressBar.setVisibility(View.VISIBLE);
+        } else {
+            progressBar.setVisibility(View.INVISIBLE);
+            ivSend.setVisibility(View.VISIBLE);
+        }
     }
 
 

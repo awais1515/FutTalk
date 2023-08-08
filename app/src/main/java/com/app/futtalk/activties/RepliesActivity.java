@@ -24,12 +24,15 @@ import com.app.futtalk.models.Reply;
 import com.app.futtalk.models.Team;
 import com.app.futtalk.utils.DbReferences;
 import com.app.futtalk.utils.FirebaseUtils;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -39,7 +42,6 @@ public class RepliesActivity extends BaseActivity {
     private Context context;
     private CircleImageView ivProfilePic;
     private RecyclerView recyclerView;
-    private List<Reply> repliesList;
     private RepliesAdapter repliesAdapter;
     private EditText etReply;
     private Team team;
@@ -57,7 +59,6 @@ public class RepliesActivity extends BaseActivity {
         init();
         setData();
         setListeners();
-        fetchReplies();
 
     }
 
@@ -67,8 +68,7 @@ public class RepliesActivity extends BaseActivity {
         etReply = findViewById(R.id.etReply);
         tvNoReplyFound = findViewById(R.id.tvNoReply);
         recyclerView = findViewById(R.id.recycler_view_replies);
-        repliesList = new ArrayList<>();
-        repliesAdapter= new RepliesAdapter(context, repliesList, R.layout.row_replies);
+        repliesAdapter= new RepliesAdapter(context, comment.getReplies(), R.layout.row_replies);
         recyclerView.setLayoutManager(new LinearLayoutManager(context));
         recyclerView.setAdapter(repliesAdapter);
 
@@ -98,43 +98,20 @@ public class RepliesActivity extends BaseActivity {
         reply.setDateTime(new Date().toString());
         reply.setText(replies);
         comment.getReplies().add(reply);
-        FirebaseDatabase.getInstance().getReference(FEED).child(team.getName()).child(feedPost.getId()).child(comment.getId()).setValue(comment);
-        etReply.setText("");
+        FirebaseDatabase.getInstance().getReference(FEED).child(team.getName()).child(feedPost.getId()).child(comment.getId()).setValue(comment).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                if (task.isSuccessful()) {
+                    tvNoReplyFound.setVisibility(View.GONE);
+                    etReply.setText("");
+                } else {
+                    showToastMessage("Sorry couldn't added a reply");
+                }
+            }
+        });
     }
     private void setData() {
         //Utils.setPicture(this, ivProfilePic, CURRENT_USER.getProfileUrl());
-    }
-
-    private void fetchReplies(){
-        FirebaseDatabase.getInstance().getReference(FEED).child(team.getName()).child(feedPost.getId()).child(comment.getId()).child(REPLIES).addChildEventListener(new ChildEventListener() {
-            @Override
-            public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-                tvNoReplyFound.setVisibility(View.GONE);
-                Reply reply = snapshot.getValue(Reply.class);
-                repliesList.add(0, reply);
-                repliesAdapter.notifyDataSetChanged();
-            }
-
-            @Override
-            public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-
-            }
-
-            @Override
-            public void onChildRemoved(@NonNull DataSnapshot snapshot) {
-
-            }
-
-            @Override
-            public void onChildMoved(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
 
     }
 

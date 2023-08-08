@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout  xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/black"
@@ -80,6 +81,17 @@
                 android:textColor="@color/grey_main"
                 android:textColorHint="@color/grey_main"
                 android:textSize="11sp" />
+
+            <ProgressBar
+                android:id="@+id/progressBar"
+                android:layout_alignParentRight="true"
+                android:layout_width="24dp"
+                android:layout_marginRight="10dp"
+                android:visibility="invisible"
+                android:layout_centerVertical="true"
+                android:layout_height="24dp"
+                tools:visibility="visible"/>
+
             <ImageView
                 android:id="@+id/ivSendComment"
                 android:src="@drawable/ic_send_comment"
@@ -87,7 +99,9 @@
                 android:layout_centerVertical="true"
                 android:layout_width="24dp"
                 android:layout_marginRight="10dp"
-                android:layout_height="24dp"/>
+                android:visibility="visible"
+                android:layout_height="24dp"
+                tools:visibility="invisible"/>
         </RelativeLayout>
 
 

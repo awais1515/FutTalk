@@ -69,4 +69,9 @@ public class User {
     public void setFavourites(List<String> favourites) {
         this.favourites = favourites;
     }
+
+    public String getFirstName() {
+        String parts[] = name.split(" ");
+        return parts[0];
+    }
 }

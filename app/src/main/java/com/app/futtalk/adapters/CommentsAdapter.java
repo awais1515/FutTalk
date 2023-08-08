@@ -16,6 +16,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.app.futtalk.R;
 import com.app.futtalk.activties.RepliesActivity;
 import com.app.futtalk.models.Comment;
+import com.app.futtalk.models.FeedPost;
+import com.app.futtalk.models.Team;
 import com.app.futtalk.models.User;
 import com.app.futtalk.utils.DbReferences;
 import com.app.futtalk.utils.Utils;
@@ -34,12 +36,17 @@ public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.MyHold
 
     private List<Comment> commentList;
 
+    private Team team;
+    private FeedPost feedPost;
 
 
-    public CommentsAdapter(Context context, List<Comment> commentList, int rowLayout) {
+
+    public CommentsAdapter(Context context, List<Comment> commentList, Team team, FeedPost feedPost, int rowLayout) {
         this.context = context;
         this.rowLayout = rowLayout;
         this.commentList = commentList;
+        this.feedPost = feedPost;
+        this.team = team;
     }
 
     @NonNull
@@ -54,12 +61,12 @@ public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.MyHold
         Comment comment = commentList.get(holder.getAdapterPosition());
         holder.etComment.setText(comment.getText());
         holder.tvTimeAgo.setText(Utils.getTimeAgo(comment.getDateTime()));
-       // holder.tvViewReplies.setText("View replies");
+        holder.tvViewReplies.setText(getTextForReplies(comment.getReplies().size()));
         FirebaseDatabase.getInstance().getReference(DbReferences.USERS).child(comment.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 User user = snapshot.getValue(User.class);
-                holder.tvUsername.setText(user.getName());
+                holder.tvUsername.setText(user.getFirstName());
                 Utils.setPicture(context, holder.ivProfilePicture, user.getProfileUrl());
             }
 
@@ -73,6 +80,9 @@ public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.MyHold
             @Override
             public void onClick(View view) {
                 Intent intent= new Intent(context, RepliesActivity.class);
+                intent.putExtra("team", team);
+                intent.putExtra("feedPost", feedPost);
+                intent.putExtra("comment", comment);
                 context.startActivity(intent);
             }
         });
@@ -80,6 +90,13 @@ public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.MyHold
 
     }
 
+    private String getTextForReplies(int count) {
+        if (count <= 1) {
+            return count + " Reply";
+        } else {
+            return count + " Replies";
+        }
+    }
     @Override
     public int getItemCount() {return commentList.size();}
 
@@ -87,8 +104,7 @@ public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.MyHold
 
         ImageView ivProfilePicture;
 
-        TextView tvTimeAgo, tvUsername;
-        RelativeLayout tvViewReplies;
+        TextView tvTimeAgo, tvUsername, tvViewReplies;
 
         EditText etComment;
 
@@ -97,7 +113,7 @@ public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.MyHold
             ivProfilePicture = itemView.findViewById(R.id.iv_profile_picture);
             tvUsername = itemView.findViewById(R.id.tvProfileName);
             etComment = itemView.findViewById(R.id.Comment_text);
-            tvViewReplies = itemView.findViewById(R.id.btnViewReplies);
+            tvViewReplies = itemView.findViewById(R.id.tvRepliesCount);
             tvTimeAgo = itemView.findViewById(R.id.timePassed);
         }
 
