@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout  xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/black"
+    android:padding="10dp">
+
+    <LinearLayout
+        android:id="@+id/LinearLayoutTopBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageButton
+            android:id="@+id/ivBackArrow"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/ic_backarrow"
+            android:layout_alignParentLeft="true"
+            android:layout_gravity="center_vertical" />
+        <TextView
+            android:id="@+id/tvreplies"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/poppins_bold_italic"
+            android:text="@string/replies"
+            android:layout_gravity="center_vertical"
+            android:textColor="@color/white"
+            android:textSize="16sp"
+            android:paddingLeft="20dp"
+            />
+    </LinearLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recycler_view_replies"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@id/AddReply"
+        android:layout_marginTop="8dp"
+        android:layout_below="@id/LinearLayoutTopBar"/>
+
+    <TextView
+        android:id="@+id/tvNoReply"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:drawableLeft="@drawable/ic_hand"
+        android:drawablePadding="8dp"
+        android:fontFamily="@font/poppins_light"
+        android:gravity="center"
+        android:text="Be first to Reply to this Reply"
+        android:textSize="16sp" />
+
+
+    <LinearLayout
+        android:layout_alignParentBottom="true"
+        android:id="@+id/AddReply"
+
+        android:gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:background="@drawable/bg_add_comment">
+
+            <EditText
+                android:id="@+id/etReply"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                android:layout_toStartOf="@id/ivSendReply"
+                android:backgroundTint="@color/white"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:fontFamily="@font/poppins_regular"
+                android:hint="Add your Reply..."
+                android:inputType="textCapSentences|textMultiLine"
+                android:textColor="@color/grey_main"
+                android:textColorHint="@color/grey_main"
+                android:textSize="11sp" />
+            <ImageView
+                android:id="@+id/ivSendReply"
+                android:src="@drawable/ic_send_comment"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_width="24dp"
+                android:layout_marginRight="10dp"
+                android:layout_height="24dp"/>
+        </RelativeLayout>
+
+
+    </LinearLayout>
+</RelativeLayout>
+
+

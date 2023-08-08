@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    tools:context=".activties.CommentsActivity"
+    app:cardBackgroundColor="@color/black"
+    tools:context=".activties.RepliesActivity"
     android:backgroundTint="@color/black"
     android:layout_marginBottom="15dp"
     >
@@ -19,6 +20,7 @@
             android:layout_height="wrap_content">
 
             <de.hdodenhof.circleimageview.CircleImageView
+                android:layout_centerHorizontal="true"
                 android:id="@+id/iv_profile_picture"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
@@ -49,7 +51,7 @@
         >
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:background="@drawable/fixtures_background"
             android:paddingTop="16dp"
             android:paddingLeft="16dp"
@@ -57,47 +59,22 @@
             android:paddingBottom="4dp"
             >
             <EditText
-                android:id="@+id/Comment_text"
+                android:id="@+id/Reply_text"
                 android:backgroundTint="@color/grey_main"
                 android:inputType="textCapSentences|textMultiLine"
                 android:textSize="12sp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:hint="Write your comment here..."/>
+                android:hint="Write your Reply here..."/>
 
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/Comment_text"
+                android:layout_below="@+id/Reply_text"
                 android:layout_marginTop="10dp"
                 android:gravity="right">
 
-                <RelativeLayout
-                    android:id="@+id/btnViewReplies"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerInParent="true"
-                    android:layout_centerHorizontal="true"
-                    android:layout_marginTop="4dp"
-                    android:layout_marginBottom="4dp"
-                    android:background="@drawable/bg_btn_teams"
-                    android:gravity="center"
-                    android:padding="4dp">
 
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_centerHorizontal="true"
-                        android:layout_marginLeft="10dp"
-                        android:fontFamily="@font/poppins_regular"
-                        android:gravity="center_horizontal"
-                        android:padding="2dp"
-                        android:text="5 Replies"
-                        android:textColor="@color/white"
-                        android:textSize="11sp" />
-
-                </RelativeLayout>
 
                 <RelativeLayout
                     android:layout_width="wrap_content"
@@ -106,7 +83,6 @@
                     android:layout_marginTop="4dp"
                     android:layout_marginEnd="4dp"
                     android:layout_marginBottom="4dp"
-                    android:layout_toRightOf="@+id/btnViewReplies"
                     android:gravity="center"
                     android:padding="6dp">
 

@@ -1,29 +1,21 @@
 package com.app.futtalk.models;
 
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
-
-public class Comment implements Serializable {
+public class Reply {
     private String id;
     private String uid;
     private String text;
     private String dateTime;
 
-    private List<Reply> replies = new ArrayList<>();
-
-
-
-
-    public Comment() {
+    public Reply(){
 
     }
 
-    public Comment(String id, String uid, String text, String dateTime) {
-        this.id = id;
-        this.uid= uid;
-        this.text= text;
-        this.dateTime= dateTime;
+    public Reply(String id, String uid, String text, String dateTime){
+        id= this.id;
+        uid= this.uid;
+        text= this.text;
+        dateTime= this.dateTime;
+
     }
 
     public String getId() {
@@ -58,11 +50,4 @@ public class Comment implements Serializable {
         this.dateTime = dateTime;
     }
 
-    public List<Reply> getReplies() {
-        return replies;
-    }
-
-    public void setReplies(List<Reply> replies) {
-        this.replies = replies;
-    }
 }

@@ -6,6 +6,8 @@ public class DbReferences {
 
     public static String COMMENTS = "comments";
 
+    public static String REPLIES = "replies";
+
     // feed
     //   Barcelona (team name)
     //        story 1
