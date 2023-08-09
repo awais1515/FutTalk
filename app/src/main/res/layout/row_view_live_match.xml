@@ -9,7 +9,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_margin="12dp"
-        android:background="@drawable/fixtures_background"
+        android:background="@drawable/fixtures_background_dark"
         android:layout_height="wrap_content"
         android:gravity="center"/>
 
@@ -37,7 +37,7 @@
         android:layout_marginTop="8dp"
         android:paddingTop="16dp"
         android:paddingBottom="16dp"
-        android:background="@drawable/fixtures_background"
+        android:background="@drawable/fixtures_background_dark"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/main_layout">

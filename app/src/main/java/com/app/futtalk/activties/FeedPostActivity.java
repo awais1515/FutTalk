@@ -4,7 +4,6 @@ import static com.app.futtalk.utils.FirebaseUtils.CURRENT_USER;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -13,7 +12,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
-import android.widget.EditText;
 import android.widget.TextView;
 
 import com.app.futtalk.R;
@@ -33,7 +31,7 @@ import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class LiveFeedActivity extends BaseActivity {
+public class FeedPostActivity extends BaseActivity {
 
     private Context context;
     private Team team;

@@ -67,36 +67,38 @@
                 android:layout_below="@+id/iv_profile_picture"
                 android:layout_centerInParent="true"
                 android:layout_marginTop="4dp"
+                android:textColor="@color/white"
                 android:fontFamily="@font/poppins_medium"
                 android:gravity="center"
                 android:text="Dante"
                 android:textSize="11sp" />
         </RelativeLayout>
-        <EditText
-            android:id="@+id/Comment_text"
+        <TextView
+            android:layout_marginTop="6dp"
+            android:id="@+id/tvCommentText"
             android:layout_toRightOf="@+id/rl_profile_info"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:backgroundTint="@color/green_comment"
-            android:hint="Write your comment here..."
+            android:textColor="@color/white"
             android:inputType="textCapSentences|textMultiLine"
             android:textSize="12sp" />
 
         <RelativeLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/Comment_text"
+            android:layout_below="@+id/tvCommentText"
             android:layout_alignParentRight="true">
 
             <TextView
-                android:id="@+id/timePassed"
+                android:id="@+id/tvTimePassed"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
                 android:layout_marginLeft="10dp"
-                android:fontFamily="@font/poppins_regular"
+                android:fontFamily="@font/poppins_light"
                 android:text="5 mins ago"
-                android:textColor="@color/white"
+
                 android:textSize="11sp" />
             </RelativeLayout>
     </RelativeLayout>
@@ -118,7 +120,7 @@
         android:drawablePadding="8dp"
         android:fontFamily="@font/poppins_light"
         android:gravity="center"
-        android:text="Be first to Reply to this Reply"
+        android:text="Be first to Reply this comment"
         android:textSize="16sp" />
 
 

@@ -41,7 +41,7 @@
             android:exported="false"
             android:screenOrientation="portrait"/>
         <activity
-            android:name=".activties.LiveFeedActivity"
+            android:name=".activties.FeedPostActivity"
             android:exported="false"
             android:screenOrientation="portrait"/>
         <activity

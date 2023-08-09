@@ -13,7 +13,7 @@
         android:paddingLeft="25dp"
         android:paddingRight="25dp"
         android:paddingBottom="16dp"
-        android:background="@drawable/fixtures_background"
+        android:background="@drawable/fixtures_background_dark"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 

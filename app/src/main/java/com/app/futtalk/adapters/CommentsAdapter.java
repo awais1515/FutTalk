@@ -5,9 +5,7 @@ import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -59,7 +57,7 @@ public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.MyHold
     @Override
     public void onBindViewHolder(@NonNull MyHolder holder, int position) {
         Comment comment = commentList.get(holder.getAdapterPosition());
-        holder.etComment.setText(comment.getText());
+        holder.tvComment.setText(comment.getText());
         holder.tvTimeAgo.setText(Utils.getTimeAgo(comment.getDateTime()));
         holder.tvViewReplies.setText(getTextForReplies(comment.getReplies().size()));
         FirebaseDatabase.getInstance().getReference(DbReferences.USERS).child(comment.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
@@ -106,15 +104,15 @@ public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.MyHold
 
         TextView tvTimeAgo, tvUsername, tvViewReplies;
 
-        EditText etComment;
+        TextView tvComment;
 
         MyHolder(View itemView) {
             super(itemView);
             ivProfilePicture = itemView.findViewById(R.id.iv_profile_picture);
             tvUsername = itemView.findViewById(R.id.tvProfileName);
-            etComment = itemView.findViewById(R.id.Comment_text);
+            tvComment = itemView.findViewById(R.id.tvCommentText);
             tvViewReplies = itemView.findViewById(R.id.tvRepliesCount);
-            tvTimeAgo = itemView.findViewById(R.id.timePassed);
+            tvTimeAgo = itemView.findViewById(R.id.tvTimePassed);
         }
 
     }

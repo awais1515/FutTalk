@@ -13,7 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.app.futtalk.R;
 import com.app.futtalk.activties.FixturesActivity;
-import com.app.futtalk.activties.LiveFeedActivity;
+import com.app.futtalk.activties.FeedPostActivity;
 import com.app.futtalk.activties.PlayersActivity;
 import com.app.futtalk.models.Team;
 
@@ -54,7 +54,7 @@ public class TeamsAdapter extends RecyclerView.Adapter<TeamsAdapter.MyHolder> {
         holder.btnLiveFeed.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(context, LiveFeedActivity.class);
+                Intent intent = new Intent(context, FeedPostActivity.class);
                 intent.putExtra("team", team);
                 context.startActivity(intent);
             }

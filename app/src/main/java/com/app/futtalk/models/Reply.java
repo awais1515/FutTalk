@@ -1,6 +1,8 @@
 package com.app.futtalk.models;
 
-public class Reply {
+import java.io.Serializable;
+
+public class Reply implements Serializable {
     private String id;
     private String uid;
     private String text;

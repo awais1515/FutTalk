@@ -25,6 +25,7 @@ import com.app.futtalk.models.Comment;
 import com.app.futtalk.models.FeedPost;
 import com.app.futtalk.models.Team;
 import com.app.futtalk.utils.FirebaseUtils;
+import com.app.futtalk.utils.Settings;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.ChildEventListener;
@@ -55,6 +56,9 @@ public class CommentsActivity extends BaseActivity {
 
     private TextView tvNoCommentFound;
 
+    private Handler handler;
+    private Runnable taskRunnable;
+
 
 
 
@@ -67,7 +71,7 @@ public class CommentsActivity extends BaseActivity {
         init();
         setData();
         setListeners();
-        fetchComments();
+        updateTimes();
     }
     private void init() {
         context=this;
@@ -81,7 +85,6 @@ public class CommentsActivity extends BaseActivity {
         commentsAdapter = new CommentsAdapter(context, commentList, team, feedPost, R.layout.row_comment);
         recyclerView.setLayoutManager(new LinearLayoutManager(context));
         recyclerView.setAdapter(commentsAdapter);
-
     }
 
     private void setListeners() {
@@ -175,6 +178,22 @@ public class CommentsActivity extends BaseActivity {
         }
     }
 
+    private void updateTimes() {
+        handler = new Handler();
+        taskRunnable = new Runnable() {
+            @Override
+            public void run() {
+                commentsAdapter.notifyDataSetChanged();
+                handler.postDelayed(this, Settings.FEED_REFRESH_DURATION);
+            }
+        };
+        handler.post(taskRunnable);
+    }
 
-
+    @Override
+    protected void onResume() {
+        super.onResume();
+        commentList.clear();
+        fetchComments();
+    }
 }

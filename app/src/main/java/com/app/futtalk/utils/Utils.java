@@ -12,10 +12,12 @@ import java.util.Date;
 public class Utils {
 
     public static void setPicture(Context context, ImageView imageView, String url) {
-        Glide.with(context)
-                .load(url)
-                .centerCrop()
-                .into(imageView);
+        if (url != null && !url.isEmpty()) {
+            Glide.with(context)
+                    .load(url)
+                    .centerCrop()
+                    .into(imageView);
+        }
     }
 
     public static String getTimeAgo(String dateString) {

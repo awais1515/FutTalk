@@ -44,61 +44,40 @@
         </RelativeLayout>
 
         <LinearLayout
+            android:id="@+id/ll_reply_container"
             android:layout_toEndOf="@id/rl_profile_info"
             android:layout_width="match_parent"
+            android:layout_centerVertical="true"
+            android:background="@drawable/fixtures_background_dark"
             android:layout_height="wrap_content"
             >
 
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/fixtures_background"
-                android:paddingLeft="8dp"
-                android:layout_marginTop="4dp"
-                android:paddingRight="8dp"
-                android:paddingBottom="4dp">
+                android:padding="8dp"
+                >
 
-                <EditText
+                <TextView
                     android:id="@+id/Reply_text"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:textColor="@color/white"
                     android:backgroundTint="@color/grey_main"
-                    android:hint="Write your comment here..."
+                    android:text="Sample Comment"
                     android:inputType="textCapSentences|textMultiLine"
                     android:textSize="12sp" />
 
-                <RelativeLayout
+                <TextView
+                    android:id="@+id/tvTimePassed"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_below="@+id/Comment_text"
-                    android:layout_alignParentRight="true">
+                    android:layout_alignParentRight="true"
+                    android:layout_below="@id/Reply_text"
+                    android:fontFamily="@font/poppins_regular"
+                    android:text="5 mins ago"
+                    android:textSize="11sp" />
 
-
-                    <RelativeLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="4dp"
-                        android:layout_marginTop="4dp"
-                        android:layout_marginEnd="4dp"
-                        android:layout_marginBottom="4dp"
-                        android:layout_alignParentRight="true"
-                        android:gravity="center"
-                        android:padding="6dp">
-
-
-                        <TextView
-                            android:id="@+id/timePassed"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_centerInParent="true"
-                            android:layout_marginLeft="10dp"
-                            android:fontFamily="@font/poppins_regular"
-                            android:text="5 mins ago"
-                            android:textColor="@color/white"
-                            android:textSize="11sp" />
-
-                    </RelativeLayout>
-                </RelativeLayout>
             </RelativeLayout>
         </LinearLayout>
 

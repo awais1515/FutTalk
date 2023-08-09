@@ -5,7 +5,7 @@
     android:layout_margin="6dp"
     app:cardBackgroundColor="@color/grey_main"
     app:cardCornerRadius="10dp"
-    android:background="@drawable/fixtures_background"
+    android:background="@drawable/fixtures_background_dark"
     android:layout_height="wrap_content">
 
 
@@ -45,7 +45,7 @@
             android:layout_marginTop="8dp"
             android:fontFamily="@font/poppins_semi_bold"
             android:textSize="12sp"
-            android:textColor="@color/light_grey"
+            android:textColor="@color/grey"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
             </RelativeLayout>
