@@ -1,25 +1,43 @@
 package com.app.futtalk.activties;
 
 import static com.app.futtalk.utils.FirebaseUtils.CURRENT_USER;
+
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 
 import com.app.futtalk.R;
 import com.app.futtalk.models.FeedPost;
+import com.app.futtalk.models.StoryTypes;
 import com.app.futtalk.models.Team;
 import com.app.futtalk.utils.DbReferences;
 import com.app.futtalk.utils.Utils;
+import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
 import java.util.Date;
+
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class AddPostActivity extends BaseActivity {
@@ -30,6 +48,13 @@ public class AddPostActivity extends BaseActivity {
     private CircleImageView ivProfilePic;
     private Button btnPublish;
     private Team team;
+    private ImageView ivSelectPicture;
+    private ImageView ivSelectVideo;
+    private ImageView ivThumbnail;
+    private RelativeLayout rlAttachmentContainer;
+    private RelativeLayout rlVideoContainer;
+    private ActivityResultLauncher<Intent> imageUriFromGallery;
+    private Uri imageFilePath;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,6 +71,11 @@ public class AddPostActivity extends BaseActivity {
         etStory = findViewById(R.id.etStory);
         ivProfilePic = findViewById(R.id.ivProfilePic);
         btnPublish = findViewById(R.id.btnPublish);
+        ivSelectPicture = findViewById(R.id.ivSelectPicture);
+        ivSelectVideo = findViewById(R.id.ivSelectVideo);
+        ivThumbnail = findViewById(R.id.ivThumbnail);
+        rlAttachmentContainer = findViewById(R.id.rl_attachment_container);
+        rlVideoContainer = findViewById(R.id.rl_container_video);
     }
 
     private void setListeners() {
@@ -60,10 +90,58 @@ public class AddPostActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
                 if (isValid()) {
-                    publishStory();
+                    String textStory = etStory.getText().toString().trim();
+                    FeedPost feedPost = new FeedPost();
+                    feedPost.setText(textStory);
+                    feedPost.setDateTime(new Date().toString());
+                    feedPost.setUid(CURRENT_USER.getId());
+                    feedPost.setId(getKeyForStory());
+                    showProgressDialog("Publishing Story");
+                    if(imageFilePath != null) {
+                        // we have picture with the story
+                        feedPost.setStoryType(StoryTypes.PictureStory);
+                        publishStoryWithPicture(feedPost);
+                    } else {
+                        feedPost.setStoryType(StoryTypes.TextStory);
+                        publishStoryText(feedPost);
+                    }
+                    
                 }
             }
         });
+
+        imageUriFromGallery = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
+            @Override
+            public void onActivityResult(ActivityResult result) {
+                if (result.getData() != null) {
+                    imageFilePath = result.getData().getData();
+                    Glide.with(context)
+                            .load(imageFilePath)
+                            .centerCrop()
+                            .into(ivThumbnail);
+                    rlAttachmentContainer.setVisibility(View.VISIBLE);
+                }
+            }
+        });
+        ivSelectPicture.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getImageFromGallery(imageUriFromGallery);
+            }
+        });
+        
+        ivSelectVideo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+    }
+
+    protected void getImageFromGallery(ActivityResultLauncher<Intent> getImageUriFromGallery) {
+        Intent intentGallery = new Intent(Intent.ACTION_PICK);
+        intentGallery.setType("image/*");
+        getImageUriFromGallery.launch((intentGallery));
     }
 
     private void setData() {
@@ -84,16 +162,14 @@ public class AddPostActivity extends BaseActivity {
         }
         return true;
     }
+    
+    private String getKeyForStory() {
+        String key =  FirebaseDatabase.getInstance().getReference(DbReferences.FEED).child(team.getName()).push().getKey();
+        return key;
+    }
 
-    private void publishStory() {
-        String textStory = etStory.getText().toString().trim();
-        FeedPost feedPost = new FeedPost();
-        feedPost.setText(textStory);
-        feedPost.setDateTime(new Date().toString());
-        feedPost.setUid(CURRENT_USER.getId());
-
-        showProgressDialog("Publishing...");
-        FirebaseDatabase.getInstance().getReference(DbReferences.FEED).child(team.getName()).push().setValue(feedPost).addOnCompleteListener(new OnCompleteListener<Void>() {
+    private void publishStoryText(FeedPost feedPost) {
+        FirebaseDatabase.getInstance().getReference(DbReferences.FEED).child(team.getName()).child(feedPost.getId()).setValue(feedPost).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 closeProgressDialog();
@@ -102,6 +178,36 @@ public class AddPostActivity extends BaseActivity {
                     finish();
                 } else {
                     showToastMessage("Failed to publish the story");
+                }
+            }
+        });
+    }
+
+    private void publishStoryWithPicture(FeedPost feedPost) {
+        FirebaseStorage firebaseStorage = FirebaseStorage.getInstance();
+        StorageReference storageReference = firebaseStorage.getReference("PostPictures").child(feedPost.getId());
+        storageReference.putFile(imageFilePath).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
+                if (task.isSuccessful()) {
+                    storageReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                        @Override
+                        public void onSuccess(Uri uri) {
+                            String url = uri.toString();
+                            feedPost.setStoryImageURL(url);
+                            publishStoryText(feedPost);
+                        }
+
+                    }).addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            closeProgressDialog();
+                            showToastMessage("Failed to upload image");
+                        }
+                    });
+                } else {
+                    closeProgressDialog();
+                    Toast.makeText(context, "Failed to upload the image", Toast.LENGTH_SHORT).show();
                 }
             }
         });

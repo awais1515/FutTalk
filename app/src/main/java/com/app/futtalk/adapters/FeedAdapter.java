@@ -2,10 +2,12 @@ package com.app.futtalk.adapters;
 
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -14,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.app.futtalk.R;
 import com.app.futtalk.activties.CommentsActivity;
 import com.app.futtalk.models.FeedPost;
+import com.app.futtalk.models.StoryTypes;
 import com.app.futtalk.models.Team;
 import com.app.futtalk.models.User;
 import com.app.futtalk.utils.DbReferences;
@@ -54,6 +57,14 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.MyHolder>{
         holder.tvTimeAgo.setText(Utils.getTimeAgo(feedPost.getDateTime()));
         holder.tvLikes.setText(String.valueOf(feedPost.getLikes().size()));
         holder.tvComments.setText(String.valueOf(feedPost.getComments().size()));
+
+        if (feedPost.getStoryType() == StoryTypes.PictureStory) {
+            Utils.setPicture(context, holder.ivStoryImage, feedPost.getStoryImageURL());
+            holder.rlAttachmentContainer.setVisibility(View.VISIBLE);
+        } else {
+            holder.rlAttachmentContainer.setVisibility(View.GONE);
+        }
+
         FirebaseDatabase.getInstance().getReference(DbReferences.USERS).child(feedPost.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -103,6 +114,8 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.MyHolder>{
     class MyHolder extends RecyclerView.ViewHolder {
         ImageView ivUserPicture;
         TextView tvTimeAgo, tvUserName, tvStory, tvLikes, tvComments;
+        ImageView ivStoryImage;
+        RelativeLayout rlAttachmentContainer, rlVideoContainer;
         MyHolder(View itemView) {
             super(itemView);
             ivUserPicture = itemView.findViewById(R.id.ivProfilePic);
@@ -111,6 +124,9 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.MyHolder>{
             tvStory = itemView.findViewById(R.id.tvStory);
             tvLikes = itemView.findViewById(R.id.tvLikes);
             tvComments = itemView.findViewById(R.id.tvComments);
+            ivStoryImage = itemView.findViewById(R.id.ivThumbnail);
+            rlAttachmentContainer = itemView.findViewById(R.id.rl_attachment_container);
+            rlVideoContainer = itemView.findViewById(R.id.rl_container_video);
         }
 
     }

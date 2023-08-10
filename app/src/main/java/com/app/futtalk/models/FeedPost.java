@@ -7,12 +7,15 @@ import java.util.List;
 import java.util.Set;
 
 public class FeedPost implements Serializable{
+
     private String id;
     private String uid;
     private String text;
     private String dateTime;
+    private String storyImageURL;
     private List<Comment> comments = new ArrayList<>();
     private List<String> likes = new ArrayList<>();
+    private StoryTypes storyType;
 
     public String getId() {
         return id;
@@ -60,5 +63,21 @@ public class FeedPost implements Serializable{
 
     public void setLikes(List<String> likes) {
         this.likes = likes;
+    }
+
+    public String getStoryImageURL() {
+        return storyImageURL;
+    }
+
+    public void setStoryImageURL(String storyImageURL) {
+        this.storyImageURL = storyImageURL;
+    }
+
+    public StoryTypes getStoryType() {
+        return storyType;
+    }
+
+    public void setStoryType(StoryTypes storyType) {
+        this.storyType = storyType;
     }
 }

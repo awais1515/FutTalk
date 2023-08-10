@@ -121,6 +121,7 @@
 
 
                 <ImageView
+                    android:id="@+id/ivThumbnail"
                     android:layout_centerInParent="true"
                     android:layout_width="match_parent"
                     android:src="@drawable/img_slider1"
