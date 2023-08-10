@@ -97,8 +97,7 @@
                 android:layout_centerInParent="true"
                 android:layout_marginLeft="10dp"
                 android:fontFamily="@font/poppins_light"
-                android:text="5 mins ago"
-
+                android:text="0 mins ago"
                 android:textSize="11sp" />
             </RelativeLayout>
     </RelativeLayout>
