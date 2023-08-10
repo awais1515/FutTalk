@@ -79,6 +79,7 @@
             android:layout_toRightOf="@+id/rl_profile_info"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_alignTop="@id/rl_profile_info"
             android:backgroundTint="@color/green_comment"
             android:textColor="@color/white"
             android:inputType="textCapSentences|textMultiLine"
@@ -88,6 +89,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/tvCommentText"
+
             android:layout_alignParentRight="true">
 
             <TextView

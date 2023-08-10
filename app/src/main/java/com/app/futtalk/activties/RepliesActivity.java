@@ -33,7 +33,10 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
+import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -42,6 +45,7 @@ public class RepliesActivity extends BaseActivity {
     private CircleImageView ivProfilePic;
     private RecyclerView recyclerView;
     private RepliesAdapter repliesAdapter;
+    private List<Reply> replyList;
     private EditText etReply;
     private Team team;
     private FeedPost feedPost;
@@ -65,6 +69,7 @@ public class RepliesActivity extends BaseActivity {
         init();
         setData();
         setListeners();
+        updateTimes();
 
     }
 
@@ -77,7 +82,9 @@ public class RepliesActivity extends BaseActivity {
         tvTimePassed = findViewById(R.id.tvTimePassed);
         tvCommentText = findViewById(R.id.tvCommentText);
         recyclerView = findViewById(R.id.recycler_view_replies);
-        repliesAdapter= new RepliesAdapter(context, comment.getReplies(), R.layout.row_replies);
+        replyList = new ArrayList<>(comment.getReplies());
+        Collections.reverse(replyList);
+        repliesAdapter= new RepliesAdapter(context, replyList, R.layout.row_replies);
         recyclerView.setLayoutManager(new LinearLayoutManager(context));
         recyclerView.setAdapter(repliesAdapter);
         ivSend = findViewById(R.id.ivSendReply);
@@ -108,7 +115,8 @@ public class RepliesActivity extends BaseActivity {
         reply.setUid(FirebaseUtils.CURRENT_USER.getId());
         reply.setDateTime(new Date().toString());
         reply.setText(replies);
-        comment.getReplies().add(0,reply);
+        comment.getReplies().add(reply);
+        repliesAdapter.notifyDataSetChanged();
         showPublishInProgress(true);
         FirebaseDatabase.getInstance().getReference(FEED).child(team.getName()).child(feedPost.getId()).child(DbReferences.COMMENTS).child(comment.getId()).setValue(comment).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
@@ -117,6 +125,8 @@ public class RepliesActivity extends BaseActivity {
                 if (task.isSuccessful()) {
                     tvNoReplyFound.setVisibility(View.GONE);
                     etReply.setText("");
+                    replyList.add(0,reply);
+                    repliesAdapter.notifyDataSetChanged();
                 } else {
                     showToastMessage("Sorry couldn't added a reply");
                 }

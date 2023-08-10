@@ -138,7 +138,6 @@ public class CommentsActivity extends BaseActivity {
                 tvNoCommentFound.setVisibility(View.GONE);
                 Comment comment = snapshot.getValue(Comment.class);
                 comment.setId(snapshot.getKey());
-                Collections.reverse(comment.getReplies());
                 commentList.add(0, comment);
                 commentsAdapter.notifyDataSetChanged();
 

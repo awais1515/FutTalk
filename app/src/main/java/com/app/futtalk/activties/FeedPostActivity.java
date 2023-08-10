@@ -12,6 +12,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.app.futtalk.R;
@@ -42,11 +43,12 @@ public class FeedPostActivity extends BaseActivity {
     private List<FeedPost> feedPosts;
     private Handler handler;
     private Runnable taskRunnable;
+    private ProgressBar progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_live_feed);
+        setContentView(R.layout.activity_feed_posts);
         team = (Team) getIntent().getSerializableExtra("team");
         init();
         setData();
@@ -63,6 +65,7 @@ public class FeedPostActivity extends BaseActivity {
         feedAdapter = new FeedAdapter(context, team, feedPosts, R.layout.row_feed);
         recyclerView.setLayoutManager(new LinearLayoutManager(context));
         recyclerView.setAdapter(feedAdapter);
+        progressBar = findViewById(R.id.progressBar);
         handler = new Handler();
         taskRunnable = new Runnable() {
             @Override
@@ -110,6 +113,7 @@ public class FeedPostActivity extends BaseActivity {
         FirebaseDatabase.getInstance().getReference(DbReferences.FEED).child(team.getName()).addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+                progressBar.setVisibility(View.GONE);
                 FeedPost feedPost = snapshot.getValue(FeedPost.class);
                 feedPost.setId(snapshot.getKey());
                 feedPosts.add(0, feedPost);
