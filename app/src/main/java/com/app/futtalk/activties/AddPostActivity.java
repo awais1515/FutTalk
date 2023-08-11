@@ -4,8 +4,11 @@ import static com.app.futtalk.utils.FirebaseUtils.CURRENT_USER;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.media.MediaMetadataRetriever;
 import android.media.MediaPlayer;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -38,6 +41,7 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
+import java.io.IOException;
 import java.util.Date;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -126,9 +130,17 @@ public class AddPostActivity extends BaseActivity {
             }
         });
 
+        videoView.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+            @Override
+            public void onCompletion(MediaPlayer mp) {
+                rlVideoContainer.setVisibility(View.VISIBLE);
+            }
+        });
+
         imageUriFromGallery = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
             @Override
             public void onActivityResult(ActivityResult result) {
+
                 if (result.getData() != null) {
                     imageFilePath = result.getData().getData();
                     Glide.with(context)
@@ -136,6 +148,9 @@ public class AddPostActivity extends BaseActivity {
                             .centerCrop()
                             .into(ivThumbnail);
                     rlAttachmentContainer.setVisibility(View.VISIBLE);
+                    ivThumbnail.setVisibility(View.VISIBLE);
+                    videoView.setVisibility(View.GONE);
+                    rlVideoContainer.setVisibility(View.GONE);
                 }
             }
         });
@@ -147,22 +162,7 @@ public class AddPostActivity extends BaseActivity {
                     videoFilePath = result.getData().getData();
                     mimeType = getContentResolver().getType(videoFilePath);
                     if (mimeType != null && mimeType.startsWith("video/")) {
-
-                   /* Glide.with(context)
-                            .load(videoFilePath)
-                            .centerCrop()
-                            .into(ivThumbnailVideo);*/
-                        rlVideoContainer.setVisibility(View.VISIBLE);
-                        ivPlay.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View view) {
-                                if (videoFilePath != null) {
-                                    videoView.setVideoURI(videoFilePath);
-                                    videoView.start();
-                                }
-                            }
-                        });
-
+                        new GetThumbnailTask(context).execute(videoFilePath);
                     } else {
                         showToastMessage("You did not attach a video");
                     }
@@ -298,5 +298,59 @@ public class AddPostActivity extends BaseActivity {
 
         });
 
+    }
+
+    private class GetThumbnailTask extends AsyncTask<Uri, Void, Bitmap> {
+        private Context context;
+
+        public GetThumbnailTask(Context context) {
+            this.context = context;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            showProgressDialog("Processing..");
+        }
+
+        @Override
+        protected Bitmap doInBackground(Uri... uris) {
+            Uri videoUri = uris[0];
+            MediaMetadataRetriever retriever = new MediaMetadataRetriever();
+            retriever.setDataSource(context, videoUri);
+
+            Bitmap thumbnail = retriever.getFrameAtTime(0, MediaMetadataRetriever.OPTION_CLOSEST_SYNC);
+            try {
+                retriever.release();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+
+            return thumbnail;
+        }
+
+        @Override
+        protected void onPostExecute(Bitmap bitmap) {
+            closeProgressDialog();
+            if (bitmap != null) {
+                ivThumbnail.setImageBitmap(bitmap);
+                rlAttachmentContainer.setVisibility(View.VISIBLE);
+                rlVideoContainer.setVisibility(View.VISIBLE);
+                videoView.setVisibility(View.GONE);
+                ivThumbnail.setVisibility(View.VISIBLE);
+                ivPlay.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        if (videoFilePath != null) {
+                            rlVideoContainer.setVisibility(View.GONE);
+                            videoView.setVideoURI(videoFilePath);
+                            ivThumbnail.setVisibility(View.INVISIBLE);
+                            videoView.setVisibility(View.VISIBLE);
+                            videoView.start();
+                        }
+                    }
+                });
+            }
+        }
     }
 }
