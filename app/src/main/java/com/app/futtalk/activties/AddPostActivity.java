@@ -14,6 +14,7 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.VideoView;
 
 import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultCallback;
@@ -52,7 +53,6 @@ public class AddPostActivity extends BaseActivity {
     private ImageView ivSelectPicture;
     private ImageView ivSelectVideo;
     private ImageView ivThumbnail;
-    private ImageView ivThumbnailVideo;
     private ImageView ivPlay;
     private RelativeLayout rlAttachmentContainer;
     private RelativeLayout rlVideoContainer;
@@ -64,6 +64,8 @@ public class AddPostActivity extends BaseActivity {
     private Uri imageFilePath;
 
     private Uri videoFilePath;
+    private VideoView videoView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -85,15 +87,15 @@ public class AddPostActivity extends BaseActivity {
         ivThumbnail = findViewById(R.id.ivThumbnail);
         rlAttachmentContainer = findViewById(R.id.rl_attachment_container);
         rlVideoContainer = findViewById(R.id.rl_container_video);
-        ivPlay= findViewById(R.id.ic_play);
-        ivThumbnailVideo=findViewById(R.id.ivThumbnailVideo);
+        ivPlay = findViewById(R.id.ic_play);
+        videoView = findViewById(R.id.videView);
     }
 
     private void setListeners() {
         findViewById(R.id.ivBack).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-               finish();
+                finish();
             }
         });
 
@@ -108,18 +110,18 @@ public class AddPostActivity extends BaseActivity {
                     feedPost.setUid(CURRENT_USER.getId());
                     feedPost.setId(getKeyForStory());
                     showProgressDialog("Publishing Story");
-                    if(imageFilePath != null) {
+                    if (imageFilePath != null) {
                         // we have picture with the story
                         feedPost.setStoryType(StoryTypes.PictureStory);
                         publishStoryWithPicture(feedPost);
-                    } else if (videoFilePath!= null) {
+                    } else if (videoFilePath != null) {
                         feedPost.setStoryType(StoryTypes.VideoStory);
                         publishStoryWithVideo(feedPost);
                     } else {
                         feedPost.setStoryType(StoryTypes.TextStory);
                         publishStoryText(feedPost);
                     }
-                    
+
                 }
             }
         });
@@ -138,39 +140,34 @@ public class AddPostActivity extends BaseActivity {
             }
         });
 
-        videoUriFromGallery= registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
+        videoUriFromGallery = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
             @Override
             public void onActivityResult(ActivityResult result) {
-                if(result.getData()!= null){
-                    videoFilePath= result.getData().getData();
-                    mimeType= getContentResolver().getType(videoFilePath);
-                    if(mimeType != null && mimeType.startsWith("video/")){
+                if (result.getData() != null) {
+                    videoFilePath = result.getData().getData();
+                    mimeType = getContentResolver().getType(videoFilePath);
+                    if (mimeType != null && mimeType.startsWith("video/")) {
 
-                    Glide.with(context)
+                   /* Glide.with(context)
                             .load(videoFilePath)
                             .centerCrop()
-                            .into(ivThumbnailVideo);
-                    rlVideoContainer.setVisibility(View.VISIBLE);
-                    ivPlay.setVisibility(View.VISIBLE);
-
-                    ivPlay.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            MediaPlayer mediaPlayer = new MediaPlayer();
-                            try {
-                                mediaPlayer.setDataSource(context, videoFilePath);
-                                mediaPlayer.prepare();
-                                mediaPlayer.start();
-                            } catch (Exception e) {
-                                e.printStackTrace();
+                            .into(ivThumbnailVideo);*/
+                        rlVideoContainer.setVisibility(View.VISIBLE);
+                        ivPlay.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                if (videoFilePath != null) {
+                                    videoView.setVideoURI(videoFilePath);
+                                    videoView.start();
+                                }
                             }
-                        }
-                    });
+                        });
 
-                }
-                    else {
+                    } else {
                         showToastMessage("You did not attach a video");
                     }
+                } else {
+                    showToastMessage("Data is null");
                 }
             }
         });
@@ -180,7 +177,7 @@ public class AddPostActivity extends BaseActivity {
                 getImageFromGallery(imageUriFromGallery);
             }
         });
-        
+
         ivSelectVideo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -197,7 +194,7 @@ public class AddPostActivity extends BaseActivity {
     }
 
     protected void getVideoFromGallery(ActivityResultLauncher<Intent> getVideoUriFromGallery) {
-        Intent intentGallery= new Intent(Intent.ACTION_PICK);
+        Intent intentGallery = new Intent(Intent.ACTION_PICK);
         intentGallery.setType("video/*");
         getVideoUriFromGallery.launch(intentGallery);
     }
@@ -220,9 +217,9 @@ public class AddPostActivity extends BaseActivity {
         }
         return true;
     }
-    
+
     private String getKeyForStory() {
-        String key =  FirebaseDatabase.getInstance().getReference(DbReferences.FEED).child(team.getName()).push().getKey();
+        String key = FirebaseDatabase.getInstance().getReference(DbReferences.FEED).child(team.getName()).push().getKey();
         return key;
     }
 
@@ -271,7 +268,7 @@ public class AddPostActivity extends BaseActivity {
         });
     }
 
-    private void publishStoryWithVideo(FeedPost feedPost){
+    private void publishStoryWithVideo(FeedPost feedPost) {
         FirebaseStorage firebaseStorage = FirebaseStorage.getInstance();
         StorageReference storageReference = firebaseStorage.getReference("Post Videos").child(feedPost.getId());
         storageReference.putFile(videoFilePath).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
