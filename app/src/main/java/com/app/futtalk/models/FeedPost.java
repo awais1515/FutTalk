@@ -13,9 +13,12 @@ public class FeedPost implements Serializable{
     private String text;
     private String dateTime;
     private String storyImageURL;
+
+    private String storyVideoURL;
     private List<Comment> comments = new ArrayList<>();
     private List<String> likes = new ArrayList<>();
     private StoryTypes storyType;
+
 
     public String getId() {
         return id;
@@ -72,6 +75,10 @@ public class FeedPost implements Serializable{
     public void setStoryImageURL(String storyImageURL) {
         this.storyImageURL = storyImageURL;
     }
+
+    public String getStoryVideoURL() {return storyVideoURL;}
+
+    public void setStoryVideoURL(String videoImageURL){ this.storyVideoURL= storyVideoURL; }
 
     public StoryTypes getStoryType() {
         return storyType;

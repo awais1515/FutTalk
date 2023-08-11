@@ -20,6 +20,15 @@ public class Utils {
         }
     }
 
+    public static void setVideo(Context context, ImageView imageView, String url) {
+        if (url != null && !url.isEmpty()) {
+            Glide.with(context)
+                    .load(url)
+                    .centerCrop()
+                    .into(imageView);
+        }
+    }
+
     public static String getTimeAgo(String dateString) {
         String timeAgo = "";
         SimpleDateFormat sdf = new SimpleDateFormat("EEE MMM dd HH:mm:ss z yyyy");

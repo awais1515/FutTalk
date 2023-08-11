@@ -1,7 +1,9 @@
 package com.app.futtalk.adapters;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+import android.media.MediaPlayer;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -27,9 +29,10 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+
 import java.util.List;
 
-public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.MyHolder>{
+public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.MyHolder> {
     private Context context;
     private List<FeedPost> feedPosts;
     private Team team;
@@ -61,6 +64,13 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.MyHolder>{
         if (feedPost.getStoryType() == StoryTypes.PictureStory) {
             Utils.setPicture(context, holder.ivStoryImage, feedPost.getStoryImageURL());
             holder.rlAttachmentContainer.setVisibility(View.VISIBLE);
+
+        } else if (feedPost.getStoryType() == StoryTypes.VideoStory) {
+            Utils.setVideo(context, holder.ivStoryVideo, feedPost.getStoryVideoURL());
+            holder.rlVideoContainer.setVisibility(View.VISIBLE);
+            holder.ivPlay.setVisibility(View.VISIBLE);
+
+
         } else {
             holder.rlAttachmentContainer.setVisibility(View.GONE);
         }
@@ -71,6 +81,7 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.MyHolder>{
                 User user = snapshot.getValue(User.class);
                 holder.tvUserName.setText(user.getName());
                 Utils.setPicture(context, holder.ivUserPicture, user.getProfileUrl());
+                Utils.setVideo(context, holder.ivUserPicture, user.getProfileUrl());
             }
 
             @Override
@@ -104,7 +115,22 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.MyHolder>{
                 FirebaseDatabase.getInstance().getReference(DbReferences.FEED).child(team.getName()).child(feedPost.getId()).setValue(feedPost);
             }
         });
+        holder.ivPlay.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                MediaPlayer mediaPlayer = new MediaPlayer();
+                try {
+                    mediaPlayer.setDataSource(feedPost.getStoryVideoURL());
+                    mediaPlayer.prepare();
+                    mediaPlayer.start();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
     }
+
+
 
     @Override
     public int getItemCount() {
@@ -114,7 +140,8 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.MyHolder>{
     class MyHolder extends RecyclerView.ViewHolder {
         ImageView ivUserPicture;
         TextView tvTimeAgo, tvUserName, tvStory, tvLikes, tvComments;
-        ImageView ivStoryImage;
+        ImageView ivStoryImage, ivPlay, ivStoryVideo;
+
         RelativeLayout rlAttachmentContainer, rlVideoContainer;
         MyHolder(View itemView) {
             super(itemView);
@@ -125,9 +152,13 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.MyHolder>{
             tvLikes = itemView.findViewById(R.id.tvLikes);
             tvComments = itemView.findViewById(R.id.tvComments);
             ivStoryImage = itemView.findViewById(R.id.ivThumbnail);
+            ivStoryVideo= itemView.findViewById(R.id.ivThumbnailVideo);
             rlAttachmentContainer = itemView.findViewById(R.id.rl_attachment_container);
             rlVideoContainer = itemView.findViewById(R.id.rl_container_video);
+            ivPlay= itemView.findViewById(R.id.ic_play);
         }
 
     }
+
+
 }

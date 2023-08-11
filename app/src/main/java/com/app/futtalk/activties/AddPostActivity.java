@@ -4,6 +4,7 @@ import static com.app.futtalk.utils.FirebaseUtils.CURRENT_USER;
 
 import android.content.Context;
 import android.content.Intent;
+import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
@@ -51,10 +52,18 @@ public class AddPostActivity extends BaseActivity {
     private ImageView ivSelectPicture;
     private ImageView ivSelectVideo;
     private ImageView ivThumbnail;
+    private ImageView ivThumbnailVideo;
+    private ImageView ivPlay;
     private RelativeLayout rlAttachmentContainer;
     private RelativeLayout rlVideoContainer;
     private ActivityResultLauncher<Intent> imageUriFromGallery;
+    private ActivityResultLauncher<Intent> videoUriFromGallery;
+
+    private String mimeType;
+
     private Uri imageFilePath;
+
+    private Uri videoFilePath;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -76,6 +85,8 @@ public class AddPostActivity extends BaseActivity {
         ivThumbnail = findViewById(R.id.ivThumbnail);
         rlAttachmentContainer = findViewById(R.id.rl_attachment_container);
         rlVideoContainer = findViewById(R.id.rl_container_video);
+        ivPlay= findViewById(R.id.ic_play);
+        ivThumbnailVideo=findViewById(R.id.ivThumbnailVideo);
     }
 
     private void setListeners() {
@@ -101,6 +112,9 @@ public class AddPostActivity extends BaseActivity {
                         // we have picture with the story
                         feedPost.setStoryType(StoryTypes.PictureStory);
                         publishStoryWithPicture(feedPost);
+                    } else if (videoFilePath!= null) {
+                        feedPost.setStoryType(StoryTypes.VideoStory);
+                        publishStoryWithVideo(feedPost);
                     } else {
                         feedPost.setStoryType(StoryTypes.TextStory);
                         publishStoryText(feedPost);
@@ -123,6 +137,43 @@ public class AddPostActivity extends BaseActivity {
                 }
             }
         });
+
+        videoUriFromGallery= registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
+            @Override
+            public void onActivityResult(ActivityResult result) {
+                if(result.getData()!= null){
+                    videoFilePath= result.getData().getData();
+                    mimeType= getContentResolver().getType(videoFilePath);
+                    if(mimeType != null && mimeType.startsWith("video/")){
+
+                    Glide.with(context)
+                            .load(videoFilePath)
+                            .centerCrop()
+                            .into(ivThumbnailVideo);
+                    rlVideoContainer.setVisibility(View.VISIBLE);
+                    ivPlay.setVisibility(View.VISIBLE);
+
+                    ivPlay.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            MediaPlayer mediaPlayer = new MediaPlayer();
+                            try {
+                                mediaPlayer.setDataSource(context, videoFilePath);
+                                mediaPlayer.prepare();
+                                mediaPlayer.start();
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    });
+
+                }
+                    else {
+                        showToastMessage("You did not attach a video");
+                    }
+                }
+            }
+        });
         ivSelectPicture.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -133,6 +184,7 @@ public class AddPostActivity extends BaseActivity {
         ivSelectVideo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                getVideoFromGallery((videoUriFromGallery));
 
             }
         });
@@ -142,6 +194,12 @@ public class AddPostActivity extends BaseActivity {
         Intent intentGallery = new Intent(Intent.ACTION_PICK);
         intentGallery.setType("image/*");
         getImageUriFromGallery.launch((intentGallery));
+    }
+
+    protected void getVideoFromGallery(ActivityResultLauncher<Intent> getVideoUriFromGallery) {
+        Intent intentGallery= new Intent(Intent.ACTION_PICK);
+        intentGallery.setType("video/*");
+        getVideoUriFromGallery.launch(intentGallery);
     }
 
     private void setData() {
@@ -211,5 +269,37 @@ public class AddPostActivity extends BaseActivity {
                 }
             }
         });
+    }
+
+    private void publishStoryWithVideo(FeedPost feedPost){
+        FirebaseStorage firebaseStorage = FirebaseStorage.getInstance();
+        StorageReference storageReference = firebaseStorage.getReference("Post Videos").child(feedPost.getId());
+        storageReference.putFile(videoFilePath).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
+                if (task.isSuccessful()) {
+                    storageReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                        @Override
+                        public void onSuccess(Uri uri) {
+                            String url = uri.toString();
+                            feedPost.setStoryVideoURL(url);
+                            publishStoryText(feedPost);
+                        }
+
+                    }).addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            closeProgressDialog();
+                            showToastMessage("Failed to upload video");
+                        }
+                    });
+                } else {
+                    closeProgressDialog();
+                    Toast.makeText(context, "Failed to upload the video", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+        });
+
     }
 }

@@ -122,10 +122,10 @@
 
                 <ImageView
                     android:id="@+id/ivThumbnail"
-                    android:layout_centerInParent="true"
                     android:layout_width="match_parent"
-                    android:src="@drawable/img_slider1"
-                    android:layout_height="150dp"/>
+                    android:layout_height="150dp"
+                    android:layout_centerInParent="true"
+                    android:src="@drawable/img_slider1" />
 
 
                 <RelativeLayout
@@ -140,11 +140,20 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"/>
 
+
                     <ImageView
+                        android:id="@+id/ivThumbnailVideo"
+                        android:layout_width="match_parent"
+                        android:layout_height="150dp"
                         android:layout_centerInParent="true"
+                        android:src="@drawable/img_slider1" />
+
+                    <ImageView
+                        android:id="@+id/ic_play"
                         android:layout_width="wrap_content"
-                        android:src="@drawable/ic_play"
-                        android:layout_height="wrap_content"/>
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:src="@drawable/ic_play" />
 
                 </RelativeLayout>
 
