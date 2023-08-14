@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.app.futtalk.R;
 import com.app.futtalk.adapters.TeamsAdapter;
+import com.app.futtalk.models.Team;
 import com.app.futtalk.utils.DataHelper;
 
 public class TeamsFragment extends Fragment {
@@ -87,4 +88,9 @@ public class TeamsFragment extends Fragment {
         });*/
     }
 
+    public void addTeam(Team team) {
+    }
+
+    public void removeTeam(Team team) {
+    }
 }

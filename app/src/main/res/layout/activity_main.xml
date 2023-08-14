@@ -40,6 +40,18 @@
                 android:background="@drawable/ic_menu"
                 />
 
+            <ImageView
+                android:id="@+id/btnAddNewTeam"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:padding="5dp"
+                android:layout_centerVertical="true"
+                android:layout_alignParentRight="true"
+                android:src="@drawable/ic_plus"
+                android:background="@drawable/ic_circle"
+                android:visibility="invisible"
+                />
+
         </RelativeLayout>
 
 

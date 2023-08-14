@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".activties.TeamSelectionActivity"
+    android:background="@color/black">
+
+
+    <RelativeLayout
+        android:id="@+id/RelativeLayoutTopBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="5dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp">
+
+        <ImageView
+            android:id="@+id/ivBack"
+            android:layout_width="wrap_content"
+            android:layout_height="20dp"
+            android:layout_centerVertical="true"
+            android:src="@drawable/ic_backarrow" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="16dp"
+            android:layout_toRightOf="@id/ivBack"
+            android:fontFamily="@font/poppins_bold_italic"
+            android:text="Team Selection"
+            android:textColor="@color/white"
+            android:textSize="15sp" />
+    </RelativeLayout>
+
+    <HorizontalScrollView
+        android:id="@+id/horizontalScrollViewLeagues"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/RelativeLayoutTopBar"
+        android:layout_marginBottom="10dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:padding="5dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/btnPremierLeague"
+                android:layout_width="150dp"
+                android:layout_height="45dp"
+                android:layout_marginRight="10dp"
+                android:drawableLeft="@drawable/ic_premier_league"
+                android:padding="8dp"
+                android:text="Premier League"
+                android:textColor="@color/white" />
+
+            <Button
+                android:id="@+id/btnSerieA"
+                android:layout_width="150dp"
+                android:layout_height="45dp"
+                android:layout_marginRight="10dp"
+                android:drawableLeft="@drawable/ic_serie_a"
+                android:drawablePadding="20dp"
+                android:paddingTop="8dp"
+                android:paddingRight="20dp"
+                android:paddingBottom="8dp"
+                android:text="Serie A"
+                android:textColor="@color/white" />
+
+            <Button
+                android:id="@+id/btnLaLiga"
+                android:layout_width="150dp"
+                android:layout_height="45dp"
+                android:layout_marginRight="10dp"
+                android:drawableLeft="@drawable/ic_laliga"
+                android:text="La Liga"
+                android:textColor="@color/white" />
+
+            <Button
+                android:id="@+id/btnBundesliga"
+                android:layout_width="150dp"
+                android:layout_height="45dp"
+                android:layout_marginRight="10dp"
+                android:drawableLeft="@drawable/ic_bundesliga_logo"
+                android:padding="8dp"
+                android:text="Bundesliga"
+                android:textColor="@color/white" />
+
+            <Button
+                android:id="@+id/btnLigue1"
+                android:layout_width="150dp"
+                android:layout_height="45dp"
+                android:layout_marginRight="10dp"
+                android:drawableLeft="@drawable/ic_ligue_1_logo"
+                android:padding="8dp"
+                android:text="Ligue 1"
+                android:textColor="@color/white" />
+        </LinearLayout>
+    </HorizontalScrollView>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:background="@color/grey"
+        android:id="@+id/recycler_view_teams_of_leagues"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/horizontalScrollViewLeagues"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="10dp" />
+</RelativeLayout>

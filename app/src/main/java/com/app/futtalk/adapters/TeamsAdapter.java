@@ -15,6 +15,7 @@ import com.app.futtalk.R;
 import com.app.futtalk.activties.FixturesActivity;
 import com.app.futtalk.activties.FeedPostActivity;
 import com.app.futtalk.activties.PlayersActivity;
+import com.app.futtalk.fragments.TeamsFragment;
 import com.app.futtalk.models.Team;
 
 import java.util.List;
@@ -26,12 +27,18 @@ public class TeamsAdapter extends RecyclerView.Adapter<TeamsAdapter.MyHolder> {
 
     private int rowLayout;
 
+    private TeamsFragment teamsFragment;
+
+
+
 
 
     public TeamsAdapter(Context context, List<Team> teamsList, int rowLayout) {
         this.context = context;
         this.rowLayout = rowLayout;
         this.teamsList = teamsList;
+        this.teamsFragment = teamsFragment;
+
     }
 
     @NonNull
@@ -74,6 +81,17 @@ public class TeamsAdapter extends RecyclerView.Adapter<TeamsAdapter.MyHolder> {
             }
         });
 
+        holder.ivFavoriteTeamButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                teamsList.remove(team);
+                notifyDataSetChanged();
+
+            }
+        });
+
+
+
     }
 
     @Override
@@ -84,7 +102,7 @@ public class TeamsAdapter extends RecyclerView.Adapter<TeamsAdapter.MyHolder> {
         public View btnLiveFeed;
         public View btnPlayers;
         public View btnFixtures;
-        ImageView ivTeamLogo;
+        ImageView ivTeamLogo, ivFavoriteTeamButton;
 
         TextView tvTeamName;
 
@@ -95,6 +113,7 @@ public class TeamsAdapter extends RecyclerView.Adapter<TeamsAdapter.MyHolder> {
             btnLiveFeed = itemView.findViewById(R.id.btnLiveFeed);
             btnPlayers = itemView.findViewById(R.id.btnPlayers);
             btnFixtures = itemView.findViewById(R.id.btnFixtures);
+            ivFavoriteTeamButton= itemView.findViewById(R.id.btnFavoriteTeam);
         }
 
     }

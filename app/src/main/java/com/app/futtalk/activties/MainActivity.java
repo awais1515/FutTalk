@@ -8,19 +8,14 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
-import androidx.core.app.ActivityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
-import android.Manifest;
-import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
@@ -67,6 +62,7 @@ public class MainActivity extends BaseActivity {
     BottomNavigationView bottomNavigationView;
     CircleImageView ivProfilePic;
     Button btnViewProfile;
+    ImageView btnAddNewTeam;
     ImageButton closeButton;
     //private ActivityResultLauncher<Intent> galleryImageResultListener;
     private Uri imageFilePath;
@@ -94,6 +90,7 @@ public class MainActivity extends BaseActivity {
         tvScreenTitle = findViewById(R.id.tvScreenTitle);
         ivProfilePic = findViewById(R.id.ivProfilePic);
         btnViewProfile = findViewById(R.id.btnViewProfile);
+        btnAddNewTeam= findViewById(R.id.btnAddNewTeam);
         closeButton = findViewById(R.id.closeButton);
         homeFragment = new HomeFragment();
         resultsFragment = new ResultsFragment();
@@ -133,6 +130,7 @@ public class MainActivity extends BaseActivity {
                     return true;
                 } else if (item.getItemId() == R.id.item_teams) {
                     loadFragment(teamsFragment, getString(R.string.teams_frag_title));
+                    btnAddNewTeam.setVisibility(View.VISIBLE);
                     return true;
                 } else if (item.getItemId() == R.id.item_fixtures) {
                     loadFragment(fixturesFragment, getString(R.string.fixtures_frag_title));
@@ -196,6 +194,14 @@ public class MainActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(context, PrivacyPolicyActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        btnAddNewTeam.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent= new Intent(context, TeamSelectionActivity.class);
                 startActivity(intent);
             }
         });

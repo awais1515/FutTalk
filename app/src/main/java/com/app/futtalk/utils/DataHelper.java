@@ -123,7 +123,6 @@ public class DataHelper {
     }
 
 
-
     public static List<Results> getResults(int count) {
 
         Results results1 = new Results();

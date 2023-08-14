@@ -32,7 +32,10 @@
                         android:id="@+id/player_profile_picture"
                         android:layout_width="42dp"
                         android:layout_height="42dp"
-                        android:layout_margin="8dp"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginEnd="8dp"
+                        android:layout_marginBottom="8dp"
                         android:scaleType="centerCrop"
                         android:src="@drawable/ic_player_picture" />
 
