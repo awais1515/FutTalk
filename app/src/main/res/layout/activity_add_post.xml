@@ -116,7 +116,7 @@
                 android:layout_below="@id/ivProfilePic"
                 android:layout_marginTop="20dp"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="350dp"
                 tools:visibility="visible">
 
 
@@ -136,7 +136,7 @@
 
                 <RelativeLayout
                     android:visibility="gone"
-                    android:id="@+id/rl_container_video"
+                    android:id="@+id/rl_container_video_controls"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent">
 
@@ -155,15 +155,11 @@
 
                 </RelativeLayout>
 
-
-
             </RelativeLayout>
 
         </RelativeLayout>
 
     </androidx.cardview.widget.CardView>
-
-
 
     <Button
         android:id="@+id/btnPublish"

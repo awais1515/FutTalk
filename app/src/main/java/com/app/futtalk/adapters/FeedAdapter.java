@@ -1,9 +1,9 @@
 package com.app.futtalk.adapters;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.media.MediaPlayer;
+import android.net.Uri;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.VideoView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -64,12 +65,22 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.MyHolder> {
         if (feedPost.getStoryType() == StoryTypes.PictureStory) {
             Utils.setPicture(context, holder.ivStoryImage, feedPost.getStoryImageURL());
             holder.rlAttachmentContainer.setVisibility(View.VISIBLE);
+            holder.rlVideoContainer.setVisibility(View.GONE);
 
         } else if (feedPost.getStoryType() == StoryTypes.VideoStory) {
-            Utils.setVideo(context, holder.ivStoryVideo, feedPost.getStoryVideoURL());
+            holder.rlAttachmentContainer.setVisibility(View.VISIBLE);
             holder.rlVideoContainer.setVisibility(View.VISIBLE);
             holder.ivPlay.setVisibility(View.VISIBLE);
-
+            Utils.setPicture(context, holder.ivStoryImage, feedPost.getStoryImageURL());
+            holder.ivPlay.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Log.d("abc", "play button clicked");
+                    Uri videoUri = Uri.parse(feedPost.getStoryVideoURL());
+                    holder.videoView.setVideoURI(videoUri);
+                    holder.videoView.start();
+                }
+            });
 
         } else {
             holder.rlAttachmentContainer.setVisibility(View.GONE);
@@ -140,8 +151,8 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.MyHolder> {
     class MyHolder extends RecyclerView.ViewHolder {
         ImageView ivUserPicture;
         TextView tvTimeAgo, tvUserName, tvStory, tvLikes, tvComments;
-        ImageView ivStoryImage, ivPlay, ivStoryVideo;
-
+        ImageView ivStoryImage, ivPlay;
+        VideoView videoView;
         RelativeLayout rlAttachmentContainer, rlVideoContainer;
         MyHolder(View itemView) {
             super(itemView);
@@ -152,10 +163,11 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.MyHolder> {
             tvLikes = itemView.findViewById(R.id.tvLikes);
             tvComments = itemView.findViewById(R.id.tvComments);
             ivStoryImage = itemView.findViewById(R.id.ivThumbnail);
-            ivStoryVideo= itemView.findViewById(R.id.ivThumbnailVideo);
             rlAttachmentContainer = itemView.findViewById(R.id.rl_attachment_container);
-            rlVideoContainer = itemView.findViewById(R.id.rl_container_video);
-            ivPlay= itemView.findViewById(R.id.ic_play);
+            rlVideoContainer = itemView.findViewById(R.id.rl_container_video_controls);
+            ivPlay = itemView.findViewById(R.id.ic_play);
+            videoView = itemView.findViewById(R.id.videoView);
+
         }
 
     }

@@ -5,13 +5,14 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:padding="16dp"
+
     tools:context=".activties.FeedPostActivity">
 
     <RelativeLayout
         android:id="@+id/LinearLayoutTopBar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:padding="16dp">
 
         <ImageView
             android:id="@+id/ivBack"
@@ -49,8 +50,10 @@
 
     <androidx.cardview.widget.CardView
         android:id="@+id/card_view"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="10dp"
         app:cardCornerRadius="12dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
         app:cardBackgroundColor="@color/grey_main"
         android:layout_below="@id/LinearLayoutTopBar"
         android:layout_width="match_parent"

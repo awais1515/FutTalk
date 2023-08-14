@@ -2,6 +2,8 @@ package com.app.futtalk.activties;
 
 import static com.app.futtalk.utils.FirebaseUtils.CURRENT_USER;
 
+import static java.io.File.createTempFile;
+
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -41,6 +43,8 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Date;
 
@@ -69,6 +73,7 @@ public class AddPostActivity extends BaseActivity {
 
     private Uri videoFilePath;
     private VideoView videoView;
+    private StoryTypes storyType = StoryTypes.TextStory;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -90,7 +95,7 @@ public class AddPostActivity extends BaseActivity {
         ivSelectVideo = findViewById(R.id.ivSelectVideo);
         ivThumbnail = findViewById(R.id.ivThumbnail);
         rlAttachmentContainer = findViewById(R.id.rl_attachment_container);
-        rlVideoContainer = findViewById(R.id.rl_container_video);
+        rlVideoContainer = findViewById(R.id.rl_container_video_controls);
         ivPlay = findViewById(R.id.ic_play);
         videoView = findViewById(R.id.videView);
     }
@@ -114,11 +119,11 @@ public class AddPostActivity extends BaseActivity {
                     feedPost.setUid(CURRENT_USER.getId());
                     feedPost.setId(getKeyForStory());
                     showProgressDialog("Publishing Story");
-                    if (imageFilePath != null) {
+                    if (storyType == StoryTypes.PictureStory) {
                         // we have picture with the story
                         feedPost.setStoryType(StoryTypes.PictureStory);
                         publishStoryWithPicture(feedPost);
-                    } else if (videoFilePath != null) {
+                    } else if (storyType == StoryTypes.VideoStory) {
                         feedPost.setStoryType(StoryTypes.VideoStory);
                         publishStoryWithVideo(feedPost);
                     } else {
@@ -142,6 +147,7 @@ public class AddPostActivity extends BaseActivity {
             public void onActivityResult(ActivityResult result) {
 
                 if (result.getData() != null) {
+                    storyType = StoryTypes.PictureStory;
                     imageFilePath = result.getData().getData();
                     Glide.with(context)
                             .load(imageFilePath)
@@ -162,6 +168,7 @@ public class AddPostActivity extends BaseActivity {
                     videoFilePath = result.getData().getData();
                     mimeType = getContentResolver().getType(videoFilePath);
                     if (mimeType != null && mimeType.startsWith("video/")) {
+                        storyType = StoryTypes.VideoStory;
                         new GetThumbnailTask(context).execute(videoFilePath);
                     } else {
                         showToastMessage("You did not attach a video");
@@ -280,7 +287,7 @@ public class AddPostActivity extends BaseActivity {
                         public void onSuccess(Uri uri) {
                             String url = uri.toString();
                             feedPost.setStoryVideoURL(url);
-                            publishStoryText(feedPost);
+                            publishStoryWithPicture(feedPost);
                         }
 
                     }).addOnFailureListener(new OnFailureListener() {
@@ -338,6 +345,7 @@ public class AddPostActivity extends BaseActivity {
                 rlVideoContainer.setVisibility(View.VISIBLE);
                 videoView.setVisibility(View.GONE);
                 ivThumbnail.setVisibility(View.VISIBLE);
+                imageFilePath = getUriFromBitmap(bitmap);
                 ivPlay.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
@@ -352,5 +360,21 @@ public class AddPostActivity extends BaseActivity {
                 });
             }
         }
+    }
+
+    private static Uri getUriFromBitmap(Bitmap bitmap) {
+        Uri uri = null;
+        try {
+             // Create a temporary file
+            File localFile = createTempFile("image", ".jpg");
+            FileOutputStream fos = new FileOutputStream(localFile);
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fos);
+            fos.flush();
+            fos.close();
+            uri = Uri.fromFile(localFile);
+        } catch (IOException e) {
+
+        }
+        return uri;
     }
 }
