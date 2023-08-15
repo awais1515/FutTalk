@@ -18,6 +18,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.app.futtalk.R;
 import com.app.futtalk.activties.CommentsActivity;
+import com.app.futtalk.activties.VideoPlayerActivity;
 import com.app.futtalk.models.FeedPost;
 import com.app.futtalk.models.StoryTypes;
 import com.app.futtalk.models.Team;
@@ -25,6 +26,9 @@ import com.app.futtalk.models.User;
 import com.app.futtalk.utils.DbReferences;
 import com.app.futtalk.utils.FirebaseUtils;
 import com.app.futtalk.utils.Utils;
+import com.google.android.exoplayer2.ExoPlayer;
+import com.google.android.exoplayer2.MediaItem;
+import com.google.android.exoplayer2.ui.StyledPlayerView;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
@@ -38,12 +42,14 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.MyHolder> {
     private List<FeedPost> feedPosts;
     private Team team;
     private int rowLayout;
+    private ExoPlayer player;
 
 
-    public FeedAdapter(Context context, Team team, List<FeedPost> feedPosts, int rowLayout) {
+    public FeedAdapter(Context context, Team team, List<FeedPost> feedPosts, ExoPlayer player, int rowLayout) {
         this.context = context;
         this.rowLayout = rowLayout;
         this.feedPosts = feedPosts;
+        this.player = player;
         this.team = team;
     }
 
@@ -65,26 +71,33 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.MyHolder> {
         if (feedPost.getStoryType() == StoryTypes.PictureStory) {
             Utils.setPicture(context, holder.ivStoryImage, feedPost.getStoryImageURL());
             holder.rlAttachmentContainer.setVisibility(View.VISIBLE);
-            holder.rlVideoContainer.setVisibility(View.GONE);
+            holder.ivStoryImage.setVisibility(View.VISIBLE);
+            holder.ivPlay.setVisibility(View.GONE);
 
         } else if (feedPost.getStoryType() == StoryTypes.VideoStory) {
             holder.rlAttachmentContainer.setVisibility(View.VISIBLE);
-            holder.rlVideoContainer.setVisibility(View.VISIBLE);
+            holder.ivStoryImage.setVisibility(View.VISIBLE);
             holder.ivPlay.setVisibility(View.VISIBLE);
             Utils.setPicture(context, holder.ivStoryImage, feedPost.getStoryImageURL());
-            holder.ivPlay.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Log.d("abc", "play button clicked");
-                    Uri videoUri = Uri.parse(feedPost.getStoryVideoURL());
-                    holder.videoView.setVideoURI(videoUri);
-                    holder.videoView.start();
-                }
-            });
 
         } else {
             holder.rlAttachmentContainer.setVisibility(View.GONE);
         }
+
+        holder.ivPlay.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (feedPost.getStoryType() == StoryTypes.VideoStory) {
+                    holder.ivStoryImage.setVisibility(View.INVISIBLE);
+                    holder.playerView.setVisibility(View.VISIBLE);
+                    holder.playerView.setPlayer(player);
+                    MediaItem mediaItem = MediaItem.fromUri(feedPost.getStoryVideoURL());
+                    player.setMediaItem(mediaItem);
+                    player.prepare();
+                    player.setPlayWhenReady(true);
+                }
+            }
+        });
 
         FirebaseDatabase.getInstance().getReference(DbReferences.USERS).child(feedPost.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -126,19 +139,6 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.MyHolder> {
                 FirebaseDatabase.getInstance().getReference(DbReferences.FEED).child(team.getName()).child(feedPost.getId()).setValue(feedPost);
             }
         });
-        holder.ivPlay.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                MediaPlayer mediaPlayer = new MediaPlayer();
-                try {
-                    mediaPlayer.setDataSource(feedPost.getStoryVideoURL());
-                    mediaPlayer.prepare();
-                    mediaPlayer.start();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        });
     }
 
 
@@ -152,8 +152,8 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.MyHolder> {
         ImageView ivUserPicture;
         TextView tvTimeAgo, tvUserName, tvStory, tvLikes, tvComments;
         ImageView ivStoryImage, ivPlay;
-        VideoView videoView;
-        RelativeLayout rlAttachmentContainer, rlVideoContainer;
+        StyledPlayerView playerView;
+        RelativeLayout rlAttachmentContainer;
         MyHolder(View itemView) {
             super(itemView);
             ivUserPicture = itemView.findViewById(R.id.ivProfilePic);
@@ -164,9 +164,8 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.MyHolder> {
             tvComments = itemView.findViewById(R.id.tvComments);
             ivStoryImage = itemView.findViewById(R.id.ivThumbnail);
             rlAttachmentContainer = itemView.findViewById(R.id.rl_attachment_container);
-            rlVideoContainer = itemView.findViewById(R.id.rl_container_video_controls);
             ivPlay = itemView.findViewById(R.id.ic_play);
-            videoView = itemView.findViewById(R.id.videoView);
+            playerView = itemView.findViewById(R.id.player_view);
 
         }
 

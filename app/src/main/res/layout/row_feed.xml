@@ -48,19 +48,22 @@
 
             <ImageView
                 android:id="@+id/ivThumbnail"
-                android:layout_centerInParent="true"
                 android:layout_width="match_parent"
+                android:adjustViewBounds="true"
+                android:scaleType="centerCrop"
                 android:src="@drawable/iv_picture_place_holder"
+                android:maxHeight="500dp"
                 android:layout_height="wrap_content"/>
 
             <VideoView
+                android:visibility="gone"
                 android:id="@+id/videoView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
 
 
             <RelativeLayout
-                android:visibility="invisible"
+                android:visibility="gone"
                 android:id="@+id/rl_container_video_controls"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">

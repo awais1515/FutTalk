@@ -15,6 +15,9 @@
         android:theme="@style/Theme.FutTalk"
         tools:targetApi="31">
         <activity
+            android:name=".activties.VideoPlayerActivity"
+            android:exported="false" />
+        <activity
             android:name=".activties.TeamSelectionActivity"
             android:exported="false" />
         <activity

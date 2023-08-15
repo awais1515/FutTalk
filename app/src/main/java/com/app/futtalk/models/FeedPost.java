@@ -78,7 +78,9 @@ public class FeedPost implements Serializable{
 
     public String getStoryVideoURL() {return storyVideoURL;}
 
-    public void setStoryVideoURL(String videoImageURL){ this.storyVideoURL= storyVideoURL; }
+    public void setStoryVideoURL(String storyVideoURL) {
+        this.storyVideoURL = storyVideoURL;
+    }
 
     public StoryTypes getStoryType() {
         return storyType;

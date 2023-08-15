@@ -22,6 +22,7 @@ import com.app.futtalk.models.Team;
 import com.app.futtalk.utils.DbReferences;
 import com.app.futtalk.utils.Settings;
 import com.app.futtalk.utils.Utils;
+import com.google.android.exoplayer2.ExoPlayer;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -44,6 +45,7 @@ public class FeedPostActivity extends BaseActivity {
     private Handler handler;
     private Runnable taskRunnable;
     private ProgressBar progressBar;
+    private ExoPlayer player;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,7 +64,8 @@ public class FeedPostActivity extends BaseActivity {
         ivProfilePic = findViewById(R.id.ivProfilePic);
         recyclerView = findViewById(R.id.recycler_view);
         feedPosts = new ArrayList<>();
-        feedAdapter = new FeedAdapter(context, team, feedPosts, R.layout.row_feed);
+        player = new ExoPlayer.Builder(context).build();
+        feedAdapter = new FeedAdapter(context, team, feedPosts, player, R.layout.row_layout_feed);
         recyclerView.setLayoutManager(new LinearLayoutManager(context));
         recyclerView.setAdapter(feedAdapter);
         progressBar = findViewById(R.id.progressBar);
@@ -93,15 +96,6 @@ public class FeedPostActivity extends BaseActivity {
                 finish();
             }
         });
-
-        /*findViewById(R.id.tvComments).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent= new Intent(context, CommentsActivity.class);
-                intent.putExtra("team", team);
-                startActivity(intent);
-            }
-        });*/
     }
 
     private void setData() {
