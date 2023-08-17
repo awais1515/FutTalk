@@ -1,6 +1,9 @@
 package com.app.futtalk.utils;
 
-import com.app.futtalk.models.Comment;
+import android.util.Log;
+
+import com.app.futtalk.api.Service;
+import com.app.futtalk.api.response.CallResponse;
 import com.app.futtalk.models.LiveMatch;
 import com.app.futtalk.models.Player;
 import com.app.futtalk.models.Results;
@@ -10,6 +13,10 @@ import com.app.futtalk.models.UpcomingMatch;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class DataHelper {
 
@@ -89,6 +96,39 @@ public class DataHelper {
         Team team3 = new Team("3", "Liver Pool", TeamLogoUrls.LIVER_POOL);
         Team team4 = new Team("4", "Manchester United", TeamLogoUrls.MANCHESTER_UNITED);
         return Arrays.asList(team1,team2,team3,team4);
+    }
+
+    public static void getAllTeamsFromApi () {
+        Call<CallResponse> call = Service.getInstance().getMyApi().getTeams(140, 2023);
+
+        call.enqueue(new Callback<CallResponse>() {
+            @Override
+            public void onResponse(Call<CallResponse> call, Response<CallResponse> response) {
+                CallResponse responseData = response.body();
+                Log.d("abc", "Data is loaded");
+
+            }
+
+            @Override
+            public void onFailure(Call<CallResponse> call, Throwable t) {
+                Log.d("abc", t.getMessage());
+            }
+        });
+    }
+
+    public static void getPlayersFromApi(int teamId, int season) {
+        Call<CallResponse> call = Service.getInstance().getMyApi().getPlayers(teamId, season);
+        call.enqueue(new Callback<CallResponse>() {
+            @Override
+            public void onResponse(Call<CallResponse> call, Response<CallResponse> response) {
+
+            }
+
+            @Override
+            public void onFailure(Call<CallResponse> call, Throwable t) {
+
+            }
+        });
     }
 
     public static List<Player> getPlayerData(int count) {
