@@ -1,11 +1,13 @@
 package com.app.futtalk.fragments;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -15,8 +17,11 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.app.futtalk.R;
 import com.app.futtalk.adapters.TeamsAdapter;
+import com.app.futtalk.api.TeamsDataListener;
 import com.app.futtalk.models.Team;
 import com.app.futtalk.utils.DataHelper;
+
+import java.util.List;
 
 public class TeamsFragment extends Fragment {
 
@@ -46,51 +51,42 @@ public class TeamsFragment extends Fragment {
 
     private void init(){
         context= getActivity();
-
         btnLiveFeed= getView().findViewById(R.id.btnLiveFeed);
-
         btnPlayers= getView().findViewById(R.id.btnPlayers);
-
         btnFixtures = getView().findViewById(R.id.btnFixtures);
-
         recyclerViewTeams = getView().findViewById(R.id.recycler_view_teams);
-
-
-        recyclerViewTeams.setLayoutManager((new LinearLayoutManager(getActivity(),LinearLayoutManager.HORIZONTAL, false)));
-        teamsAdapter = new TeamsAdapter(getActivity(), DataHelper.getTeamData(7), R.layout.row_teams);
-        recyclerViewTeams.setAdapter(teamsAdapter);
-
+        recyclerViewTeams.setLayoutManager(new LinearLayoutManager(context));
+        loadData();
     }
 
     private void setListeners() {
-       /* btnLiveFeed.setOnClickListener(new View.OnClickListener() {
+
+    }
+
+
+
+    private void loadData() {
+
+        ProgressDialog progressDialog = new ProgressDialog(context);
+        progressDialog.setCancelable(false);
+        progressDialog.setMessage("Loading...");
+        DataHelper.getAllTeamsFromApi(140, 2023, new TeamsDataListener() {
             @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(context, LiveFeedActivity.class);
-                startActivity(intent);
+            public void onTeamsLoaded(List<Team> teamList) {
+                // now we have team list and we are ready to set our adapter
+                teamsAdapter = new TeamsAdapter(getActivity(),teamList, R.layout.row_teams);
+                recyclerViewTeams.setAdapter(teamsAdapter);
+                progressDialog.dismiss();
+            }
+
+            @Override
+            public void onFailure(String message) {
+                progressDialog.dismiss();
+                Toast.makeText(context, message, Toast.LENGTH_LONG).show();
             }
         });
 
-        btnPlayers.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(context, PlayersActivity.class);
-                startActivity(intent);
-            }
-        });
 
-        btnFixtures.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(context, SingleClubFixturesActivity.class);
-                startActivity(intent);
-            }
-        });*/
-    }
 
-    public void addTeam(Team team) {
-    }
-
-    public void removeTeam(Team team) {
     }
 }

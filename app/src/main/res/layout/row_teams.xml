@@ -3,6 +3,7 @@
     android:layout_width="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     app:cardCornerRadius="10dp"
+    android:layout_marginTop="8dp"
     app:cardBackgroundColor="@color/grey_main"
     android:layout_height="wrap_content">
 
@@ -19,7 +20,7 @@
             android:id="@+id/iv_team_logo"
             android:layout_width="70dp"
             android:layout_height="70dp"
-            android:src="@drawable/iv_barcelona" />
+            />
 
             <TextView
                 android:id="@+id/tv_team_name"
@@ -32,7 +33,7 @@
                 android:layout_marginBottom="20dp"
                 android:layout_toRightOf="@+id/iv_team_logo"
                 android:fontFamily="@font/poppins_bold"
-                android:text="BARCELONA"
+                android:text=""
                 android:textColor="@color/white"
                 android:textSize="15sp" />
 
@@ -67,7 +68,8 @@
                 <ImageView
                     android:src="@drawable/ic_live_chat"
                     android:layout_width="24dp"
-                    android:layout_height="24dp"/>
+                    android:layout_height="24dp"
+                    app:tint="@color/grey" />
 
                 <TextView
                     android:textSize="11sp"
@@ -75,8 +77,8 @@
                     android:layout_width="wrap_content"
                     android:text="Live Feed"
                     android:layout_marginLeft="10dp"
-                    android:textColor="@color/white"
-                    android:fontFamily="@font/poppins_regular"
+                    android:textColor="@color/grey_main"
+                    android:fontFamily="@font/poppins_medium"
                     android:layout_height="wrap_content"/>
 
             </LinearLayout>
@@ -94,6 +96,7 @@
                 <ImageView
                     android:src="@drawable/ic_teamplayers"
                     android:layout_width="24dp"
+                    app:tint="@color/grey"
                     android:layout_height="24dp"/>
 
                 <TextView
@@ -102,8 +105,8 @@
                     android:layout_width="wrap_content"
                     android:text="Players"
                     android:layout_marginLeft="10dp"
-                    android:textColor="@color/white"
-                    android:fontFamily="@font/poppins_regular"
+                    android:textColor="@color/grey_main"
+                    android:fontFamily="@font/poppins_medium"
                     android:layout_height="wrap_content"/>
 
             </LinearLayout>
@@ -121,7 +124,8 @@
                 <ImageView
                     android:src="@drawable/ic_fixtures"
                     android:layout_width="24dp"
-                    android:layout_height="24dp"/>
+                    android:layout_height="24dp"
+                    app:tint="@color/grey"/>
 
                 <TextView
                     android:textSize="11sp"
@@ -129,8 +133,8 @@
                     android:layout_width="wrap_content"
                     android:text="Fixtures"
                     android:layout_marginLeft="10dp"
-                    android:textColor="@color/white"
-                    android:fontFamily="@font/poppins_regular"
+                    android:textColor="@color/grey_main"
+                    android:fontFamily="@font/poppins_medium"
                     android:layout_height="wrap_content"/>
 
             </LinearLayout>

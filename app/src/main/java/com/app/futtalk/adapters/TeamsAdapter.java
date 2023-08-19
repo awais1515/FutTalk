@@ -17,6 +17,7 @@ import com.app.futtalk.activties.FeedPostActivity;
 import com.app.futtalk.activties.PlayersActivity;
 import com.app.futtalk.fragments.TeamsFragment;
 import com.app.futtalk.models.Team;
+import com.app.futtalk.utils.Utils;
 
 import java.util.List;
 
@@ -24,21 +25,12 @@ public class TeamsAdapter extends RecyclerView.Adapter<TeamsAdapter.MyHolder> {
 
     private Context context;
     private List<Team> teamsList;
-
     private int rowLayout;
-
-    private TeamsFragment teamsFragment;
-
-
-
-
 
     public TeamsAdapter(Context context, List<Team> teamsList, int rowLayout) {
         this.context = context;
         this.rowLayout = rowLayout;
         this.teamsList = teamsList;
-        this.teamsFragment = teamsFragment;
-
     }
 
     @NonNull
@@ -52,12 +44,7 @@ public class TeamsAdapter extends RecyclerView.Adapter<TeamsAdapter.MyHolder> {
         Team team = teamsList.get(holder.getAdapterPosition());
 
         holder.tvTeamName.setText(team.getName());
-
-        /* Glide.with(context)
-                .load(Team.getLogo())
-                .centerCrop()
-                .into(holder.ivTeamLogo);
-        */
+        Utils.setPicture(context, holder.ivTeamLogo, team.getLogo());
         holder.btnLiveFeed.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -89,15 +76,12 @@ public class TeamsAdapter extends RecyclerView.Adapter<TeamsAdapter.MyHolder> {
 
             }
         });
-
-
-
     }
 
     @Override
-    public int getItemCount() {return teamsList.size();}
-
-
+    public int getItemCount() {
+        return teamsList.size();
+    }
     class MyHolder extends RecyclerView.ViewHolder {
         public View btnLiveFeed;
         public View btnPlayers;

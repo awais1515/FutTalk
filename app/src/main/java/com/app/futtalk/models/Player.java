@@ -9,18 +9,18 @@ public class Player {
 
     private String position;
 
-    private String playerImage;
+    private String photo;
 
     public Player(){
 
     }
-    public Player(String name, int age, String nationality, String position, String playerImage){
+    public Player(String name, int age, String nationality, String position, String photo){
 
         this.name= name;
         this.age=age;
         this.nationality= nationality;
         this.position= position;
-        this.playerImage= playerImage;
+        this.photo = photo;
 
     }
 
@@ -57,11 +57,11 @@ public class Player {
         this.position = position;
     }
 
-    public String getPlayerImage() {
-        return playerImage;
+    public String getPhoto() {
+        return photo;
     }
 
-    public void setPlayerImage(String playerImage) {
-        this.playerImage = playerImage;
+    public void setPhoto(String photo) {
+        this.photo = photo;
     }
 }

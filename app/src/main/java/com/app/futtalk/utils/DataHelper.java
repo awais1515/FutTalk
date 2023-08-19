@@ -2,17 +2,21 @@ package com.app.futtalk.utils;
 
 import android.util.Log;
 
+import com.app.futtalk.api.PlayersDataListener;
 import com.app.futtalk.api.Service;
-import com.app.futtalk.api.response.CallResponse;
+import com.app.futtalk.api.ApiResponse;
+import com.app.futtalk.api.TeamsDataListener;
 import com.app.futtalk.models.LiveMatch;
 import com.app.futtalk.models.Player;
 import com.app.futtalk.models.Results;
 import com.app.futtalk.models.Team;
 import com.app.futtalk.models.UpcomingMatch;
+import com.google.gson.Gson;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -90,6 +94,7 @@ public class DataHelper {
         }
     }
 
+    // synchronized call (flow didn't break)
     public static List<Team> getAllTeams() {
         Team team1 = new Team("1", "Barcelona", TeamLogoUrls.BARCELONA);
         Team team2 = new Team("2", "Real Madrid", TeamLogoUrls.REAL_MADRID);
@@ -98,37 +103,36 @@ public class DataHelper {
         return Arrays.asList(team1,team2,team3,team4);
     }
 
-    public static void getAllTeamsFromApi () {
-        Call<CallResponse> call = Service.getInstance().getMyApi().getTeams(140, 2023);
+    public static void getAllTeamsFromApi (int leagueId, int season, TeamsDataListener teamsDataListener) {
 
-        call.enqueue(new Callback<CallResponse>() {
+        Log.d("abc", "ready to make a call");
+        // Async calls (flow is broken here.. why? because we made a request to the internet for fetching data and we don't know how much time it's going to take
+        Service.getInstance().getMyApi().getTeams(leagueId, season).enqueue(new Callback<ApiResponse>() {
             @Override
-            public void onResponse(Call<CallResponse> call, Response<CallResponse> response) {
-                CallResponse responseData = response.body();
-                Log.d("abc", "Data is loaded");
-
+            public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
+                ApiResponse apiResponse = response.body();
+                Log.d("abc", "data loaded");
+                List<Team> allTeams = new ArrayList<>();
+                for (Map map: apiResponse.getResponse()) {
+                    // get json of the team
+                    Gson gson = new Gson();
+                    String jsonString = gson.toJson(map.get("team"));
+                    Team team = gson.fromJson(jsonString, Team.class);
+                    allTeams.add(team);
+                }
+                Log.d("abc", "loaded all the teams in our list");
+                teamsDataListener.onTeamsLoaded(allTeams);
             }
-
             @Override
-            public void onFailure(Call<CallResponse> call, Throwable t) {
-                Log.d("abc", t.getMessage());
+            public void onFailure(Call<ApiResponse> call, Throwable t) {
+                Log.d("abc", "error");
+                teamsDataListener.onFailure(t.getMessage());
             }
         });
     }
 
-    public static void getPlayersFromApi(int teamId, int season) {
-        Call<CallResponse> call = Service.getInstance().getMyApi().getPlayers(teamId, season);
-        call.enqueue(new Callback<CallResponse>() {
-            @Override
-            public void onResponse(Call<CallResponse> call, Response<CallResponse> response) {
+    public static void getPlayersFromApi(int teamId, int season, PlayersDataListener playersDataListener) {
 
-            }
-
-            @Override
-            public void onFailure(Call<CallResponse> call, Throwable t) {
-
-            }
-        });
     }
 
     public static List<Player> getPlayerData(int count) {

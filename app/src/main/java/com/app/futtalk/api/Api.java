@@ -1,7 +1,5 @@
 package com.app.futtalk.api;
 
-import com.app.futtalk.api.response.CallResponse;
-
 import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.Headers;
@@ -17,14 +15,14 @@ public interface Api {
             "x-rapidapi-key: " + API_KEY
     })
     @GET("teams")
-    Call <CallResponse> getTeams(@Query("league") int leagueId, @Query("season") int season);
+    Call <ApiResponse> getTeams(@Query("league") int leagueId, @Query("season") int season);
 
     @Headers({
             "x-rapidapi-host: " + HOST_NAME,
             "x-rapidapi-key: " + API_KEY
     })
     @GET("players")
-    Call <CallResponse> getPlayers(@Query("team") int teamId, @Query("season") int season);
+    Call <ApiResponse> getPlayers(@Query("team") int teamId, @Query("season") int season);
 
 
 

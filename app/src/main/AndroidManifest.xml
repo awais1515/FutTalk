@@ -17,11 +17,6 @@
         <activity
             android:name=".activties.TestApiActivity"
             android:exported="true" >
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         <activity
             android:name=".activties.VideoPlayerActivity"
@@ -97,6 +92,12 @@
             android:name=".activties.SplashActivity"
             android:exported="true"
             android:screenOrientation="portrait">
+
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
         <activity
             android:name=".activties.MainActivity"
