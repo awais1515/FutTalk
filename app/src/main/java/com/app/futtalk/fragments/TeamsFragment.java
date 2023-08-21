@@ -29,11 +29,6 @@ public class TeamsFragment extends Fragment {
     private RecyclerView recyclerViewTeams;
     private TeamsAdapter teamsAdapter;
 
-    private Button btnLiveFeed;
-
-    private Button btnPlayers;
-
-    private Button btnFixtures;
 
 
     @Nullable
@@ -51,9 +46,6 @@ public class TeamsFragment extends Fragment {
 
     private void init(){
         context= getActivity();
-        btnLiveFeed= getView().findViewById(R.id.btnLiveFeed);
-        btnPlayers= getView().findViewById(R.id.btnPlayers);
-        btnFixtures = getView().findViewById(R.id.btnFixtures);
         recyclerViewTeams = getView().findViewById(R.id.recycler_view_teams);
         recyclerViewTeams.setLayoutManager(new LinearLayoutManager(context));
         loadData();

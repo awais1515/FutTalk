@@ -133,6 +133,26 @@ public class DataHelper {
 
     public static void getPlayersFromApi(int teamId, int season, PlayersDataListener playersDataListener) {
 
+        Service.getInstance().getMyApi().getPlayers(teamId, season).enqueue(new Callback<ApiResponse>() {
+            @Override
+            public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
+                ApiResponse apiResponse = response.body();
+                List<Player> allPlayers = new ArrayList<>();
+                for (Map map: apiResponse.getResponse()){
+                    Gson gson= new Gson();
+                    String jsonString= gson.toJson(map.get("players"));
+                    Player player= gson.fromJson(jsonString, Player.class);
+                    allPlayers.add(player);
+                }
+                playersDataListener.onPlayersLoaded(allPlayers);
+            }
+
+            @Override
+            public void onFailure(Call<ApiResponse> call, Throwable t) {
+                playersDataListener.onFailure(t.getMessage());
+            }
+        });
+
     }
 
     public static List<Player> getPlayerData(int count) {

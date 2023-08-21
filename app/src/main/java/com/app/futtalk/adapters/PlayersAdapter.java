@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.app.futtalk.R;
 import com.app.futtalk.models.Player;
+import com.app.futtalk.utils.Utils;
 
 import java.util.List;
 
@@ -39,6 +40,7 @@ public class PlayersAdapter extends RecyclerView.Adapter<PlayersAdapter.MyHolder
         Player player = playerList.get(holder.getAdapterPosition());
 
         holder.tvName.setText(player.getName());
+        Utils.setPicture(context, holder.ivplayerImage, player.getPhoto());
         holder.tvNationality.setText(player.getNationality());
         holder.tvAge.setText(String.valueOf(player.getAge()));
         holder.tvPosition.setText(player.getPosition());
