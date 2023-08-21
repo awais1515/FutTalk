@@ -16,7 +16,11 @@ import com.app.futtalk.R;
 import com.app.futtalk.adapters.FixturesAdapter;
 import com.app.futtalk.adapters.LiveMatchesAdapter;
 import com.app.futtalk.adapters.TeamsAdapter;
+import com.app.futtalk.api.UpcomingFixturesListener;
+import com.app.futtalk.models.UpcomingFixture;
 import com.app.futtalk.utils.DataHelper;
+
+import java.util.List;
 
 public class FixturesFragment extends Fragment {
 
@@ -35,6 +39,17 @@ public class FixturesFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         init(view);
+        DataHelper.getFixturesByApi(40, 2023, "2023-08-21", "2023-09-21", new UpcomingFixturesListener() {
+            @Override
+            public void onUpcomingFixturesLoaded(List<UpcomingFixture> playerList) {
+
+            }
+
+            @Override
+            public void onFailure(String message) {
+
+            }
+        });
     }
 
     private void init(View view){

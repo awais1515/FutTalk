@@ -1,6 +1,6 @@
 package com.app.futtalk.models;
 
-public class UpcomingMatch {
+public class UpcomingMatchOld {
 
     private String id;
     private String leagueName;
@@ -11,7 +11,7 @@ public class UpcomingMatch {
     private Team awayTeam;
 
 
-    public UpcomingMatch(String id, String leagueName, String venue, String date, String time, Team homeTeam, Team awayTeam) {
+    public UpcomingMatchOld(String id, String leagueName, String venue, String date, String time, Team homeTeam, Team awayTeam) {
         this.id = id;
         this.leagueName = leagueName;
         this.venue = venue;
@@ -21,7 +21,7 @@ public class UpcomingMatch {
         this.awayTeam = awayTeam;
     }
 
-    public UpcomingMatch() {
+    public UpcomingMatchOld() {
     }
 
 

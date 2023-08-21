@@ -11,22 +11,22 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.app.futtalk.R;
-import com.app.futtalk.models.UpcomingMatch;
+import com.app.futtalk.models.UpcomingMatchOld;
 
 import java.util.List;
 
 public class FixturesAdapter extends RecyclerView.Adapter<FixturesAdapter.MyHolder>{
 
     private Context context;
-    private List<UpcomingMatch> upcomingMatchList;
+    private List<UpcomingMatchOld> upcomingMatchOldList;
 
     private int rowLayout;
 
 
-    public FixturesAdapter(Context context, List<UpcomingMatch> upcomingMatchList, int rowLayout) {
+    public FixturesAdapter(Context context, List<UpcomingMatchOld> upcomingMatchOldList, int rowLayout) {
         this.context = context;
         this.rowLayout = rowLayout;
-        this.upcomingMatchList = upcomingMatchList;
+        this.upcomingMatchOldList = upcomingMatchOldList;
     }
 
     @NonNull
@@ -38,13 +38,13 @@ public class FixturesAdapter extends RecyclerView.Adapter<FixturesAdapter.MyHold
 
     @Override
     public void onBindViewHolder(@NonNull MyHolder holder, int position) {
-        UpcomingMatch upcomingMatch = upcomingMatchList.get(holder.getAdapterPosition());
+        UpcomingMatchOld upcomingMatchOld = upcomingMatchOldList.get(holder.getAdapterPosition());
 
-        holder.tvHomeTeamName.setText(upcomingMatch.getHomeTeam().getName());
-        holder.tvAwayTeamName.setText(upcomingMatch.getAwayTeam().getName());
-        holder.tvTime.setText(upcomingMatch.getTime() + "'");
-        holder.tvDate.setText(upcomingMatch.getDate());
-        holder.tvVenueName.setText(upcomingMatch.getVenue());
+        holder.tvHomeTeamName.setText(upcomingMatchOld.getHomeTeam().getName());
+        holder.tvAwayTeamName.setText(upcomingMatchOld.getAwayTeam().getName());
+        holder.tvTime.setText(upcomingMatchOld.getTime() + "'");
+        holder.tvDate.setText(upcomingMatchOld.getDate());
+        holder.tvVenueName.setText(upcomingMatchOld.getVenue());
        /* Glide.with(context)
                 .load(liveMatch.getHomeTeam().getLogo())
                 .centerCrop()
@@ -57,7 +57,7 @@ public class FixturesAdapter extends RecyclerView.Adapter<FixturesAdapter.MyHold
 
     @Override
     public int getItemCount() {
-        return upcomingMatchList.size();
+        return upcomingMatchOldList.size();
     }
 
     class MyHolder extends RecyclerView.ViewHolder {

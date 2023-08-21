@@ -12,7 +12,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.app.futtalk.R;
 import com.app.futtalk.models.Results;
-import com.app.futtalk.models.UpcomingMatch;
 
 import java.util.List;
 

@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.app.futtalk.R;
 import com.app.futtalk.fragments.TeamsFragment;
 import com.app.futtalk.models.Team;
+import com.app.futtalk.utils.Utils;
 
 import java.util.List;
 
@@ -21,14 +22,12 @@ public class TeamsSelectionAdapter extends RecyclerView.Adapter<TeamsSelectionAd
     private Context context;
     private List<Team> teamsSelectionList;
     private int rowLayout;
-    private TeamsFragment teamsFragment;
 
 
     public TeamsSelectionAdapter(Context context, List<Team> teamsSelectionList, int rowLayout) {
         this.context = context;
         this.rowLayout = rowLayout;
         this.teamsSelectionList = teamsSelectionList;
-        this.teamsFragment = teamsFragment;
     }
 
     @NonNull
@@ -42,6 +41,7 @@ public class TeamsSelectionAdapter extends RecyclerView.Adapter<TeamsSelectionAd
         Team team = teamsSelectionList.get(holder.getAdapterPosition());
 
         holder.tvTeamName.setText(team.getName());
+        Utils.setPicture(context, holder.ivTeamLogo, team.getLogo());
 
 
         holder.btnPlusAddTeam.setOnClickListener(new View.OnClickListener() {

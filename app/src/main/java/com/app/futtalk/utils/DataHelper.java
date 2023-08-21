@@ -6,11 +6,13 @@ import com.app.futtalk.api.PlayersDataListener;
 import com.app.futtalk.api.Service;
 import com.app.futtalk.api.ApiResponse;
 import com.app.futtalk.api.TeamsDataListener;
+import com.app.futtalk.api.UpcomingFixturesListener;
 import com.app.futtalk.models.LiveMatch;
 import com.app.futtalk.models.Player;
 import com.app.futtalk.models.Results;
 import com.app.futtalk.models.Team;
-import com.app.futtalk.models.UpcomingMatch;
+import com.app.futtalk.models.UpcomingFixture;
+import com.app.futtalk.models.UpcomingMatchOld;
 import com.google.gson.Gson;
 
 import java.util.ArrayList;
@@ -61,36 +63,36 @@ public class DataHelper {
         }
     }
 
-    public static List<UpcomingMatch> getUpComingMatches(int count) {
+    public static List<UpcomingMatchOld> getUpComingMatches(int count) {
 
-        UpcomingMatch upComingMatch1 = new UpcomingMatch();
-        upComingMatch1.setId("1");
-        upComingMatch1.setHomeTeam(getAllTeams().get(0));
-        upComingMatch1.setAwayTeam(getAllTeams().get(1));
-        upComingMatch1.setTime("07:30 ");
-        upComingMatch1.setLeagueName("Royal Premium League");
-        upComingMatch1.setVenue("Emirates Stadium London");
-        upComingMatch1.setDate("Jul 21");
+        UpcomingMatchOld upComingMatch1Old = new UpcomingMatchOld();
+        upComingMatch1Old.setId("1");
+        upComingMatch1Old.setHomeTeam(getAllTeams().get(0));
+        upComingMatch1Old.setAwayTeam(getAllTeams().get(1));
+        upComingMatch1Old.setTime("07:30 ");
+        upComingMatch1Old.setLeagueName("Royal Premium League");
+        upComingMatch1Old.setVenue("Emirates Stadium London");
+        upComingMatch1Old.setDate("Jul 21");
 
-        UpcomingMatch UpcomingMatch2 = new UpcomingMatch();
-        UpcomingMatch2.setId("2");
-        UpcomingMatch2.setHomeTeam(getAllTeams().get(2));
-        UpcomingMatch2.setAwayTeam(getAllTeams().get(3));
-        UpcomingMatch2.setTime("16:30");
-        UpcomingMatch2.setLeagueName("Spain Premium League");
-        UpcomingMatch2.setVenue("Estadio Da Luz");
-        UpcomingMatch2.setDate("Jul 21");
+        UpcomingMatchOld upcomingMatchOld2 = new UpcomingMatchOld();
+        upcomingMatchOld2.setId("2");
+        upcomingMatchOld2.setHomeTeam(getAllTeams().get(2));
+        upcomingMatchOld2.setAwayTeam(getAllTeams().get(3));
+        upcomingMatchOld2.setTime("16:30");
+        upcomingMatchOld2.setLeagueName("Spain Premium League");
+        upcomingMatchOld2.setVenue("Estadio Da Luz");
+        upcomingMatchOld2.setDate("Jul 21");
 
-        List<UpcomingMatch> allUpcomingMatches =  Arrays.asList(upComingMatch1,UpcomingMatch2,upComingMatch1,UpcomingMatch2,upComingMatch1,UpcomingMatch2,upComingMatch1,UpcomingMatch2,upComingMatch1,UpcomingMatch2,upComingMatch1,UpcomingMatch2,upComingMatch1,UpcomingMatch2,upComingMatch1,UpcomingMatch2);
+        List<UpcomingMatchOld> allUpcomingMatchOlds =  Arrays.asList(upComingMatch1Old, upcomingMatchOld2, upComingMatch1Old, upcomingMatchOld2, upComingMatch1Old, upcomingMatchOld2, upComingMatch1Old, upcomingMatchOld2, upComingMatch1Old, upcomingMatchOld2, upComingMatch1Old, upcomingMatchOld2, upComingMatch1Old, upcomingMatchOld2, upComingMatch1Old, upcomingMatchOld2);
 
-        if (count >= allUpcomingMatches.size()) {
-            return  allUpcomingMatches;
+        if (count >= allUpcomingMatchOlds.size()) {
+            return allUpcomingMatchOlds;
         } else {
-            List<UpcomingMatch> upcomingMatches = new ArrayList<>();
+            List<UpcomingMatchOld> upcomingMatchOlds = new ArrayList<>();
             for (int i = 0; i <= count; i++) {
-                upcomingMatches.add(allUpcomingMatches.get(i));
+                upcomingMatchOlds.add(allUpcomingMatchOlds.get(i));
             }
-            return upcomingMatches;
+            return upcomingMatchOlds;
         }
     }
 
@@ -101,6 +103,41 @@ public class DataHelper {
         Team team3 = new Team("3", "Liver Pool", TeamLogoUrls.LIVER_POOL);
         Team team4 = new Team("4", "Manchester United", TeamLogoUrls.MANCHESTER_UNITED);
         return Arrays.asList(team1,team2,team3,team4);
+    }
+
+    public static List<Results> getResults(int count) {
+
+        Results results1 = new Results();
+        results1.setId("1");
+        results1.setHomeTeam(getAllTeams().get(0));
+        results1.setAwayTeam(getAllTeams().get(1));
+        results1.setLeagueName("Royal Premium League");
+        results1.setVenue("Emirates Stadium London");
+        results1.setDate("Jul 21");
+        results1.setHomeTeamScore(3);
+        results1.setAwayTeamScore(1);
+
+        Results results2 = new Results();
+        results2.setId("2");
+        results2.setHomeTeam(getAllTeams().get(2));
+        results2.setAwayTeam(getAllTeams().get(3));
+        results2.setLeagueName("Spain Premium League");
+        results2.setVenue("Estadio Da Luz");
+        results2.setDate("Jul 21");
+        results2.setHomeTeamScore(1);
+        results2.setAwayTeamScore(3);
+
+        List<Results> allResults =  Arrays.asList(results1,results2,results1,results2, results1,results2,results1,results2, results1,results2,results1,results2);
+
+        if (count >= allResults.size()) {
+            return  allResults;
+        } else {
+            List<Results> results = new ArrayList<>();
+            for (int i = 0; i <= count; i++) {
+                results.add(allResults.get(i));
+            }
+            return results;
+        }
     }
 
     public static void getAllTeamsFromApi (int leagueId, int season, TeamsDataListener teamsDataListener) {
@@ -140,7 +177,7 @@ public class DataHelper {
                 List<Player> allPlayers = new ArrayList<>();
                 for (Map map: apiResponse.getResponse()){
                     Gson gson= new Gson();
-                    String jsonString= gson.toJson(map.get("players"));
+                    String jsonString= gson.toJson(map.get("player"));
                     Player player= gson.fromJson(jsonString, Player.class);
                     allPlayers.add(player);
                 }
@@ -155,72 +192,26 @@ public class DataHelper {
 
     }
 
-    public static List<Player> getPlayerData(int count) {
-
-        Player player1 = new Player();
-        player1.setName("L. Messi");
-        player1.setAge(35);
-        player1.setNationality("Argentina");
-        player1.setPosition("CF");
-
-
-        return Arrays.asList(player1,player1,player1,player1,player1,player1,player1,player1,player1,player1,player1,player1);
-    }
-
-    public static List<Team> getTeamData(int count) {
-
-        Team teams = new Team();
-        teams.setName("Barcelona");
-        teams.getLogo();
-
-        List<Team> teamList =  Arrays.asList(teams);
-
-        if (count >= teamList.size()) {
-            return  teamList;
-        } else {
-            List<Team> teamsList = new ArrayList<>();
-            for (int i = 0; i <= count; i++) {
-                teamsList.add(teamsList.get(i));
+    public static void getFixturesByApi(int leagueId, int season, String fromDate, String toDate, UpcomingFixturesListener upcomingFixturesListener) {
+        Service.getInstance().getMyApi().getFixtures(leagueId, season, fromDate, toDate).enqueue(new Callback<ApiResponse>() {
+            @Override
+            public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
+                ApiResponse apiResponse = response.body();
+                List<UpcomingFixture> allUpcomingFixtures = new ArrayList<>();
+                for (Map map: apiResponse.getResponse()){
+                    Gson gson= new Gson();
+                    String jsonString= gson.toJson(map);
+                    UpcomingFixture upcomingFixture= gson.fromJson(jsonString, UpcomingFixture.class);
+                    allUpcomingFixtures.add(upcomingFixture);
+                }
+                upcomingFixturesListener.onUpcomingFixturesLoaded(allUpcomingFixtures);
             }
-            return teamsList;
-        }
-    }
 
-
-    public static List<Results> getResults(int count) {
-
-        Results results1 = new Results();
-        results1.setId("1");
-        results1.setHomeTeam(getAllTeams().get(0));
-        results1.setAwayTeam(getAllTeams().get(1));
-        results1.setLeagueName("Royal Premium League");
-        results1.setVenue("Emirates Stadium London");
-        results1.setDate("Jul 21");
-        results1.setHomeTeamScore(3);
-        results1.setAwayTeamScore(1);
-
-        Results results2 = new Results();
-        results2.setId("2");
-        results2.setHomeTeam(getAllTeams().get(2));
-        results2.setAwayTeam(getAllTeams().get(3));
-        results2.setLeagueName("Spain Premium League");
-        results2.setVenue("Estadio Da Luz");
-        results2.setDate("Jul 21");
-        results2.setHomeTeamScore(1);
-        results2.setAwayTeamScore(3);
-
-        List<Results> allResults =  Arrays.asList(results1,results2,results1,results2, results1,results2,results1,results2, results1,results2,results1,results2);
-
-        if (count >= allResults.size()) {
-            return  allResults;
-        } else {
-            List<Results> results = new ArrayList<>();
-            for (int i = 0; i <= count; i++) {
-                results.add(allResults.get(i));
+            @Override
+            public void onFailure(Call<ApiResponse> call, Throwable t) {
+                upcomingFixturesListener.onFailure(t.getMessage());
             }
-            return results;
-        }
+        });
     }
 
-
-    }
+}

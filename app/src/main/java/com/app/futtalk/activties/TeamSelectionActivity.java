@@ -21,7 +21,7 @@ import com.app.futtalk.utils.DataHelper;
 
 import java.util.List;
 
-public class TeamSelectionActivity extends AppCompatActivity {
+public class TeamSelectionActivity extends BaseActivity {
 
     Context context;
     HorizontalScrollView horizontalScrollView;
@@ -40,14 +40,13 @@ public class TeamSelectionActivity extends AppCompatActivity {
     }
 
     private void init() {
+        context = this;
         horizontalScrollView = findViewById(R.id.horizontalScrollViewLeagues);
         horizontalScrollView.setHorizontalScrollBarEnabled(false);
         ivBack = findViewById(R.id.ivBack);
 
         recyclerViewTeamSelection = findViewById(R.id.recycler_view_teams_of_leagues);
         recyclerViewTeamSelection.setLayoutManager((new LinearLayoutManager(this)));
-
-
     }
 
     private void setListeners() {
@@ -61,20 +60,18 @@ public class TeamSelectionActivity extends AppCompatActivity {
 
     private void loadData() {
 
-        ProgressDialog progressDialog = new ProgressDialog(context);
-        progressDialog.setCancelable(false);
-        progressDialog.setMessage("Loading...");
+       showProgressDialog("Loading..");
         DataHelper.getAllTeamsFromApi(140, 2023, new TeamsDataListener() {
             @Override
             public void onTeamsLoaded(List<Team> teamSelectionList) {
                 teamsSelectionAdapter = new TeamsSelectionAdapter(context, teamSelectionList, R.layout.row_team_selection);
                 recyclerViewTeamSelection.setAdapter(teamsSelectionAdapter);
-                progressDialog.dismiss();
+                closeProgressDialog();
             }
 
             @Override
             public void onFailure(String message) {
-                progressDialog.dismiss();
+                closeProgressDialog();
                 Toast.makeText(context, message, Toast.LENGTH_LONG).show();
             }
         });
