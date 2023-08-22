@@ -58,7 +58,6 @@ public class TeamsAdapter extends RecyclerView.Adapter<TeamsAdapter.MyHolder> {
             public void onClick(View v) {
                 Intent intent = new Intent(context, PlayersActivity.class);
                 intent.putExtra("team", team);
-
                 context.startActivity(intent);
             }
         });
@@ -66,6 +65,7 @@ public class TeamsAdapter extends RecyclerView.Adapter<TeamsAdapter.MyHolder> {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(context, FixturesActivity.class);
+                intent.putExtra("team", team);
                 context.startActivity(intent);
             }
         });

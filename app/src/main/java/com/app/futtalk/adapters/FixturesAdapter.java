@@ -11,22 +11,23 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.app.futtalk.R;
-import com.app.futtalk.models.UpcomingMatchOld;
+import com.app.futtalk.models.UpcomingFixture;
+import com.app.futtalk.utils.Utils;
 
 import java.util.List;
 
 public class FixturesAdapter extends RecyclerView.Adapter<FixturesAdapter.MyHolder>{
 
     private Context context;
-    private List<UpcomingMatchOld> upcomingMatchOldList;
+    private List<UpcomingFixture> upcomingFixtureList;
 
     private int rowLayout;
 
 
-    public FixturesAdapter(Context context, List<UpcomingMatchOld> upcomingMatchOldList, int rowLayout) {
+    public FixturesAdapter(Context context, List<UpcomingFixture> upcomingFixtureList, int rowLayout) {
         this.context = context;
         this.rowLayout = rowLayout;
-        this.upcomingMatchOldList = upcomingMatchOldList;
+        this.upcomingFixtureList = upcomingFixtureList;
     }
 
     @NonNull
@@ -38,27 +39,20 @@ public class FixturesAdapter extends RecyclerView.Adapter<FixturesAdapter.MyHold
 
     @Override
     public void onBindViewHolder(@NonNull MyHolder holder, int position) {
-        UpcomingMatchOld upcomingMatchOld = upcomingMatchOldList.get(holder.getAdapterPosition());
+        UpcomingFixture upcomingFixture = upcomingFixtureList.get(holder.getAdapterPosition());
 
-
-        holder.tvHomeTeamName.setText(upcomingMatchOld.getHomeTeam().getName());
-        holder.tvAwayTeamName.setText(upcomingMatchOld.getAwayTeam().getName());
-        holder.tvTime.setText(upcomingMatchOld.getTime() + "'");
-        holder.tvDate.setText(upcomingMatchOld.getDate());
-        holder.tvVenueName.setText(upcomingMatchOld.getVenue());
-       /* Glide.with(context)
-                .load(liveMatch.getHomeTeam().getLogo())
-                .centerCrop()
-                .into(holder.ivHomeIcon);
-        Glide.with(context)
-                .load(liveMatch.getAwayTeam().getLogo())
-                .centerCrop()
-                .into(holder.ivAwayIcon);*/
+        holder.tvHomeTeamName.setText(upcomingFixture.getTeams().getHome().getName());
+        holder.tvAwayTeamName.setText(upcomingFixture.getTeams().getAway().getName());
+        holder.tvTime.setText(Utils.getTimeFromTimestamp(upcomingFixture.getFixture().getDate(),upcomingFixture.getFixture().getTimezone()));
+        holder.tvDate.setText(Utils.getDateFromTimestamp(upcomingFixture.getFixture().getDate()));
+        holder.tvVenueName.setText(upcomingFixture.getFixture().getVenue().getName());
+        Utils.setPicture(context, holder.ivHomeIcon, upcomingFixture.getTeams().getHome().getLogo());
+        Utils.setPicture(context, holder.ivAwayIcon, upcomingFixture.getTeams().getAway().getLogo());
     }
 
     @Override
     public int getItemCount() {
-        return upcomingMatchOldList.size();
+        return upcomingFixtureList.size();
     }
 
     class MyHolder extends RecyclerView.ViewHolder {

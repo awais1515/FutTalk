@@ -13,7 +13,11 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.app.futtalk.R;
 import com.app.futtalk.fragments.TeamsFragment;
 import com.app.futtalk.models.Team;
+import com.app.futtalk.utils.DbReferences;
+import com.app.futtalk.utils.FirebaseUtils;
 import com.app.futtalk.utils.Utils;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.List;
 
@@ -47,8 +51,7 @@ public class TeamsSelectionAdapter extends RecyclerView.Adapter<TeamsSelectionAd
         holder.btnPlusAddTeam.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-
+                FirebaseDatabase.getInstance().getReference().child(DbReferences.USERS).child(FirebaseUtils.CURRENT_USER.getId()).child(DbReferences.FOLLOW_TEAMS).child(String.valueOf(team.getId())).setValue(team);
             }
         });
     }

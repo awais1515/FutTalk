@@ -59,26 +59,8 @@ public class TeamsFragment extends Fragment {
 
     private void loadData() {
 
-        ProgressDialog progressDialog = new ProgressDialog(context);
-        progressDialog.setCancelable(false);
-        progressDialog.setMessage("Loading...");
-        DataHelper.getAllTeamsFromApi(140, 2023, new TeamsDataListener() {
-            @Override
-            public void onTeamsLoaded(List<Team> teamList) {
-                // now we have team list and we are ready to set our adapter
-                teamsAdapter = new TeamsAdapter(getActivity(),teamList, R.layout.row_teams);
-                recyclerViewTeams.setAdapter(teamsAdapter);
-                progressDialog.dismiss();
-            }
-
-            @Override
-            public void onFailure(String message) {
-                progressDialog.dismiss();
-                Toast.makeText(context, message, Toast.LENGTH_LONG).show();
-            }
-        });
-
-
+       /* teamsAdapter = new TeamsAdapter(getActivity(),teamList, R.layout.row_teams);
+        recyclerViewTeams.setAdapter(teamsAdapter);*/
 
     }
 }

@@ -98,10 +98,10 @@ public class DataHelper {
 
     // synchronized call (flow didn't break)
     public static List<Team> getAllTeams() {
-        Team team1 = new Team("1", "Barcelona", TeamLogoUrls.BARCELONA);
-        Team team2 = new Team("2", "Real Madrid", TeamLogoUrls.REAL_MADRID);
-        Team team3 = new Team("3", "Liver Pool", TeamLogoUrls.LIVER_POOL);
-        Team team4 = new Team("4", "Manchester United", TeamLogoUrls.MANCHESTER_UNITED);
+        Team team1 = new Team(1, "Barcelona", TeamLogoUrls.BARCELONA);
+        Team team2 = new Team(2, "Real Madrid", TeamLogoUrls.REAL_MADRID);
+        Team team3 = new Team(3, "Liver Pool", TeamLogoUrls.LIVER_POOL);
+        Team team4 = new Team(4, "Manchester United", TeamLogoUrls.MANCHESTER_UNITED);
         return Arrays.asList(team1,team2,team3,team4);
     }
 

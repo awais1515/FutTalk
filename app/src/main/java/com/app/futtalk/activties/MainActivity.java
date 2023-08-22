@@ -126,16 +126,19 @@ public class MainActivity extends BaseActivity {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 if (item.getItemId() == R.id.item_home) {
+                    btnAddNewTeam.setVisibility(View.GONE);
                     loadFragment(homeFragment, getString(R.string.home_frag_title));
                     return true;
                 } else if (item.getItemId() == R.id.item_teams) {
-                    loadFragment(teamsFragment, getString(R.string.teams_frag_title));
                     btnAddNewTeam.setVisibility(View.VISIBLE);
+                    loadFragment(teamsFragment, getString(R.string.teams_frag_title));
                     return true;
                 } else if (item.getItemId() == R.id.item_fixtures) {
+                    btnAddNewTeam.setVisibility(View.GONE);
                     loadFragment(fixturesFragment, getString(R.string.fixtures_frag_title));
                     return true;
                 } else if (item.getItemId() == R.id.item_results) {
+                    btnAddNewTeam.setVisibility(View.GONE);
                     loadFragment(resultsFragment, getString(R.string.results_frag_title));
                     return true;
                 } else {

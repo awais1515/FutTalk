@@ -43,10 +43,9 @@ public class FixturesFragment extends Fragment {
         init(view);
         DataHelper.getFixturesByApi(40, 2023, "2023-08-21", "2023-09-21", new UpcomingFixturesListener() {
             @Override
-            public void onUpcomingFixturesLoaded(List<UpcomingFixture> upcomingFixtures) {
-                FixturesAdapter = new FixturesAdapter(getActivity(),, R.layout.row_view_fixtures);
+            public void onUpcomingFixturesLoaded(List<UpcomingFixture> upcomingFixtureList) {
+                fixturesAdapter = new FixturesAdapter(context, upcomingFixtureList,R.layout.row_view_fixtures);
                 recyclerViewFixtures.setAdapter(fixturesAdapter);
-
             }
 
             @Override
@@ -60,8 +59,6 @@ public class FixturesFragment extends Fragment {
         context = getActivity();
         recyclerViewFixtures = view.findViewById(R.id.recycler_view_fixtures);
         recyclerViewFixtures.setLayoutManager((new LinearLayoutManager(getActivity())));
-        fixturesAdapter = new FixturesAdapter(context, DataHelper.getUpComingMatches(7), R.layout.row_view_fixtures);
-        recyclerViewFixtures.setAdapter(fixturesAdapter);
 
     }
 }

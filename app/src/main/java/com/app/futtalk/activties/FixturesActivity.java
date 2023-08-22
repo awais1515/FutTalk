@@ -11,9 +11,14 @@ import android.view.View;
 import com.app.futtalk.R;
 import com.app.futtalk.adapters.FixturesAdapter;
 import com.app.futtalk.adapters.LiveMatchesAdapter;
+import com.app.futtalk.api.UpcomingFixturesListener;
+import com.app.futtalk.models.UpcomingFixture;
 import com.app.futtalk.utils.DataHelper;
 
-public class FixturesActivity extends AppCompatActivity {
+import java.util.ArrayList;
+import java.util.List;
+
+public class FixturesActivity extends BaseActivity {
 
     private Context context;
     private RecyclerView recyclerViewLiveMatches;
@@ -26,9 +31,8 @@ public class FixturesActivity extends AppCompatActivity {
         context = this;
         recyclerViewLiveMatches = findViewById(R.id.recycler_view);
         recyclerViewLiveMatches.setLayoutManager((new LinearLayoutManager(this)));
-        fixturesAdapter = new FixturesAdapter(this, DataHelper.getUpComingMatches(7), R.layout.row_view_fixtures);
-        recyclerViewLiveMatches.setAdapter(fixturesAdapter);
         setListeners();
+        loadData();
     }
 
     private void setListeners() {
@@ -36,6 +40,27 @@ public class FixturesActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 finish();
+            }
+        });
+    }
+
+    private void loadData() {
+        DataHelper.getFixturesByApi(40, 2023, "2023-08-21", "2023-09-21", new UpcomingFixturesListener() {
+            @Override
+            public void onUpcomingFixturesLoaded(List<UpcomingFixture> upcomingFixtureList) {
+                findViewById(R.id.pbLoader).setVisibility(View.GONE);
+                if (upcomingFixtureList != null && upcomingFixtureList.size() > 0) {
+                    fixturesAdapter = new FixturesAdapter(context, upcomingFixtureList, R.layout.row_view_fixtures);
+                    recyclerViewLiveMatches.setAdapter(fixturesAdapter);
+                } else {
+                    findViewById(R.id.tvNoDataFound).setVisibility(View.VISIBLE);
+                }
+
+            }
+
+            @Override
+            public void onFailure(String message) {
+                showToastMessage("Failed to load data");
             }
         });
     }

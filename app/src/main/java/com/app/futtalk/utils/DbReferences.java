@@ -4,6 +4,7 @@ public class DbReferences {
     public static String USERS = "users";
     public static String FEED = "feed";
     public static String COMMENTS = "comments";
-    public static String REPLIES = "replies";
+
+    public static String FOLLOW_TEAMS = "follow_teams";
 
 }
