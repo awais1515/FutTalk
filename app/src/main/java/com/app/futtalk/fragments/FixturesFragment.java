@@ -13,10 +13,12 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.app.futtalk.R;
+import com.app.futtalk.activties.BaseActivity;
 import com.app.futtalk.adapters.FixturesAdapter;
 import com.app.futtalk.adapters.LiveMatchesAdapter;
 import com.app.futtalk.adapters.TeamsAdapter;
 import com.app.futtalk.api.UpcomingFixturesListener;
+import com.app.futtalk.models.Team;
 import com.app.futtalk.models.UpcomingFixture;
 import com.app.futtalk.utils.DataHelper;
 
@@ -41,7 +43,9 @@ public class FixturesFragment extends Fragment {
         init(view);
         DataHelper.getFixturesByApi(40, 2023, "2023-08-21", "2023-09-21", new UpcomingFixturesListener() {
             @Override
-            public void onUpcomingFixturesLoaded(List<UpcomingFixture> playerList) {
+            public void onUpcomingFixturesLoaded(List<UpcomingFixture> upcomingFixtures) {
+                FixturesAdapter = new FixturesAdapter(getActivity(),, R.layout.row_view_fixtures);
+                recyclerViewFixtures.setAdapter(fixturesAdapter);
 
             }
 
@@ -52,8 +56,8 @@ public class FixturesFragment extends Fragment {
         });
     }
 
-    private void init(View view){
-        context= getActivity();
+    private void init(View view) {
+        context = getActivity();
         recyclerViewFixtures = view.findViewById(R.id.recycler_view_fixtures);
         recyclerViewFixtures.setLayoutManager((new LinearLayoutManager(getActivity())));
         fixturesAdapter = new FixturesAdapter(context, DataHelper.getUpComingMatches(7), R.layout.row_view_fixtures);
@@ -61,3 +65,4 @@ public class FixturesFragment extends Fragment {
 
     }
 }
+

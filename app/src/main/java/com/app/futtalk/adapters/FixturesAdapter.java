@@ -40,6 +40,7 @@ public class FixturesAdapter extends RecyclerView.Adapter<FixturesAdapter.MyHold
     public void onBindViewHolder(@NonNull MyHolder holder, int position) {
         UpcomingMatchOld upcomingMatchOld = upcomingMatchOldList.get(holder.getAdapterPosition());
 
+
         holder.tvHomeTeamName.setText(upcomingMatchOld.getHomeTeam().getName());
         holder.tvAwayTeamName.setText(upcomingMatchOld.getAwayTeam().getName());
         holder.tvTime.setText(upcomingMatchOld.getTime() + "'");
