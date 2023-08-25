@@ -102,5 +102,14 @@
         android:layout_height="24dp"
         android:layout_centerInParent="true"/>
 
+    <TextView
+        android:id="@+id/tvNoDataFound"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:gravity="center"
+        android:visibility="gone"
+        android:text="Be first to post something in this club" />
+
 
 </RelativeLayout>

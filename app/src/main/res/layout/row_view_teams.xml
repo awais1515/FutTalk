@@ -40,11 +40,11 @@
 </RelativeLayout>
 
         <ImageButton
-            android:id="@+id/btnFavoriteTeam"
+            android:id="@+id/btnUnfollowTeam"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
-            android:background="@drawable/ic_heart" />
+            android:background="@drawable/ic_remove" />
 
         <LinearLayout
             android:layout_marginTop="10dp"

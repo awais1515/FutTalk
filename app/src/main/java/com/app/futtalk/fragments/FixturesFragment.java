@@ -44,13 +44,17 @@ public class FixturesFragment extends Fragment {
         DataHelper.getFixturesByApi(40, 2023, "2023-08-21", "2023-09-21", new UpcomingFixturesListener() {
             @Override
             public void onUpcomingFixturesLoaded(List<UpcomingFixture> upcomingFixtureList) {
+                getView().findViewById(R.id.pbLoader).setVisibility(View.GONE);
+                if (upcomingFixtureList.size() == 0) {
+                    getView().findViewById(R.id.tvNoDataFound).setVisibility(View.VISIBLE);
+                }
                 fixturesAdapter = new FixturesAdapter(context, upcomingFixtureList,R.layout.row_view_fixtures);
                 recyclerViewFixtures.setAdapter(fixturesAdapter);
             }
 
             @Override
             public void onFailure(String message) {
-
+                getView().findViewById(R.id.pbLoader).setVisibility(View.GONE);
             }
         });
     }

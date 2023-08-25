@@ -47,6 +47,9 @@ public class FeedPostActivity extends BaseActivity {
     private ProgressBar progressBar;
     private ExoPlayer player;
 
+    private TextView tvNoDataFound;
+    private boolean isDataLoaded = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,6 +58,7 @@ public class FeedPostActivity extends BaseActivity {
         init();
         setData();
         fetchPostsData();
+        postChecker();
         setListeners();
     }
 
@@ -69,6 +73,7 @@ public class FeedPostActivity extends BaseActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(context));
         recyclerView.setAdapter(feedAdapter);
         progressBar = findViewById(R.id.progressBar);
+        tvNoDataFound = findViewById(R.id.tvNoDataFound);
         handler = new Handler();
         taskRunnable = new Runnable() {
             @Override
@@ -107,7 +112,9 @@ public class FeedPostActivity extends BaseActivity {
         FirebaseDatabase.getInstance().getReference(DbReferences.FEED).child(team.getName()).addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+                isDataLoaded = true;
                 progressBar.setVisibility(View.GONE);
+                tvNoDataFound.setVisibility(View.GONE);
                 FeedPost feedPost = snapshot.getValue(FeedPost.class);
                 feedPost.setId(snapshot.getKey());
                 feedPosts.add(0, feedPost);
@@ -134,6 +141,18 @@ public class FeedPostActivity extends BaseActivity {
 
             }
         });
+    }
+
+    private void postChecker() {
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                if (!isDataLoaded) {
+                    progressBar.setVisibility(View.GONE);
+                    tvNoDataFound.setVisibility(View.VISIBLE);
+                }
+            }
+        },15000);
     }
 
 }

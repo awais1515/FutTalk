@@ -1,5 +1,6 @@
 package com.app.futtalk.utils;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.widget.ImageView;
 
@@ -91,6 +92,13 @@ public class Utils {
             e.printStackTrace();
             return "";
         }
+    }
+
+    public static ProgressDialog getProgressDialog(Context context, String message) {
+        ProgressDialog progressDialog = new ProgressDialog(context);
+        progressDialog.setCancelable(false);
+        progressDialog.setMessage(message);
+        return progressDialog;
     }
 
 }
