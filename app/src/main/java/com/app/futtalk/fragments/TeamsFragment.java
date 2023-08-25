@@ -16,11 +16,13 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.app.futtalk.R;
+import com.app.futtalk.adapters.FixturesAdapter;
 import com.app.futtalk.adapters.TeamsAdapter;
 import com.app.futtalk.api.TeamsDataListener;
 import com.app.futtalk.models.Team;
 import com.app.futtalk.utils.DataHelper;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class TeamsFragment extends Fragment {
@@ -28,7 +30,7 @@ public class TeamsFragment extends Fragment {
     private Context context;
     private RecyclerView recyclerViewTeams;
     private TeamsAdapter teamsAdapter;
-
+    private List<Team> teamsList;
 
 
     @Nullable
@@ -42,13 +44,17 @@ public class TeamsFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         init();
         setListeners();
+
+
+
+
     }
 
-    private void init(){
-        context= getActivity();
+    private void init() {
+        context = getActivity();
         recyclerViewTeams = getView().findViewById(R.id.recycler_view_teams);
         recyclerViewTeams.setLayoutManager(new LinearLayoutManager(context));
-        loadData();
+        teamsAdapter= new TeamsAdapter(context, teamsList ,R.layout.row_teams);
     }
 
     private void setListeners() {
@@ -57,10 +63,5 @@ public class TeamsFragment extends Fragment {
 
 
 
-    private void loadData() {
-
-       /* teamsAdapter = new TeamsAdapter(getActivity(),teamList, R.layout.row_teams);
-        recyclerViewTeams.setAdapter(teamsAdapter);*/
-
-    }
 }
+

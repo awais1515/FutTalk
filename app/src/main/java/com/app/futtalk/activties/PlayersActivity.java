@@ -68,9 +68,15 @@ public class PlayersActivity extends AppCompatActivity {
         DataHelper.getPlayersFromApi(team.getId(), 2023, new PlayersDataListener() {
             @Override
             public void onPlayersLoaded(List<Player> playerList) {
-                playersAdapter= new PlayersAdapter(context, playerList, R.layout.row_players);
-                recyclerViewPlayers.setAdapter(playersAdapter);
-                progressDialog.dismiss();
+                findViewById(R.id.pbLoader).setVisibility(View.GONE);
+                if(playerList !=null && playerList.size() > 0){
+                    playersAdapter= new PlayersAdapter(context, playerList, R.layout.row_players);
+                    recyclerViewPlayers.setAdapter(playersAdapter);
+                    progressDialog.dismiss();
+                }
+               else {
+                   findViewById(R.id.tvNoDataFound).setVisibility(View.VISIBLE);
+                }
             }
 
             @Override

@@ -68,30 +68,34 @@
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true">
 
-           <RelativeLayout
-               android:layout_width="wrap_content"
-               android:layout_height="wrap_content">
-            <ImageView
-                android:id="@+id/ivHomeIcon"
-                android:src="@drawable/iv_barcelona"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:layout_marginLeft="10dp"/>
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent">
 
-               <TextView
+                <ImageView
+                    android:id="@+id/ivHomeIcon"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_marginLeft="10dp"
+                    android:src="@drawable/iv_barcelona" />
 
-                   android:id="@+id/tvHomeTeamName"
-                   android:layout_width="wrap_content"
-                   android:layout_height="wrap_content"
-                   android:layout_below="@+id/ivHomeIcon"
-                   android:fontFamily="@font/poppins_semi_bold"
-                   android:gravity="center"
-                   android:text="BARCELONA"
-                   android:textAlignment="center"
-                   android:textColor="@color/white"
-                   android:textSize="12sp" />
+                <TextView
+                    android:autoSizeTextType="uniform"
+                    android:id="@+id/tvHomeTeamName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/ivHomeIcon"
+                    android:layout_centerHorizontal="true"
+                    android:fontFamily="@font/poppins_semi_bold"
+                    android:gravity="top|center_horizontal"
+                    android:text="BARCELONA"
+                    android:textAlignment="center"
+                    android:textColor="@color/white"
+                    android:textSize="12sp"
+                    android:maxLines="2"
+                    android:ellipsize="end"/>
 
-           </RelativeLayout>
+            </RelativeLayout>
         </LinearLayout>
 
         <LinearLayout
@@ -101,6 +105,7 @@
             android:layout_alignParentRight="true"
             android:layout_height="wrap_content">
 
+
             <ImageView
                 android:id="@+id/ivAwayIcon"
                 android:layout_alignParentRight="true"
@@ -109,19 +114,19 @@
                 android:layout_height="50dp" />
 
             <TextView
-
+                android:autoSizeTextType="uniform"
                 android:id="@+id/tvAwayTeamName"
-                android:text="REAL MADRID"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/ivAwayIcon"
+                android:layout_alignParentRight="true"
                 android:fontFamily="@font/poppins_semi_bold"
-                android:textSize="12sp"
+                android:gravity="top|center_horizontal"
+                android:maxLines="2"
+                android:text="REAL MADRID"
                 android:textAlignment="center"
                 android:textColor="@color/white"
-                android:layout_below="@id/ivAwayIcon"
-                android:gravity="center"
-                android:layout_alignParentRight="true"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
-
+                android:textSize="12sp" />
 
         </LinearLayout>
 

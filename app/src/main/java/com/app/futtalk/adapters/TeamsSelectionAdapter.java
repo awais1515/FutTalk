@@ -27,11 +27,14 @@ public class TeamsSelectionAdapter extends RecyclerView.Adapter<TeamsSelectionAd
     private List<Team> teamsSelectionList;
     private int rowLayout;
 
+    private List<Team> teamList;
+
 
     public TeamsSelectionAdapter(Context context, List<Team> teamsSelectionList, int rowLayout) {
         this.context = context;
         this.rowLayout = rowLayout;
         this.teamsSelectionList = teamsSelectionList;
+        this.teamList= teamList;
     }
 
     @NonNull
@@ -52,6 +55,8 @@ public class TeamsSelectionAdapter extends RecyclerView.Adapter<TeamsSelectionAd
             @Override
             public void onClick(View view) {
                 FirebaseDatabase.getInstance().getReference().child(DbReferences.USERS).child(FirebaseUtils.CURRENT_USER.getId()).child(DbReferences.FOLLOW_TEAMS).child(String.valueOf(team.getId())).setValue(team);
+
+
             }
         });
     }
