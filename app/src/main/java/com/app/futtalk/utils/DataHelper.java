@@ -2,11 +2,15 @@ package com.app.futtalk.utils;
 
 import android.util.Log;
 
+import com.app.futtalk.api.CountriesDataListener;
+import com.app.futtalk.api.LeaguesInfoDataListener;
 import com.app.futtalk.api.PlayersDataListener;
 import com.app.futtalk.api.Service;
 import com.app.futtalk.api.ApiResponse;
 import com.app.futtalk.api.TeamsDataListener;
 import com.app.futtalk.api.UpcomingFixturesListener;
+import com.app.futtalk.models.Country;
+import com.app.futtalk.models.LeagueInfo;
 import com.app.futtalk.models.LiveMatch;
 import com.app.futtalk.models.Player;
 import com.app.futtalk.models.Results;
@@ -192,7 +196,7 @@ public class DataHelper {
 
     }
 
-    public static void getFixturesByApi(int leagueId, int season, String fromDate, String toDate, UpcomingFixturesListener upcomingFixturesListener) {
+    public static void getFixturesFromApi(int leagueId, int season, String fromDate, String toDate, UpcomingFixturesListener upcomingFixturesListener) {
         Service.getInstance().getMyApi().getFixtures(leagueId, season, fromDate, toDate).enqueue(new Callback<ApiResponse>() {
             @Override
             public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
@@ -210,6 +214,51 @@ public class DataHelper {
             @Override
             public void onFailure(Call<ApiResponse> call, Throwable t) {
                 upcomingFixturesListener.onFailure(t.getMessage());
+            }
+        });
+    }
+
+    public static void getCountriesFromApi(CountriesDataListener countriesDataListener) {
+        Service.getInstance().getMyApi().getCountries().enqueue(new Callback<ApiResponse>() {
+            @Override
+            public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
+                ApiResponse apiResponse = response.body();
+                List<Country> allCountries = new ArrayList<>();
+                for (Map map: apiResponse.getResponse()){
+                    Gson gson= new Gson();
+                    String jsonString = gson.toJson(map);
+                    Country country = gson.fromJson(jsonString, Country.class);
+                    allCountries.add(country );
+                }
+                countriesDataListener.onCountriesLoaded(allCountries);
+            }
+
+            @Override
+            public void onFailure(Call<ApiResponse> call, Throwable t) {
+                countriesDataListener.onFailure(t.getMessage());
+            }
+        });
+    }
+
+
+    public static void getLeaguesFromApi(int season, LeaguesInfoDataListener leaguesInfoDataListener) {
+        Service.getInstance().getMyApi().getLeagues(season).enqueue(new Callback<ApiResponse>() {
+            @Override
+            public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
+                ApiResponse apiResponse = response.body();
+                List<LeagueInfo> leaguesInfoList = new ArrayList<>();
+                for (Map map: apiResponse.getResponse()){
+                    Gson gson= new Gson();
+                    String jsonString = gson.toJson(map);
+                    LeagueInfo leagueInfo = gson.fromJson(jsonString, LeagueInfo.class);
+                    leaguesInfoList.add(leagueInfo);
+                }
+                leaguesInfoDataListener.onLeaguesLoaded(leaguesInfoList);
+            }
+
+            @Override
+            public void onFailure(Call<ApiResponse> call, Throwable t) {
+                leaguesInfoDataListener.onFailure(t.getMessage());
             }
         });
     }

@@ -42,7 +42,7 @@ public class PlayersActivity extends AppCompatActivity {
 
     private void init(){
         context = this;
-        tvTeamName = findViewById(R.id.tv_league_name);
+        tvTeamName = findViewById(R.id.tv_team_name);
         ivTeamLogo = findViewById(R.id.ivTeamLogo);
         recyclerViewPlayers = findViewById(R.id.recycler_view_Player_stats);
         recyclerViewPlayers.setLayoutManager((new LinearLayoutManager(this)));

@@ -64,7 +64,7 @@ public class FeedPostActivity extends BaseActivity {
 
     private void init() {
         context = this;
-        tvTeamName = findViewById(R.id.tv_league_name);
+        tvTeamName = findViewById(R.id.tv_team_name);
         ivProfilePic = findViewById(R.id.ivProfilePic);
         recyclerView = findViewById(R.id.recycler_view);
         feedPosts = new ArrayList<>();

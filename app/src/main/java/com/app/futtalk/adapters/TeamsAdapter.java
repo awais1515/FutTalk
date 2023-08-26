@@ -129,7 +129,7 @@ public class TeamsAdapter extends RecyclerView.Adapter<TeamsAdapter.MyHolder> {
         MyHolder(View itemView) {
             super(itemView);
             ivTeamLogo = itemView.findViewById(R.id.iv_league_logo);
-            tvTeamName = itemView.findViewById(R.id.tv_league_name);
+            tvTeamName = itemView.findViewById(R.id.tv_team_name);
             btnLiveFeed = itemView.findViewById(R.id.btnLiveFeed);
             btnPlayers = itemView.findViewById(R.id.btnPlayers);
             btnFixtures = itemView.findViewById(R.id.btnFixtures);

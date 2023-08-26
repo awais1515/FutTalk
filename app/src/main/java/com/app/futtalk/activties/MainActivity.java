@@ -28,6 +28,7 @@ import android.widget.Toast;
 import com.app.futtalk.R;
 import com.app.futtalk.fragments.FixturesFragment;
 import com.app.futtalk.fragments.HomeFragment;
+import com.app.futtalk.fragments.LeaguesFragment;
 import com.app.futtalk.fragments.ResultsFragment;
 import com.app.futtalk.fragments.TeamsFragment;
 import com.bumptech.glide.Glide;
@@ -56,7 +57,7 @@ public class MainActivity extends BaseActivity {
     TextView tvLogout;
     TextView tvScreenTitle;
     HomeFragment homeFragment;
-    ResultsFragment resultsFragment;
+    LeaguesFragment leaguesFragment;
     TeamsFragment teamsFragment;
     FixturesFragment fixturesFragment;
     BottomNavigationView bottomNavigationView;
@@ -95,7 +96,7 @@ public class MainActivity extends BaseActivity {
         btnAddNewLeague = findViewById(R.id.btnAddNewLeague);
         closeButton = findViewById(R.id.closeButton);
         homeFragment = new HomeFragment();
-        resultsFragment = new ResultsFragment();
+        leaguesFragment = new LeaguesFragment();
         teamsFragment = new TeamsFragment();
         fixturesFragment = new FixturesFragment();
         loadFragment(homeFragment, getString(R.string.home_frag_title));
@@ -139,13 +140,13 @@ public class MainActivity extends BaseActivity {
                     return true;
                 } else if (item.getItemId() == R.id.item_fixtures) {
                     btnAddNewTeam.setVisibility(View.GONE);
-                    btnAddNewLeague.setVisibility(View.VISIBLE);
+                    btnAddNewLeague.setVisibility(View.GONE);
                     loadFragment(fixturesFragment, getString(R.string.fixtures_frag_title));
                     return true;
-                } else if (item.getItemId() == R.id.item_results) {
+                } else if (item.getItemId() == R.id.item_leagues) {
                     btnAddNewTeam.setVisibility(View.GONE);
-                    btnAddNewLeague.setVisibility(View.GONE);
-                    loadFragment(resultsFragment, getString(R.string.results_frag_title));
+                    btnAddNewLeague.setVisibility(View.VISIBLE);
+                    loadFragment(leaguesFragment, getString(R.string.results_frag_title));
                     return true;
                 } else {
                     return false;

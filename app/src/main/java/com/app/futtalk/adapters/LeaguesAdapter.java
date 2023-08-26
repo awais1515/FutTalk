@@ -16,17 +16,19 @@ import com.app.futtalk.utils.Utils;
 
 import java.util.List;
 
-public class LeaguesSelectionAdapter extends RecyclerView.Adapter<LeaguesSelectionAdapter.MyHolder> {
+public class LeaguesAdapter extends RecyclerView.Adapter<LeaguesAdapter.MyHolder> {
 
     private Context context;
     private List<League> leaguesList;
+    private boolean isSelectionMode;
     private int rowLayout;
 
 
-    public LeaguesSelectionAdapter(Context context, List<League> leaguesList, int rowLayout){
+    public LeaguesAdapter(Context context, List<League> leaguesList, int rowLayout, boolean isSelectionMode) {
         this.context = context;
-        this.leaguesList= leaguesList;
-        this.rowLayout= rowLayout;
+        this.leaguesList = leaguesList;
+        this.rowLayout = rowLayout;
+        this.isSelectionMode = isSelectionMode;
     }
 
     @NonNull
@@ -41,6 +43,14 @@ public class LeaguesSelectionAdapter extends RecyclerView.Adapter<LeaguesSelecti
         League league = leaguesList.get(holder.getAbsoluteAdapterPosition());
         holder.tvLeagueName.setText(league.getName());
         Utils.setPicture(context, holder.ivLeagueLogo, league.getLogo());
+
+        if (isSelectionMode) {
+            // show follow icon
+            // hide remove icon
+        } else {
+            // hide follow icon
+            // show remove icon
+        }
 
         holder.btnFollow.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -60,9 +70,11 @@ public class LeaguesSelectionAdapter extends RecyclerView.Adapter<LeaguesSelecti
     }
 
     @Override
-    public int getItemCount() {return leaguesList.size();}
+    public int getItemCount() {
+        return leaguesList.size();
+    }
 
-    class MyHolder extends RecyclerView.ViewHolder{
+    class MyHolder extends RecyclerView.ViewHolder {
         public View btnFollow;
 
         ImageView ivLeagueLogo, ivRemoveLeague;
@@ -72,7 +84,7 @@ public class LeaguesSelectionAdapter extends RecyclerView.Adapter<LeaguesSelecti
         MyHolder(View itemView) {
             super(itemView);
             ivLeagueLogo = itemView.findViewById(R.id.iv_league_logo);
-            tvLeagueName = itemView.findViewById(R.id.tv_league_name);
+            tvLeagueName = itemView.findViewById(R.id.tv_team_name);
             btnFollow = itemView.findViewById(R.id.btnFollowLeague);
             ivRemoveLeague = itemView.findViewById(R.id.btnUnfollowLeague);
 

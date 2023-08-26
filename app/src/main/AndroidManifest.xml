@@ -15,11 +15,14 @@
         android:theme="@style/Theme.FutTalk"
         tools:targetApi="31">
         <activity
+            android:name=".activties.SelectCountryActivity"
+            android:exported="false" />
+        <activity
             android:name=".activties.LeaguesSelectionActivity"
             android:exported="false" />
         <activity
             android:name=".activties.TestApiActivity"
-            android:exported="true"></activity>
+            android:exported="true" />
         <activity
             android:name=".activties.VideoPlayerActivity"
             android:exported="false" />

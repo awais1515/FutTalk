@@ -24,7 +24,6 @@ import com.app.futtalk.api.UpcomingFixturesListener;
 import com.app.futtalk.models.UpcomingFixture;
 import com.app.futtalk.utils.DataHelper;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class HomeFragment extends Fragment {
@@ -88,7 +87,7 @@ public class HomeFragment extends Fragment {
     }
 
     private void loadData() {
-        DataHelper.getFixturesByApi(40, 2023, "2023-08-21", "2023-09-21", new UpcomingFixturesListener() {
+        DataHelper.getFixturesFromApi(40, 2023, "2023-08-21", "2023-09-21", new UpcomingFixturesListener() {
             @Override
             public void onUpcomingFixturesLoaded(List<UpcomingFixture> upcomingFixtureList) {
                 fixturesAdapter = new FixturesAdapter(getActivity(), upcomingFixtureList, R.layout.row_view_fixtures);

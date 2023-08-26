@@ -87,7 +87,7 @@ public class AddPostActivity extends BaseActivity {
 
     private void init() {
         context = this;
-        tvTeamName = findViewById(R.id.tv_league_name);
+        tvTeamName = findViewById(R.id.tv_team_name);
         etStory = findViewById(R.id.etStory);
         ivProfilePic = findViewById(R.id.ivProfilePic);
         btnPublish = findViewById(R.id.btnPublish);

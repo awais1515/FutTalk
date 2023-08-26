@@ -6,5 +6,6 @@ public class DbReferences {
     public static String COMMENTS = "comments";
 
     public static String FOLLOW_TEAMS = "follow_teams";
+    public static String FOLLOW_LEAGUES = "follow_leagues";
 
 }

@@ -15,8 +15,8 @@
         android:icon="@drawable/ic_fixtures"/>
 
     <item
-        android:id="@+id/item_results"
-        android:title="Results"
+        android:id="@+id/item_leagues"
+        android:title="Leagues"
         android:icon="@drawable/ic_results"/>
 
 

@@ -55,7 +55,7 @@ public class LeagueScrollerAdapter extends RecyclerView.Adapter<LeagueScrollerAd
         MyHolder(View itemView) {
             super(itemView);
             ivLeagueLogo = itemView.findViewById(R.id.iv_league_logo);
-            tvLeagueName = itemView.findViewById(R.id.tv_league_name);
+            tvLeagueName = itemView.findViewById(R.id.tv_team_name);
         }
 
     }

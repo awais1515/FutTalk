@@ -31,6 +31,18 @@ public interface Api {
     @GET("fixtures")
     Call<ApiResponse> getFixtures(@Query("league") int league, @Query("season") int season, @Query("from") String from, @Query("to") String to);
 
+    @Headers({
+            "x-rapidapi-host: " + HOST_NAME,
+            "x-rapidapi-key: " + API_KEY
+    })
+    @GET("countries")
+    Call<ApiResponse> getCountries();
 
+    @Headers({
+            "x-rapidapi-host: " + HOST_NAME,
+            "x-rapidapi-key: " + API_KEY
+    })
+    @GET("leagues")
+    Call<ApiResponse> getLeagues(@Query("season") int season);
 
 }

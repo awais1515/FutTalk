@@ -33,7 +33,7 @@
             android:textSize="15sp" />
 
         <TextView
-            android:id="@+id/tv_league_name"
+            android:id="@+id/tv_team_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
