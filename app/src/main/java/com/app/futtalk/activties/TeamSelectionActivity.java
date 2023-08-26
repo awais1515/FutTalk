@@ -13,18 +13,26 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.app.futtalk.R;
+import com.app.futtalk.adapters.LeagueScrollerAdapter;
 import com.app.futtalk.adapters.TeamsAdapter;
 import com.app.futtalk.adapters.TeamsSelectionAdapter;
 import com.app.futtalk.api.TeamsDataListener;
+import com.app.futtalk.models.League;
 import com.app.futtalk.models.Team;
 import com.app.futtalk.utils.DataHelper;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class TeamSelectionActivity extends BaseActivity {
 
     Context context;
-    HorizontalScrollView horizontalScrollView;
+
+    private RecyclerView recyclerViewLeaguesScroller;
+
+    private List<League> leagueList = new ArrayList<>();
+
+    private LeagueScrollerAdapter leagueScrollerAdapter;
     ImageView ivBack;
 
     private RecyclerView recyclerViewTeamSelection;
@@ -41,9 +49,9 @@ public class TeamSelectionActivity extends BaseActivity {
 
     private void init() {
         context = this;
-        horizontalScrollView = findViewById(R.id.horizontalScrollViewLeagues);
-        horizontalScrollView.setHorizontalScrollBarEnabled(false);
         ivBack = findViewById(R.id.ivBack);
+        recyclerViewLeaguesScroller = findViewById(R.id.recycler_view_scroll_leagues);
+        recyclerViewLeaguesScroller.setLayoutManager((new LinearLayoutManager(context,LinearLayoutManager.HORIZONTAL, false)));
 
         recyclerViewTeamSelection = findViewById(R.id.recycler_view_teams_of_leagues);
         recyclerViewTeamSelection.setLayoutManager((new LinearLayoutManager(this)));
@@ -75,6 +83,10 @@ public class TeamSelectionActivity extends BaseActivity {
                 Toast.makeText(context, message, Toast.LENGTH_LONG).show();
             }
         });
+
+    }
+
+    private void loadLeagueData(){
 
     }
 }

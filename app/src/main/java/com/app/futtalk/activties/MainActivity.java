@@ -63,6 +63,7 @@ public class MainActivity extends BaseActivity {
     CircleImageView ivProfilePic;
     Button btnViewProfile;
     ImageView btnAddNewTeam;
+    ImageView btnAddNewLeague;
     ImageButton closeButton;
     //private ActivityResultLauncher<Intent> galleryImageResultListener;
     private Uri imageFilePath;
@@ -91,6 +92,7 @@ public class MainActivity extends BaseActivity {
         ivProfilePic = findViewById(R.id.ivProfilePic);
         btnViewProfile = findViewById(R.id.btnViewProfile);
         btnAddNewTeam= findViewById(R.id.btnAddNewTeam);
+        btnAddNewLeague = findViewById(R.id.btnAddNewLeague);
         closeButton = findViewById(R.id.closeButton);
         homeFragment = new HomeFragment();
         resultsFragment = new ResultsFragment();
@@ -127,18 +129,22 @@ public class MainActivity extends BaseActivity {
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 if (item.getItemId() == R.id.item_home) {
                     btnAddNewTeam.setVisibility(View.GONE);
+                    btnAddNewLeague.setVisibility(View.GONE);
                     loadFragment(homeFragment, getString(R.string.home_frag_title));
                     return true;
                 } else if (item.getItemId() == R.id.item_teams) {
                     btnAddNewTeam.setVisibility(View.VISIBLE);
+                    btnAddNewLeague.setVisibility(View.GONE);
                     loadFragment(teamsFragment, getString(R.string.teams_frag_title));
                     return true;
                 } else if (item.getItemId() == R.id.item_fixtures) {
                     btnAddNewTeam.setVisibility(View.GONE);
+                    btnAddNewLeague.setVisibility(View.VISIBLE);
                     loadFragment(fixturesFragment, getString(R.string.fixtures_frag_title));
                     return true;
                 } else if (item.getItemId() == R.id.item_results) {
                     btnAddNewTeam.setVisibility(View.GONE);
+                    btnAddNewLeague.setVisibility(View.GONE);
                     loadFragment(resultsFragment, getString(R.string.results_frag_title));
                     return true;
                 } else {
@@ -205,6 +211,14 @@ public class MainActivity extends BaseActivity {
             @Override
             public void onClick(View view) {
                 Intent intent= new Intent(context, TeamSelectionActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        btnAddNewLeague.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(context, LeaguesSelectionActivity.class);
                 startActivity(intent);
             }
         });

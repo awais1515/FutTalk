@@ -4,15 +4,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activties.TeamSelectionActivity"
+    tools:context=".activties.LeaguesSelectionActivity"
     android:background="@color/black">
-
 
     <RelativeLayout
         android:id="@+id/RelativeLayoutTopBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="5dp"
+        android:layout_marginBottom="10dp"
         android:layout_marginTop="10dp"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp">
@@ -31,30 +30,15 @@
             android:layout_marginLeft="16dp"
             android:layout_toRightOf="@id/ivBack"
             android:fontFamily="@font/poppins_bold_italic"
-            android:text="Team Selection"
+            android:text="League Selection"
             android:textColor="@color/white"
             android:textSize="15sp" />
     </RelativeLayout>
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recycler_view_scroll_leagues"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
+        android:id="@+id/recycler_view_league_selection"
         android:layout_below="@+id/RelativeLayoutTopBar"
-        android:layout_marginBottom="10dp"
-        android:padding="5dp">
-
-
-    </androidx.recyclerview.widget.RecyclerView>
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:background="@color/grey"
-        android:id="@+id/recycler_view_teams_of_leagues"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@+id/recycler_view_scroll_leagues"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginEnd="10dp"
-        android:layout_marginBottom="10dp" />
+        android:layout_height="match_parent"/>
+
 </RelativeLayout>

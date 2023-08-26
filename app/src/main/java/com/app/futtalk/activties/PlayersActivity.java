@@ -9,12 +9,10 @@ import android.content.Context;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.app.futtalk.R;
-import com.app.futtalk.adapters.LiveMatchesAdapter;
 import com.app.futtalk.adapters.PlayersAdapter;
 import com.app.futtalk.api.PlayersDataListener;
 import com.app.futtalk.models.Player;
@@ -44,7 +42,7 @@ public class PlayersActivity extends AppCompatActivity {
 
     private void init(){
         context = this;
-        tvTeamName = findViewById(R.id.tv_team_name);
+        tvTeamName = findViewById(R.id.tv_league_name);
         ivTeamLogo = findViewById(R.id.ivTeamLogo);
         recyclerViewPlayers = findViewById(R.id.recycler_view_Player_stats);
         recyclerViewPlayers.setLayoutManager((new LinearLayoutManager(this)));
