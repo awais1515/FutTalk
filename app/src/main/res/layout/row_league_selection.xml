@@ -8,7 +8,7 @@
     android:layout_height="wrap_content">
 
     <RelativeLayout
-        android:padding="6dp"
+        android:padding="2dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
@@ -18,8 +18,9 @@
         android:layout_height="wrap_content">
         <ImageView
             android:id="@+id/iv_league_logo"
-            android:layout_width="70dp"
-            android:layout_height="70dp"
+            android:layout_centerInParent="true"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
             />
 
         <TextView
@@ -30,7 +31,7 @@
             android:layout_marginStart="20dp"
             android:layout_marginTop="20dp"
             android:layout_marginEnd="20dp"
-            android:layout_marginBottom="20dp"
+            android:layout_marginBottom="10dp"
             android:layout_toRightOf="@+id/iv_league_logo"
             android:fontFamily="@font/poppins_bold"
             android:text=""
@@ -39,7 +40,7 @@
 
     </RelativeLayout>
         <LinearLayout
-            android:layout_toLeftOf="@+id/btnUnfollowLeague"
+            android:layout_alignParentRight="true"
             android:id="@+id/btnFollowLeague"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -50,7 +51,7 @@
             android:paddingTop="2dp"
             android:paddingBottom="2dp"
             android:layout_marginLeft="2dp"
-            android:layout_marginRight="2dp">
+            android:layout_marginRight="10dp">
 
 
             <TextView
@@ -65,15 +66,39 @@
                 android:textColor="@color/grey_main"
                 android:textSize="11sp" />
 
+
         </LinearLayout>
-        <ImageButton
-            android:layout_marginLeft="10dp"
-            android:layout_centerVertical="true"
-            android:id="@+id/btnUnfollowLeague"
+
+        <LinearLayout
+            android:visibility="invisible"
+            android:layout_alignParentRight="true"
+            android:id="@+id/btnUnFollowLeague"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:background="@drawable/ic_remove" />
+            android:background="@drawable/bg_btn_teams"
+            android:backgroundTint="@color/white"
+            android:layout_centerVertical="true"
+            android:paddingLeft="8dp"
+            android:paddingRight="8dp"
+            android:paddingTop="2dp"
+            android:paddingBottom="2dp"
+            android:layout_marginLeft="2dp"
+            android:layout_marginRight="10dp">
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:layout_gravity="center"
+                android:fontFamily="@font/poppins_medium"
+                android:gravity="center"
+                android:text="Following"
+                android:textColor="@color/grey_main"
+                android:textSize="11sp" />
+        </LinearLayout>
+
 
 </RelativeLayout>
 

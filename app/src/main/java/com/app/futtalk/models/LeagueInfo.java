@@ -5,6 +5,7 @@ public class LeagueInfo {
     private Country country;
 
 
+
     public League getLeague() {
         return league;
     }
@@ -20,4 +21,7 @@ public class LeagueInfo {
     public void setCountry(Country country) {
         this.country = country;
     }
+
+
 }
+
