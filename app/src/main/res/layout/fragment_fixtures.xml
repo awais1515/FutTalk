@@ -18,6 +18,8 @@
 
     <TextView
         android:id="@+id/tvNoDataFound"
+        android:visibility="gone"
+        android:layout_centerInParent="true"
         android:text="No Upcoming matches found."
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>

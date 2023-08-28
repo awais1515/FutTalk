@@ -1,7 +1,6 @@
 package com.app.futtalk.adapters;
 
 import static com.app.futtalk.utils.DbReferences.USERS;
-import static com.app.futtalk.utils.FirebaseUtils.CURRENT_USER;
 
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
@@ -11,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -18,7 +18,6 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.app.futtalk.R;
-import com.app.futtalk.models.League;
 import com.app.futtalk.models.LeagueInfo;
 import com.app.futtalk.utils.DbReferences;
 import com.app.futtalk.utils.FirebaseUtils;
@@ -60,7 +59,7 @@ public class LeaguesAdapter extends RecyclerView.Adapter<LeaguesAdapter.MyHolder
 
         if (isSelectionMode) {
             holder.btnFollow.setVisibility(View.VISIBLE);
-            holder.ivRemoveLeague.setVisibility(View.INVISIBLE);
+            holder.btnRemoveLeague.setVisibility(View.GONE);
 
             holder.btnFollow.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -89,21 +88,11 @@ public class LeaguesAdapter extends RecyclerView.Adapter<LeaguesAdapter.MyHolder
                 }
             });
 
-            holder.ivRemoveLeague.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-
-                }
-            });
-
-
-
-
         } else {
-            holder.btnFollow.setVisibility(View.INVISIBLE);
-            holder.ivRemoveLeague.setVisibility(View.VISIBLE);
+            holder.btnFollow.setVisibility(View.GONE);
+            holder.btnRemoveLeague.setVisibility(View.VISIBLE);
 
-            holder.ivRemoveLeague.setOnClickListener(new View.OnClickListener() {
+            holder.btnRemoveLeague.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     AlertDialog.Builder builder = new AlertDialog.Builder(context);
@@ -143,8 +132,6 @@ public class LeaguesAdapter extends RecyclerView.Adapter<LeaguesAdapter.MyHolder
             });
 
         }
-
-
     }
 
     @Override
@@ -152,9 +139,13 @@ public class LeaguesAdapter extends RecyclerView.Adapter<LeaguesAdapter.MyHolder
         return leaguesList.size();
     }
 
-    class MyHolder extends RecyclerView.ViewHolder {
-        public View btnFollow, ivRemoveLeague;
+    public void setLeaguesList(List<LeagueInfo> leaguesList) {
+        this.leaguesList = leaguesList;
+        notifyDataSetChanged();
+    }
 
+    class MyHolder extends RecyclerView.ViewHolder {
+        LinearLayout btnFollow, btnRemoveLeague;
         ImageView ivLeagueLogo;
 
         TextView tvLeagueName;
@@ -162,9 +153,9 @@ public class LeaguesAdapter extends RecyclerView.Adapter<LeaguesAdapter.MyHolder
         MyHolder(View itemView) {
             super(itemView);
             ivLeagueLogo = itemView.findViewById(R.id.iv_league_logo);
-            tvLeagueName = itemView.findViewById(R.id.tv_team_name);
-            btnFollow = itemView.findViewById(R.id.btnFollowLeague);
-            ivRemoveLeague = itemView.findViewById(R.id.btnUnfollowLeague);
+            tvLeagueName = itemView.findViewById(R.id.tv_league_name);
+            btnRemoveLeague = itemView.findViewById(R.id.btnUnfollow);
+            btnFollow = itemView.findViewById(R.id.btnFollow);
 
         }
     }

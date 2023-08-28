@@ -1,105 +1,123 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    app:cardCornerRadius="10dp"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
     android:layout_marginTop="8dp"
     app:cardBackgroundColor="@color/grey_main"
-    android:layout_height="wrap_content">
+    app:cardCornerRadius="10dp">
 
-    <RelativeLayout
-        android:padding="2dp"
+    <LinearLayout
         android:layout_width="match_parent"
+        android:padding="8dp"
         android:layout_height="wrap_content">
 
-    <RelativeLayout
-        android:id="@+id/RelativeLayout"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
         <ImageView
             android:id="@+id/iv_league_logo"
-            android:layout_centerInParent="true"
             android:layout_width="50dp"
             android:layout_height="50dp"
-            />
+            android:layout_centerInParent="true" />
 
         <TextView
-            android:id="@+id/tv_team_name"
-            android:layout_width="wrap_content"
+            android:id="@+id/tv_league_name"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:layout_centerVertical="true"
-            android:layout_marginStart="20dp"
-            android:layout_marginTop="20dp"
-            android:layout_marginEnd="20dp"
-            android:layout_marginBottom="10dp"
+            android:layout_gravity="center_vertical"
             android:layout_toRightOf="@+id/iv_league_logo"
-            android:fontFamily="@font/poppins_bold"
-            android:text=""
+            android:fontFamily="@font/poppins_medium"
+            android:text="Sample League Name"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
             android:textColor="@color/white"
-            android:textSize="15sp" />
+            android:textSize="14sp" />
 
-    </RelativeLayout>
         <LinearLayout
-            android:layout_alignParentRight="true"
-            android:id="@+id/btnFollowLeague"
+            android:id="@+id/btnFollow"
+            android:visibility="gone"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/bg_btn_teams"
-            android:layout_centerVertical="true"
-            android:paddingLeft="8dp"
-            android:paddingRight="8dp"
-            android:paddingTop="2dp"
-            android:paddingBottom="2dp"
-            android:layout_marginLeft="2dp"
-            android:layout_marginRight="10dp">
+            android:layout_gravity="center_vertical"
+            android:background="@drawable/bg_btn_teams">
 
 
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="70dp"
+                android:layout_height="25dp"
                 android:layout_centerHorizontal="true"
                 android:layout_centerVertical="true"
                 android:layout_gravity="center"
                 android:fontFamily="@font/poppins_medium"
                 android:gravity="center"
                 android:text="Follow"
-                android:textColor="@color/grey_main"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:textColor="@color/white"
                 android:textSize="11sp" />
 
 
         </LinearLayout>
 
         <LinearLayout
-            android:visibility="invisible"
-            android:layout_alignParentRight="true"
-            android:id="@+id/btnUnFollowLeague"
+            android:id="@+id/btnUnfollow"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@drawable/bg_btn_teams"
             android:backgroundTint="@color/white"
-            android:layout_centerVertical="true"
-            android:paddingLeft="8dp"
-            android:paddingRight="8dp"
-            android:paddingTop="2dp"
-            android:paddingBottom="2dp"
-            android:layout_marginLeft="2dp"
-            android:layout_marginRight="10dp">
+            android:layout_gravity="center_vertical"
+            android:visibility="visible">
 
 
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerHorizontal="true"
-                android:layout_centerVertical="true"
-                android:layout_gravity="center"
-                android:fontFamily="@font/poppins_medium"
+                android:layout_width="90dp"
+                android:layout_height="25dp"
                 android:gravity="center"
+                android:fontFamily="@font/poppins_medium"
                 android:text="Following"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
                 android:textColor="@color/grey_main"
                 android:textSize="11sp" />
         </LinearLayout>
 
+    </LinearLayout>
 
-</RelativeLayout>
+    <!--<RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="2dp">
+
+        <RelativeLayout
+            android:id="@+id/RelativeLayout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+           &lt;!&ndash; <ImageView
+                android:id="@+id/iv_league_logo"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_centerInParent="true" />&ndash;&gt;
+
+            &lt;!&ndash;<TextView
+                android:id="@+id/tv_league_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginEnd="20dp"
+                android:layout_marginBottom="10dp"
+                android:layout_toRightOf="@+id/iv_league_logo"
+                android:fontFamily="@font/poppins_bold"
+                android:text=""
+                android:textColor="@color/white"
+                android:textSize="15sp" />&ndash;&gt;
+
+        </RelativeLayout>
+
+
+
+    </RelativeLayout>-->
 
 </androidx.cardview.widget.CardView>

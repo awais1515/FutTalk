@@ -146,7 +146,7 @@ public class MainActivity extends BaseActivity {
                 } else if (item.getItemId() == R.id.item_leagues) {
                     btnAddNewTeam.setVisibility(View.GONE);
                     btnAddNewLeague.setVisibility(View.VISIBLE);
-                    loadFragment(leaguesFragment, getString(R.string.results_frag_title));
+                    loadFragment(leaguesFragment, getString(R.string.leagues_frag_title));
                     return true;
                 } else {
                     return false;

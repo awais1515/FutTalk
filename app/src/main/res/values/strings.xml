@@ -20,9 +20,10 @@
     <string name="next">Next</string>
     <string name="previous">Previous</string>
     <string name="home_frag_title">Home</string>
-    <string name="teams_frag_title">Teams</string>
+    <string name="teams_frag_title">Favourite Teams</string>
     <string name="fixtures_frag_title">Fixtures</string>
     <string name="results_frag_title">Results</string>
+    <string name="leagues_frag_title">Favourite Leagues</string>
 
     <string name="lorem_ipsum">
         Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam in scelerisque sem. Mauris

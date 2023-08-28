@@ -23,7 +23,6 @@ import java.util.List;
 public class SelectCountryActivity extends AppCompatActivity {
     Context context;
     private RecyclerView recyclerViewCountries;
-    private List<Country> countryList = new ArrayList<>();
     ImageView ivBack;
 
     private CountriesAdapter countriesAdapter;
@@ -33,6 +32,7 @@ public class SelectCountryActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_select_country);
         init();
+        loadCountries();
 
 
     }

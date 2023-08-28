@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -61,8 +62,10 @@ public class LeaguesFragment extends Fragment {
         recyclerViewLeagues = getView().findViewById(R.id.recycler_view_leagues);
         recyclerViewLeagues.setLayoutManager(new LinearLayoutManager(context));
         leaguesAdapter = new LeaguesAdapter(context, leagueList, R.layout.row_league_selection,false);
+        recyclerViewLeagues.setAdapter(leaguesAdapter);
         tvNoDataFound = getView().findViewById(R.id.tvNoDataFound);
-        progressBar = getView().findViewById(R.id.progressBar);
+        progressBar = getView().findViewById(R.id.pbLoader);
+        loadLeaguesFromFirebase();
     }
 
     private void loadLeaguesFromFirebase() {
@@ -87,7 +90,7 @@ public class LeaguesFragment extends Fragment {
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-
+                Toast.makeText(context, error.getMessage(), Toast.LENGTH_LONG).show();
             }
         });
 

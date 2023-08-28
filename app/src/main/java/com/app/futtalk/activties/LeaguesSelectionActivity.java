@@ -21,6 +21,7 @@ import com.app.futtalk.models.League;
 import com.app.futtalk.models.LeagueInfo;
 import com.app.futtalk.utils.DataHelper;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class LeaguesSelectionActivity extends AppCompatActivity {
@@ -32,6 +33,8 @@ public class LeaguesSelectionActivity extends AppCompatActivity {
     private LeaguesAdapter leaguesAdapter;
 
     private SearchView searchview;
+
+    private List<LeagueInfo> allLeagues;
 
 
 
@@ -46,22 +49,44 @@ public class LeaguesSelectionActivity extends AppCompatActivity {
     }
 
     private void init(){
-        context=this;
+        context = this;
         recyclerViewLeaguesSelection = findViewById(R.id.recycler_view_league_selection);
-        recyclerViewLeaguesSelection.setLayoutManager((new LinearLayoutManager(this)));
+        recyclerViewLeaguesSelection.setLayoutManager((new LinearLayoutManager(context)));
         searchview = findViewById(R.id.SearchViewCountries);
 
     }
 
     private void setListeners(){
-        searchview.setOnClickListener(new View.OnClickListener() {
+
+        searchview.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(context, SelectCountryActivity.class);
-                startActivity(intent);
+            public boolean onQueryTextSubmit(String query) {
+                List<LeagueInfo> filteredLeagues = filterLeagues(query, allLeagues);
+                leaguesAdapter.setLeaguesList(filteredLeagues);
+                Toast.makeText(context, "Search for: " + searchview.getQuery().toString(), Toast.LENGTH_LONG).show();
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                if (newText.trim().length() == 0) {
+                    leaguesAdapter.setLeaguesList(allLeagues);
+                }
+                return false;
             }
         });
 
+    }
+
+    private List<LeagueInfo> filterLeagues(String searchQuery, List<LeagueInfo> allLeagues) {
+        List<LeagueInfo> filteredList = new ArrayList<>();
+        for (LeagueInfo leagueInfo: allLeagues) {
+            if (leagueInfo.getLeague().getName().toLowerCase().trim().startsWith(searchQuery.toLowerCase().trim())
+                || leagueInfo.getCountry().getName().toLowerCase().trim().startsWith(searchQuery.toLowerCase().trim())){
+                filteredList.add(leagueInfo);
+            }
+        }
+        return filteredList;
     }
 
 
@@ -69,7 +94,8 @@ public class LeaguesSelectionActivity extends AppCompatActivity {
         DataHelper.getLeaguesFromApi(2023, new LeaguesInfoDataListener() {
             @Override
             public void onLeaguesLoaded(List<LeagueInfo> leagueList) {
-                leaguesAdapter = new LeaguesAdapter(context, leagueList, R.layout.row_league_selection, false);
+                allLeagues = leagueList;
+                leaguesAdapter = new LeaguesAdapter(context, allLeagues, R.layout.row_league_selection, true);
                 recyclerViewLeaguesSelection.setAdapter(leaguesAdapter);
             }
 

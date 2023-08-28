@@ -45,7 +45,7 @@
         android:background="@drawable/fixtures_background_dark"
         android:layout_marginEnd="10dp"
         android:layout_marginBottom="10dp"
-        app:queryHint="Search for a country" />
+        app:queryHint="Search by League or Country" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_view_league_selection"
