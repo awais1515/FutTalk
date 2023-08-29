@@ -10,7 +10,7 @@ import android.view.View;
 import com.app.futtalk.R;
 import com.app.futtalk.adapters.FixturesAdapter;
 import com.app.futtalk.api.UpcomingFixturesListener;
-import com.app.futtalk.models.UpcomingFixture;
+import com.app.futtalk.models.FixtureData;
 import com.app.futtalk.utils.DataHelper;
 
 import java.util.List;
@@ -44,10 +44,10 @@ public class FixturesActivity extends BaseActivity {
     private void loadData() {
         DataHelper.getFixturesFromApi(40, 2023, "2023-08-21", "2023-09-21", new UpcomingFixturesListener() {
             @Override
-            public void onUpcomingFixturesLoaded(List<UpcomingFixture> upcomingFixtureList) {
+            public void onUpcomingFixturesLoaded(List<FixtureData> fixtureDataList) {
                 findViewById(R.id.pbLoader).setVisibility(View.GONE);
-                if (upcomingFixtureList != null && upcomingFixtureList.size() > 0) {
-                    fixturesAdapter = new FixturesAdapter(context, upcomingFixtureList, R.layout.row_view_fixtures);
+                if (fixtureDataList != null && fixtureDataList.size() > 0) {
+                    fixturesAdapter = new FixturesAdapter(context, fixtureDataList, R.layout.row_view_fixtures);
                     recyclerViewLiveMatches.setAdapter(fixturesAdapter);
                 } else {
                     findViewById(R.id.tvNoDataFound).setVisibility(View.VISIBLE);

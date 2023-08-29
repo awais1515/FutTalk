@@ -7,7 +7,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -20,11 +19,7 @@ import com.app.futtalk.activties.FixturesActivity;
 import com.app.futtalk.activties.LiveMatchesActivity;
 import com.app.futtalk.adapters.FixturesAdapter;
 import com.app.futtalk.adapters.LiveMatchesAdapter;
-import com.app.futtalk.api.UpcomingFixturesListener;
-import com.app.futtalk.models.UpcomingFixture;
 import com.app.futtalk.utils.DataHelper;
-
-import java.util.List;
 
 public class HomeFragment extends Fragment {
 
@@ -87,18 +82,7 @@ public class HomeFragment extends Fragment {
     }
 
     private void loadData() {
-        DataHelper.getFixturesFromApi(40, 2023, "2023-08-21", "2023-09-21", new UpcomingFixturesListener() {
-            @Override
-            public void onUpcomingFixturesLoaded(List<UpcomingFixture> upcomingFixtureList) {
-                fixturesAdapter = new FixturesAdapter(getActivity(), upcomingFixtureList, R.layout.row_view_fixtures);
-                recyclerViewUpcomingMatches.setAdapter(fixturesAdapter);
-            }
-
-            @Override
-            public void onFailure(String message) {
-                Toast.makeText(context, "Failed to load Data", Toast.LENGTH_LONG).show();
-            }
-        });
-
+        fixturesAdapter = new FixturesAdapter(getActivity(), DataHelper.getUpComingMatches(), R.layout.row_view_fixtures);
+        recyclerViewUpcomingMatches.setAdapter(fixturesAdapter);
     }
 }
