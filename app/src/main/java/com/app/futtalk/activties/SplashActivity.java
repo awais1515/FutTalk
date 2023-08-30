@@ -4,13 +4,18 @@ import static com.app.futtalk.utils.FirebaseUtils.CURRENT_USER;
 
 import androidx.annotation.NonNull;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.WindowManager;
+import android.widget.Toast;
 
 import com.app.futtalk.R;
+import com.app.futtalk.api.UpcomingFixturesListener;
+import com.app.futtalk.models.FixtureData;
 import com.app.futtalk.models.User;
+import com.app.futtalk.utils.DataHelper;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -18,18 +23,22 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.List;
+
 public class SplashActivity extends BaseActivity {
 
     private int DELAY_TIME = 2500; //2.5 seconds delay
+    Context context;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
+        context = this;
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         Handler handler = new Handler();
 
         if (FirebaseAuth.getInstance().getCurrentUser() != null) {
-            DELAY_TIME = 500;
+            DELAY_TIME = 0;
         }
 
         handler.postDelayed(new Runnable() {
@@ -57,14 +66,29 @@ public class SplashActivity extends BaseActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 CURRENT_USER = snapshot.getValue(User.class);
+                loadMainData();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+               showToastMessage(error.getMessage());
+            }
+        });
+    }
+
+    private void loadMainData() {
+        DataHelper.getAllFixturesFromApi(99, new UpcomingFixturesListener() {
+            @Override
+            public void onUpcomingFixturesLoaded(List<FixtureData> fixtureDataList) {
+                DataHelper.setSharedFixturesList(fixtureDataList);
                 Intent intent = new Intent(SplashActivity.this, MainActivity.class);
                 startActivity(intent);
                 finish();
             }
 
             @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-               showToastMessage(error.getMessage());
+            public void onFailure(String message) {
+                Toast.makeText(context, "Failed to load Data", Toast.LENGTH_LONG).show();
             }
         });
     }

@@ -1,9 +1,13 @@
 package com.app.futtalk.models;
 
-public class UpcomingFixture {
+import com.app.futtalk.models.scores.Score;
+
+public class FixtureData {
     private Fixture fixture;
     private League league;
     private FixtureTeams teams;
+    private Score score;
+    private Goals goals;
 
 
     public Fixture getFixture() {
@@ -28,5 +32,21 @@ public class UpcomingFixture {
 
     public void setTeams(FixtureTeams teams) {
         this.teams = teams;
+    }
+
+    public Score getScore() {
+        return score;
+    }
+
+    public void setScore(Score score) {
+        this.score = score;
+    }
+
+    public Goals getGoals() {
+        return goals;
+    }
+
+    public void setGoals(Goals goals) {
+        this.goals = goals;
     }
 }

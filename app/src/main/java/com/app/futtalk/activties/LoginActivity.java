@@ -1,5 +1,7 @@
 package com.app.futtalk.activties;
 
+import static com.app.futtalk.utils.FirebaseUtils.CURRENT_USER;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
@@ -12,9 +14,13 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.app.futtalk.R;
+import com.app.futtalk.api.UpcomingFixturesListener;
+import com.app.futtalk.models.FixtureData;
 import com.app.futtalk.models.User;
+import com.app.futtalk.utils.DataHelper;
 import com.app.futtalk.utils.DbReferences;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -25,8 +31,13 @@ import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+import java.util.List;
 
 public class LoginActivity extends BaseActivity {
 
@@ -61,12 +72,12 @@ public class LoginActivity extends BaseActivity {
         btnLogin = findViewById(R.id.btnLogin);
         etEmail = findViewById(R.id.etEmail);
         etPassword = findViewById(R.id.etPassword);
-        btnGoogle_SignIn= findViewById(R.id.btnGoogleLogin);
-        tvForgotPassword= findViewById(R.id.tvForgotPassword);
-        tvOtherSignInOptions= findViewById(R.id.Text_Other_Options);
+        btnGoogle_SignIn = findViewById(R.id.btnGoogleLogin);
+        tvForgotPassword = findViewById(R.id.tvForgotPassword);
+        tvOtherSignInOptions = findViewById(R.id.Text_Other_Options);
         progressDialog = new ProgressDialog(context);
         progressDialog.setCancelable(false);
-        mAuth=FirebaseAuth.getInstance();
+        mAuth = FirebaseAuth.getInstance();
 
       /*  GoogleSignInOptions googleSignInOptions = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(GOOGLE_CLIENT_ID)
@@ -83,7 +94,7 @@ public class LoginActivity extends BaseActivity {
         btnCreateAccount.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent= new Intent(context, SignupActivity.class);
+                Intent intent = new Intent(context, SignupActivity.class);
                 startActivity(intent);
             }
         });
@@ -92,19 +103,17 @@ public class LoginActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
                 // Todo login user with the email and password, for reference check the code of our EasyTodo App
-                String email=etEmail.getText().toString().trim();
-                String password= etPassword.getText().toString().trim();
-                if(email.isEmpty()==true){
+                String email = etEmail.getText().toString().trim();
+                String password = etPassword.getText().toString().trim();
+                if (email.isEmpty() == true) {
                     etEmail.setError("Please enter your Email");
                     etEmail.requestFocus();
-                }
-                else if (password.isEmpty()==true){
+                } else if (password.isEmpty() == true) {
                     etPassword.setError("Please enter your Password");
                     etPassword.requestFocus();
-                }
-                else{
-                    FirebaseAuth mAuth= FirebaseAuth.getInstance();
-                    login(email,password, mAuth);
+                } else {
+                    FirebaseAuth mAuth = FirebaseAuth.getInstance();
+                    login(email, password, mAuth);
                 }
 
             }
@@ -112,7 +121,7 @@ public class LoginActivity extends BaseActivity {
         tvForgotPassword.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent= new Intent(context, ForgotPasswordActivity.class);
+                Intent intent = new Intent(context, ForgotPasswordActivity.class);
             }
         });
         /* btnGoogle_SignIn.setOnClickListener(new View.OnClickListener() {
@@ -125,82 +134,116 @@ public class LoginActivity extends BaseActivity {
         });*/
     }
 
-    private void login(String email, String password, FirebaseAuth mAuth){
+    private void login(String email, String password, FirebaseAuth mAuth) {
         progressDialog.setMessage("Signing in...");
         progressDialog.setCancelable(false);
         progressDialog.show();
 
-mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-    @Override
-    public void onComplete(@NonNull Task<AuthResult> task) {
-        progressDialog.dismiss();
-        if (task.isSuccessful()){
-        Intent intent = new Intent(context, MainActivity.class);
-        startActivity(intent);
-        finish();
-        }
-        else{
-            etPassword.setError("Invalid Email or Password");
-        }
-    }
-});
+        mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+            @Override
+            public void onComplete(@NonNull Task<AuthResult> task) {
+                if (task.isSuccessful()) {
+                   getCurrentUserData();
+                } else {
+                    progressDialog.dismiss();
+                    etPassword.setError("Invalid Email or Password");
+                }
+            }
+        });
 
+    }
+
+    private void getCurrentUserData() {
+
+        final FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference ref = database.getReference("users").child(FirebaseAuth.getInstance().getUid());
+        ref.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                CURRENT_USER = snapshot.getValue(User.class);
+                loadMainData();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                progressDialog.dismiss();
+                showToastMessage(error.getMessage());
+            }
+        });
+    }
+
+    private void loadMainData() {
+        DataHelper.getAllFixturesFromApi(99, new UpcomingFixturesListener() {
+            @Override
+            public void onUpcomingFixturesLoaded(List<FixtureData> fixtureDataList) {
+                progressDialog.dismiss();
+                DataHelper.setSharedFixturesList(fixtureDataList);
+                Intent intent = new Intent(context, MainActivity.class);
+                startActivity(intent);
+                finish();
+            }
+
+            @Override
+            public void onFailure(String message) {
+                progressDialog.dismiss();
+                Toast.makeText(context, "Failed to load Data", Toast.LENGTH_LONG).show();
+            }
+        });
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode==100){
+        if (requestCode == 100) {
             progressDialog.setMessage("Signing in with Google");
             progressDialog.show();
             Task<GoogleSignInAccount> signInAccountTask = GoogleSignIn.getSignedInAccountFromIntent(data);
-            if (signInAccountTask.isSuccessful()){
-            try{
-                FirebaseAuth mAuth= FirebaseAuth.getInstance();
-                GoogleSignInAccount signInAccount = signInAccountTask.getResult(ApiException.class);
-                if (signInAccount!= null){
-                    AuthCredential credential= GoogleAuthProvider.getCredential(signInAccount.getIdToken(), null);
-                    mAuth.signInWithCredential(credential).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                        @Override
-                        public void onComplete(@NonNull Task<AuthResult> task) {
-                            if (task.isSuccessful()) {
-                                User user= new User();
-                                user.setId(mAuth.getUid());
-                                user.setEmail(mAuth.getCurrentUser().getDisplayName());
-                                user.setName(mAuth.getCurrentUser().getEmail());
-                                FirebaseDatabase firebaseDatabase= FirebaseDatabase.getInstance();
-                                DatabaseReference databaseReference= firebaseDatabase.getReference(DbReferences.USERS).child(mAuth.getUid());
-                                databaseReference.setValue(user).addOnCompleteListener(new OnCompleteListener<Void>() {
-                                    @Override
-                                    public void onComplete(@NonNull Task<Void> task) {
-                                        if (task.isSuccessful()){
-                                            Intent intent= new Intent(context, SignupActivity.class);
-                                            startActivity(intent);
-                                            showToastMessage("Logged in Successfully");
-                                            progressDialog.dismiss();
-                                        }
-                                        else {
-                                            progressDialog.dismiss();
-                                            showToastMessage("There was a problem updating user information");
-                                        }
+            if (signInAccountTask.isSuccessful()) {
+                try {
+                    FirebaseAuth mAuth = FirebaseAuth.getInstance();
+                    GoogleSignInAccount signInAccount = signInAccountTask.getResult(ApiException.class);
+                    if (signInAccount != null) {
+                        AuthCredential credential = GoogleAuthProvider.getCredential(signInAccount.getIdToken(), null);
+                        mAuth.signInWithCredential(credential).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                            @Override
+                            public void onComplete(@NonNull Task<AuthResult> task) {
+                                if (task.isSuccessful()) {
+                                    User user = new User();
+                                    user.setId(mAuth.getUid());
+                                    user.setEmail(mAuth.getCurrentUser().getDisplayName());
+                                    user.setName(mAuth.getCurrentUser().getEmail());
+                                    FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
+                                    DatabaseReference databaseReference = firebaseDatabase.getReference(DbReferences.USERS).child(mAuth.getUid());
+                                    databaseReference.setValue(user).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<Void> task) {
+                                            if (task.isSuccessful()) {
+                                                Intent intent = new Intent(context, SignupActivity.class);
+                                                startActivity(intent);
+                                                showToastMessage("Logged in Successfully");
+                                                progressDialog.dismiss();
+                                            } else {
+                                                progressDialog.dismiss();
+                                                showToastMessage("There was a problem updating user information");
+                                            }
 
-                                    }
-                                });
-                            } else{
-                                progressDialog.dismiss();
-                                showToastMessage("Login failed");
+                                        }
+                                    });
+                                } else {
+                                    progressDialog.dismiss();
+                                    showToastMessage("Login failed");
+                                }
                             }
-                        }
-                    });
-                }  else {
+                        });
+                    } else {
+                        progressDialog.dismiss();
+                        showToastMessage("Sign in account is null");
+                    }
+                } catch (Exception e) {
                     progressDialog.dismiss();
-                    showToastMessage("Sign in account is null");
+                    showToastMessage(e.getMessage());
                 }
-            } catch (Exception e) {
-                progressDialog.dismiss();
-                showToastMessage(e.getMessage());
-            }
-            }else {
+            } else {
                 showToastMessage(signInAccountTask.getException().toString());
                 Log.d("ToastMessage", signInAccountTask.getException().toString());
             }
@@ -208,7 +251,8 @@ mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(this, ne
     }
 
 
-    private void printLogMessage(String message){Log.d("ToastMessage", message);
+    private void printLogMessage(String message) {
+        Log.d("ToastMessage", message);
     }
 
 }

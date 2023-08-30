@@ -15,7 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.app.futtalk.R;
 import com.app.futtalk.adapters.FixturesAdapter;
 import com.app.futtalk.api.UpcomingFixturesListener;
-import com.app.futtalk.models.UpcomingFixture;
+import com.app.futtalk.models.FixtureData;
 import com.app.futtalk.utils.DataHelper;
 
 import java.util.List;
@@ -39,12 +39,12 @@ public class FixturesFragment extends Fragment {
         init(view);
         DataHelper.getFixturesFromApi(40, 2023, "2023-08-21", "2023-09-21", new UpcomingFixturesListener() {
             @Override
-            public void onUpcomingFixturesLoaded(List<UpcomingFixture> upcomingFixtureList) {
+            public void onUpcomingFixturesLoaded(List<FixtureData> fixtureDataList) {
                 getView().findViewById(R.id.pbLoader).setVisibility(View.GONE);
-                if (upcomingFixtureList.size() == 0) {
+                if (fixtureDataList.size() == 0) {
                     getView().findViewById(R.id.tvNoDataFound).setVisibility(View.VISIBLE);
                 }
-                fixturesAdapter = new FixturesAdapter(context, upcomingFixtureList,R.layout.row_view_fixtures);
+                fixturesAdapter = new FixturesAdapter(context, fixtureDataList,R.layout.row_view_fixtures);
                 recyclerViewFixtures.setAdapter(fixturesAdapter);
             }
 

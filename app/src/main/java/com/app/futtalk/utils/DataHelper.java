@@ -15,8 +15,7 @@ import com.app.futtalk.models.LiveMatch;
 import com.app.futtalk.models.Player;
 import com.app.futtalk.models.Results;
 import com.app.futtalk.models.Team;
-import com.app.futtalk.models.UpcomingFixture;
-import com.app.futtalk.models.UpcomingMatchOld;
+import com.app.futtalk.models.FixtureData;
 import com.google.gson.Gson;
 
 import java.util.ArrayList;
@@ -30,6 +29,7 @@ import retrofit2.Response;
 
 public class DataHelper {
 
+    private static List<FixtureData> sharedFixturesList = new ArrayList<>();
     public static List<LiveMatch> getLiveMatches(int count) {
 
         LiveMatch liveMatch1 = new LiveMatch();
@@ -67,38 +67,7 @@ public class DataHelper {
         }
     }
 
-    public static List<UpcomingMatchOld> getUpComingMatches(int count) {
 
-        UpcomingMatchOld upComingMatch1Old = new UpcomingMatchOld();
-        upComingMatch1Old.setId("1");
-        upComingMatch1Old.setHomeTeam(getAllTeams().get(0));
-        upComingMatch1Old.setAwayTeam(getAllTeams().get(1));
-        upComingMatch1Old.setTime("07:30 ");
-        upComingMatch1Old.setLeagueName("Royal Premium League");
-        upComingMatch1Old.setVenue("Emirates Stadium London");
-        upComingMatch1Old.setDate("Jul 21");
-
-        UpcomingMatchOld upcomingMatchOld2 = new UpcomingMatchOld();
-        upcomingMatchOld2.setId("2");
-        upcomingMatchOld2.setHomeTeam(getAllTeams().get(2));
-        upcomingMatchOld2.setAwayTeam(getAllTeams().get(3));
-        upcomingMatchOld2.setTime("16:30");
-        upcomingMatchOld2.setLeagueName("Spain Premium League");
-        upcomingMatchOld2.setVenue("Estadio Da Luz");
-        upcomingMatchOld2.setDate("Jul 21");
-
-        List<UpcomingMatchOld> allUpcomingMatchOlds =  Arrays.asList(upComingMatch1Old, upcomingMatchOld2, upComingMatch1Old, upcomingMatchOld2, upComingMatch1Old, upcomingMatchOld2, upComingMatch1Old, upcomingMatchOld2, upComingMatch1Old, upcomingMatchOld2, upComingMatch1Old, upcomingMatchOld2, upComingMatch1Old, upcomingMatchOld2, upComingMatch1Old, upcomingMatchOld2);
-
-        if (count >= allUpcomingMatchOlds.size()) {
-            return allUpcomingMatchOlds;
-        } else {
-            List<UpcomingMatchOld> upcomingMatchOlds = new ArrayList<>();
-            for (int i = 0; i <= count; i++) {
-                upcomingMatchOlds.add(allUpcomingMatchOlds.get(i));
-            }
-            return upcomingMatchOlds;
-        }
-    }
 
     // synchronized call (flow didn't break)
     public static List<Team> getAllTeams() {
@@ -201,14 +170,37 @@ public class DataHelper {
             @Override
             public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
                 ApiResponse apiResponse = response.body();
-                List<UpcomingFixture> allUpcomingFixtures = new ArrayList<>();
+                List<FixtureData> allFixtureData = new ArrayList<>();
                 for (Map map: apiResponse.getResponse()){
                     Gson gson= new Gson();
                     String jsonString= gson.toJson(map);
-                    UpcomingFixture upcomingFixture= gson.fromJson(jsonString, UpcomingFixture.class);
-                    allUpcomingFixtures.add(upcomingFixture);
+                    FixtureData fixtureData = gson.fromJson(jsonString, FixtureData.class);
+                    allFixtureData.add(fixtureData);
                 }
-                upcomingFixturesListener.onUpcomingFixturesLoaded(allUpcomingFixtures);
+                upcomingFixturesListener.onUpcomingFixturesLoaded(allFixtureData);
+            }
+
+            @Override
+            public void onFailure(Call<ApiResponse> call, Throwable t) {
+                upcomingFixturesListener.onFailure(t.getMessage());
+            }
+        });
+    }
+
+
+    public static void getAllFixturesFromApi(int last, UpcomingFixturesListener upcomingFixturesListener) {
+        Service.getInstance().getMyApi().getAllFixtures(last).enqueue(new Callback<ApiResponse>() {
+            @Override
+            public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
+                ApiResponse apiResponse = response.body();
+                List<FixtureData> allFixtureData = new ArrayList<>();
+                for (Map map: apiResponse.getResponse()){
+                    Gson gson= new Gson();
+                    String jsonString= gson.toJson(map);
+                    FixtureData fixtureData = gson.fromJson(jsonString, FixtureData.class);
+                    allFixtureData.add(fixtureData);
+                }
+                upcomingFixturesListener.onUpcomingFixturesLoaded(allFixtureData);
             }
 
             @Override
@@ -263,4 +255,17 @@ public class DataHelper {
         });
     }
 
+    public static void setSharedFixturesList(List<FixtureData> sharedFixturesList) {
+        DataHelper.sharedFixturesList = sharedFixturesList;
+    }
+
+    public static List<FixtureData> getUpComingMatches() {
+        List<FixtureData> upComingMatches = new ArrayList<>();
+        for (FixtureData fixtureData: sharedFixturesList) {
+            if (fixtureData.getFixture().getStatus().getShortDescription().equals("NS")) {
+                upComingMatches.add(fixtureData);
+            }
+        }
+        return upComingMatches;
+    }
 }

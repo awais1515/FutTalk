@@ -6,6 +6,8 @@ public class Fixture {
     private String date;
     private String timezone;
     private Venue venue;
+    private Status status;
+    private Periods periods;
 
     public int getId() {
         return id;
@@ -37,5 +39,21 @@ public class Fixture {
 
     public void setVenue(Venue venue) {
         this.venue = venue;
+    }
+
+    public Status getStatus() {
+        return status;
+    }
+
+    public void setStatus(Status status) {
+        this.status = status;
+    }
+
+    public Periods getPeriods() {
+        return periods;
+    }
+
+    public void setPeriods(Periods periods) {
+        this.periods = periods;
     }
 }

@@ -35,6 +35,15 @@ public interface Api {
             "x-rapidapi-host: " + HOST_NAME,
             "x-rapidapi-key: " + API_KEY
     })
+
+    @GET("fixtures")
+    Call<ApiResponse> getAllFixtures(@Query("last") int last);
+
+    @Headers({
+            "x-rapidapi-host: " + HOST_NAME,
+            "x-rapidapi-key: " + API_KEY
+    })
+
     @GET("countries")
     Call<ApiResponse> getCountries();
 
