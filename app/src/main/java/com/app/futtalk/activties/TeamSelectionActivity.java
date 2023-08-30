@@ -1,25 +1,24 @@
 package com.app.futtalk.activties;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.app.futtalk.R;
 import com.app.futtalk.adapters.LeagueScrollerAdapter;
-import com.app.futtalk.adapters.TeamsAdapter;
 import com.app.futtalk.adapters.TeamsSelectionAdapter;
 import com.app.futtalk.api.TeamsDataListener;
 import com.app.futtalk.models.League;
+import com.app.futtalk.models.LeagueInfo;
 import com.app.futtalk.models.Team;
 import com.app.futtalk.utils.DataHelper;
+import com.google.android.material.chip.Chip;
+import com.google.android.material.chip.ChipGroup;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,7 +27,7 @@ public class TeamSelectionActivity extends BaseActivity {
 
     Context context;
 
-    private RecyclerView recyclerViewLeaguesScroller;
+    private ChipGroup chipGroupLeaguesScroller;
 
     private List<League> leagueList = new ArrayList<>();
 
@@ -37,6 +36,8 @@ public class TeamSelectionActivity extends BaseActivity {
 
     private RecyclerView recyclerViewTeamSelection;
     private TeamsSelectionAdapter teamsSelectionAdapter;
+
+    private LeagueInfo leagueInfo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,8 +51,7 @@ public class TeamSelectionActivity extends BaseActivity {
     private void init() {
         context = this;
         ivBack = findViewById(R.id.ivBack);
-        recyclerViewLeaguesScroller = findViewById(R.id.recycler_view_scroll_leagues);
-        recyclerViewLeaguesScroller.setLayoutManager((new LinearLayoutManager(context,LinearLayoutManager.HORIZONTAL, false)));
+        chipGroupLeaguesScroller = findViewById(R.id.chipGroup);
 
         recyclerViewTeamSelection = findViewById(R.id.recycler_view_teams_of_leagues);
         recyclerViewTeamSelection.setLayoutManager((new LinearLayoutManager(this)));
@@ -86,7 +86,16 @@ public class TeamSelectionActivity extends BaseActivity {
 
     }
 
-    private void loadLeagueData(){
-
+    private void addChip(String text, ImageView ivTeamLogo) {
+        Chip chip = (Chip) getLayoutInflater().inflate(R.layout.row_chip, null);
+        chip.setText(leagueInfo.getLeague().getName());
+        chip.setCheckable(false);
+        chip.setOnCloseIconClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                chipGroupLeaguesScroller.removeView(view);
+            }
+        });
+        chipGroupLeaguesScroller.addView(chip);
     }
 }

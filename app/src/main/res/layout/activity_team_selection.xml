@@ -36,23 +36,20 @@
             android:textSize="15sp" />
     </RelativeLayout>
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recycler_view_scroll_leagues"
+    <com.google.android.material.chip.ChipGroup
+        android:id="@+id/chipGroup"
+        android:layout_below="@id/RelativeLayoutTopBar"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_below="@+id/RelativeLayoutTopBar"
-        android:layout_marginBottom="10dp"
-        android:padding="5dp">
-
-
-    </androidx.recyclerview.widget.RecyclerView>
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+    </com.google.android.material.chip.ChipGroup>
 
     <androidx.recyclerview.widget.RecyclerView
         android:background="@color/grey"
         android:id="@+id/recycler_view_teams_of_leagues"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/recycler_view_scroll_leagues"
+        android:layout_below="@+id/chipGroup"
         android:layout_marginStart="10dp"
         android:layout_marginTop="10dp"
         android:layout_marginEnd="10dp"
