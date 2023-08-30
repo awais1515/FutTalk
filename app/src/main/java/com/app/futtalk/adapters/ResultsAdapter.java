@@ -11,19 +11,21 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.app.futtalk.R;
+import com.app.futtalk.models.FixtureData;
 import com.app.futtalk.models.Results;
+import com.app.futtalk.utils.Utils;
 
 import java.util.List;
 
 public class ResultsAdapter extends RecyclerView.Adapter<ResultsAdapter.MyHolder>{
 
     private Context context;
-    private List<Results> resultsList;
+    private List<FixtureData> resultsList;
 
     private int rowLayout;
 
 
-    public ResultsAdapter(Context context, List<Results> resultsList, int rowLayout) {
+    public ResultsAdapter(Context context, List<FixtureData> resultsList, int rowLayout) {
         this.context = context;
         this.rowLayout = rowLayout;
         this.resultsList = resultsList;
@@ -38,11 +40,17 @@ public class ResultsAdapter extends RecyclerView.Adapter<ResultsAdapter.MyHolder
 
     @Override
     public void onBindViewHolder(@NonNull MyHolder holder, int position) {
-        Results results = resultsList.get(holder.getAdapterPosition());
-        holder.tvHomeTeamName.setText(results.getHomeTeam().getName());
-        holder.tvAwayTeamName.setText(results.getAwayTeam().getName());
-        holder.tvDate.setText(results.getDate());
-        holder.tvVenueName.setText(results.getVenue());
+        FixtureData results = resultsList.get(holder.getAdapterPosition());
+
+
+        holder.tvHomeTeamName.setText(results.getTeams().getHome().getName());
+        holder.tvAwayTeamName.setText(results.getTeams().getAway().getName());
+        holder.tvDate.setText(Utils.getDateFromTimestamp(results.getFixture().getDate()));
+        holder.tvVenueName.setText(results.getFixture().getVenue().getName());
+       // holder.tvLeagueName.setText(liveMatch.getLeague().getName());
+        //holder.tvScore.setText(liveMatch.getGoals().getHome() + " : " + liveMatch.getGoals().getAway());
+        Utils.setPicture(context,holder.ivHomeIcon,results.getTeams().getHome().getLogo());
+        Utils.setPicture(context,holder.ivAwayIcon,results.getTeams().getAway().getLogo());
     }
 
     @Override

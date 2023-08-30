@@ -13,7 +13,9 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.app.futtalk.R;
+import com.app.futtalk.models.FixtureData;
 import com.app.futtalk.models.LiveMatch;
+import com.app.futtalk.utils.Utils;
 import com.bumptech.glide.Glide;
 
 import java.util.List;
@@ -21,12 +23,12 @@ import java.util.List;
 public class LiveMatchesAdapter extends RecyclerView.Adapter<LiveMatchesAdapter.MyHolder>{
 
     private Context context;
-    private List<LiveMatch> liveMatchList;
+    private List<FixtureData> liveMatchList;
 
     private int rowLayout;
 
 
-    public LiveMatchesAdapter(Context context, List<LiveMatch> liveMatchList, int rowLayout) {
+    public LiveMatchesAdapter(Context context, List<FixtureData> liveMatchList, int rowLayout) {
         this.context = context;
         this.rowLayout = rowLayout;
         this.liveMatchList = liveMatchList;
@@ -41,23 +43,17 @@ public class LiveMatchesAdapter extends RecyclerView.Adapter<LiveMatchesAdapter.
 
     @Override
     public void onBindViewHolder(@NonNull MyHolder holder, int position) {
-        LiveMatch liveMatch = liveMatchList.get(holder.getAdapterPosition());
+        FixtureData liveMatch = liveMatchList.get(holder.getAdapterPosition());
 
-        holder.tvHomeTeamName.setText(liveMatch.getHomeTeam().getName());
-        holder.tvAwayTeamName.setText(liveMatch.getAwayTeam().getName());
-        holder.tvLiveMinutes.setText(liveMatch.getMinutes() + "'");
-        holder.tvDate.setText(liveMatch.getDate());
-        holder.tvVenueName.setText(liveMatch.getVenue());
-        holder.tvLeagueName.setText(liveMatch.getLeagueName());
-        holder.tvScore.setText(liveMatch.getHomeTeamScore() + " : " + liveMatch.getAwayTeamScore());
-       /* Glide.with(context)
-                .load(liveMatch.getHomeTeam().getLogo())
-                .centerCrop()
-                .into(holder.ivHomeIcon);
-        Glide.with(context)
-                .load(liveMatch.getAwayTeam().getLogo())
-                .centerCrop()
-                .into(holder.ivAwayIcon);*/
+        holder.tvHomeTeamName.setText(liveMatch.getTeams().getHome().getName());
+        holder.tvAwayTeamName.setText(liveMatch.getTeams().getAway().getName());
+        holder.tvLiveMinutes.setText(liveMatch.getFixture().getStatus().getElapsed().toString());
+        holder.tvDate.setText(Utils.getDateFromTimestamp(liveMatch.getFixture().getDate()));
+        holder.tvVenueName.setText(liveMatch.getFixture().getVenue().getName());
+        holder.tvLeagueName.setText(liveMatch.getLeague().getName());
+        holder.tvScore.setText(liveMatch.getGoals().getHome() + " : " + liveMatch.getGoals().getAway());
+        Utils.setPicture(context,holder.ivHomeIcon,liveMatch.getTeams().getHome().getLogo());
+        Utils.setPicture(context,holder.ivAwayIcon,liveMatch.getTeams().getAway().getLogo());
     }
 
     @Override

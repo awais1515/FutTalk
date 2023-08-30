@@ -14,12 +14,14 @@ import com.app.futtalk.models.LeagueInfo;
 import com.app.futtalk.models.LiveMatch;
 import com.app.futtalk.models.Player;
 import com.app.futtalk.models.Results;
+import com.app.futtalk.models.StatusFlags;
 import com.app.futtalk.models.Team;
 import com.app.futtalk.models.FixtureData;
 import com.google.gson.Gson;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -262,10 +264,32 @@ public class DataHelper {
     public static List<FixtureData> getUpComingMatches() {
         List<FixtureData> upComingMatches = new ArrayList<>();
         for (FixtureData fixtureData: sharedFixturesList) {
-            if (fixtureData.getFixture().getStatus().getShortDescription().equals("NS")) {
+            if (StatusFlags.upComingMatches.contains(fixtureData.getFixture().getStatus().getShortDescription())) {
                 upComingMatches.add(fixtureData);
             }
         }
+        Collections.reverse(upComingMatches);
         return upComingMatches;
+    }
+
+    public static List<FixtureData> getLiveMatches() {
+        List<FixtureData> liveMatches = new ArrayList<>();
+        for (FixtureData fixtureData: sharedFixturesList) {
+            if (StatusFlags.inProgressMatches.contains(fixtureData.getFixture().getStatus().getShortDescription())) {
+                liveMatches.add(fixtureData);
+            }
+        }
+        return liveMatches;
+    }
+
+
+    public static List<FixtureData> getCompletedMatches() {
+        List<FixtureData> completedMatches = new ArrayList<>();
+        for (FixtureData fixtureData: sharedFixturesList) {
+            if (StatusFlags.completedMatches.contains(fixtureData.getFixture().getStatus().getShortDescription())) {
+                completedMatches.add(fixtureData);
+            }
+        }
+        return completedMatches;
     }
 }

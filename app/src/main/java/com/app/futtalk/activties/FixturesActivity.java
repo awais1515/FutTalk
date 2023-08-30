@@ -42,23 +42,7 @@ public class FixturesActivity extends BaseActivity {
     }
 
     private void loadData() {
-        DataHelper.getFixturesFromApi(40, 2023, "2023-08-21", "2023-09-21", new UpcomingFixturesListener() {
-            @Override
-            public void onUpcomingFixturesLoaded(List<FixtureData> fixtureDataList) {
-                findViewById(R.id.pbLoader).setVisibility(View.GONE);
-                if (fixtureDataList != null && fixtureDataList.size() > 0) {
-                    fixturesAdapter = new FixturesAdapter(context, fixtureDataList, R.layout.row_view_fixtures);
-                    recyclerViewLiveMatches.setAdapter(fixturesAdapter);
-                } else {
-                    findViewById(R.id.tvNoDataFound).setVisibility(View.VISIBLE);
-                }
-
-            }
-
-            @Override
-            public void onFailure(String message) {
-                showToastMessage("Failed to load data");
-            }
-        });
+        fixturesAdapter = new FixturesAdapter(context, DataHelper.getUpComingMatches(), R.layout.row_view_fixtures);
+        recyclerViewLiveMatches.setAdapter(fixturesAdapter);
     }
 }

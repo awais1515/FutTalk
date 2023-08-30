@@ -53,8 +53,6 @@ public class HomeFragment extends Fragment {
         recyclerViewLiveMatches = view.findViewById(R.id.recycler_view_live_matches);
         tvViewAllLiveMatches = view.findViewById(R.id.tvViewAllLiveMatches);
         recyclerViewLiveMatches.setLayoutManager((new LinearLayoutManager(getActivity(),LinearLayoutManager.HORIZONTAL, false)));
-        liveMatchesAdapter = new LiveMatchesAdapter(getActivity(), DataHelper.getLiveMatches(3), R.layout.row_view_live_match_home);
-        recyclerViewLiveMatches.setAdapter(liveMatchesAdapter);
 
         // setup upcoming matches
         recyclerViewUpcomingMatches = view.findViewById(R.id.recycler_view_fixtures);
@@ -82,7 +80,13 @@ public class HomeFragment extends Fragment {
     }
 
     private void loadData() {
+        // adding upcoming matches to home screen
         fixturesAdapter = new FixturesAdapter(getActivity(), DataHelper.getUpComingMatches(), R.layout.row_view_fixtures);
         recyclerViewUpcomingMatches.setAdapter(fixturesAdapter);
+
+        // adding live matches to home screen
+        liveMatchesAdapter = new LiveMatchesAdapter(getActivity(),DataHelper.getLiveMatches(), R.layout.row_view_live_match_home);
+        recyclerViewLiveMatches.setAdapter(liveMatchesAdapter);
+
     }
 }

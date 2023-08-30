@@ -39,7 +39,7 @@ public class ResultsFragment extends Fragment {
          context = getActivity();
          recyclerViewResults = view.findViewById(R.id.recycler_view_results);
          recyclerViewResults.setLayoutManager((new LinearLayoutManager(getActivity())));
-         resultsAdapter = new ResultsAdapter(context, DataHelper.getResults(7), R.layout.row_view_results);
+         resultsAdapter = new ResultsAdapter(context, DataHelper.getCompletedMatches(), R.layout.row_view_results);
          recyclerViewResults.setAdapter(resultsAdapter);
      }
 

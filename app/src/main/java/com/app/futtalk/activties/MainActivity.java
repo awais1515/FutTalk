@@ -27,9 +27,9 @@ import android.widget.Toast;
 
 import com.app.futtalk.R;
 import com.app.futtalk.fragments.FixturesFragment;
+import com.app.futtalk.fragments.UpcomingMatchesFragment;
 import com.app.futtalk.fragments.HomeFragment;
 import com.app.futtalk.fragments.LeaguesFragment;
-import com.app.futtalk.fragments.ResultsFragment;
 import com.app.futtalk.fragments.TeamsFragment;
 import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnCompleteListener;

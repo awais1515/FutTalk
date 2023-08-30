@@ -28,7 +28,7 @@ public class LiveMatchesActivity extends AppCompatActivity {
         context = this;
         recyclerViewLiveMatches = findViewById(R.id.recycler_view);
         recyclerViewLiveMatches.setLayoutManager((new LinearLayoutManager(this)));
-        liveMatchesAdapter = new LiveMatchesAdapter(this, DataHelper.getLiveMatches(7), R.layout.row_view_live_match);
+        liveMatchesAdapter = new LiveMatchesAdapter(this, DataHelper.getLiveMatches(), R.layout.row_view_live_match);
         recyclerViewLiveMatches.setAdapter(liveMatchesAdapter);
         setListeners();
     }
