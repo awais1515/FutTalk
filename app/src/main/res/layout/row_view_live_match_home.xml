@@ -82,6 +82,7 @@
 
 
         <RelativeLayout
+            android:layout_marginTop="5dp"
             android:id="@+id/border_liveScore"
             android:layout_width="30dp"
             android:layout_height="20dp"
@@ -90,6 +91,7 @@
             android:background="@drawable/border_live_minutes" />
 
         <TextView
+            android:layout_marginTop="5dp"
             android:id="@+id/tvLiveMinutes"
             android:layout_width="wrap_content"
             android:layout_height="30dp"
@@ -102,19 +104,11 @@
             android:textSize="10sp" />
 
 
-+
-        <TextView
-            android:id="@+id/tvVenueName"
-            android:layout_below="@id/tvDateOfFixture"
-            android:layout_centerHorizontal="true"
-            android:text="Emirate Stadium London"
-            android:fontFamily="@font/poppins_regular"
-            android:textSize="12sp"
-            android:textColor="@color/white"
-            android:layout_marginTop="60dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
 
+        <RelativeLayout
+            android:id="@+id/RelativeTeamsLayout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
 <RelativeLayout
     android:layout_width="130dp"
     android:layout_height="130dp">
@@ -190,6 +184,18 @@
             android:textColor="@color/white"
             android:textSize="10sp" />
 </RelativeLayout>
+        </RelativeLayout>
+        <TextView
+            android:id="@+id/tvVenueName"
+            android:layout_below="@id/RelativeTeamsLayout"
+            android:layout_centerHorizontal="true"
+            android:text="Emirate Stadium London"
+            android:fontFamily="@font/poppins_regular"
+            android:textSize="12sp"
+            android:textAlignment="center"
+            android:textColor="@color/white"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
 
     </RelativeLayout>
 

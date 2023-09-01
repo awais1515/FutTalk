@@ -18,6 +18,7 @@
 
 
         <LinearLayout
+            android:layout_marginTop="10dp"
             android:id="@+id/LinearLayoutTimeandDate"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -52,52 +53,48 @@
             </RelativeLayout>
         </LinearLayout>
 
-        <TextView
-            android:id="@+id/tvVenueName"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/LinearLayoutTimeandDate"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="22dp"
-            android:fontFamily="@font/poppins_regular"
-            android:text="Emirate Stadium London"
-            android:textColor="@color/white"
-            android:textSize="12sp" />
 
-        <LinearLayout
+
+        <RelativeLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
+            android:id="@+id/RelativeLayoutTeamsContainer">
+
+        <RelativeLayout
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center"
             android:layout_alignParentLeft="true">
 
 
+            <ImageView
+                android:id="@+id/ivHomeIcon"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_centerInParent="true"
+                android:layout_marginBottom="20dp"
+                android:src="@drawable/iv_barcelona" />
 
-                <ImageView
-                    android:id="@+id/ivHomeIcon"
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"
-                    android:layout_gravity="center_horizontal"
+            <TextView
+                android:id="@+id/tvHomeTeamName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/ivHomeIcon"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="4dp"
+                android:ellipsize="end"
+                android:fontFamily="@font/poppins_semi_bold"
+                android:maxLines="2"
+                android:textAlignment="center"
+                android:text="BARCELONA"
+                android:textColor="@color/white"
+                android:textSize="11sp" />
 
-                    android:src="@drawable/iv_barcelona" />
+        </RelativeLayout>
 
-                <TextView
-                    android:id="@+id/tvHomeTeamName"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/ivHomeIcon"
-                    android:ellipsize="end"
-                    android:fontFamily="@font/poppins_semi_bold"
-                    android:maxLines="2"
-                    android:layout_marginTop="4dp"
-                    android:text="BARCELONA"
-                    android:gravity="center_horizontal"
-                    android:textColor="@color/white"
-                    android:textSize="11sp" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="wrap_content"
+        <RelativeLayout
+            android:layout_width="100dp"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:gravity="center"
@@ -108,25 +105,38 @@
                 android:id="@+id/ivAwayIcon"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
-                android:layout_gravity="center_horizontal"
-                android:layout_alignParentRight="true"
-                android:src="@drawable/iv_real_madrid" />
+                android:layout_centerInParent="true"
+                android:src="@drawable/iv_real_madrid"
+                android:layout_marginBottom="20dp"/>
 
             <TextView
+                android:layout_marginTop="4dp"
                 android:id="@+id/tvAwayTeamName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/ivAwayIcon"
                 android:fontFamily="@font/poppins_semi_bold"
+                android:layout_centerHorizontal="true"
                 android:maxLines="2"
-                android:layout_marginTop="4dp"
                 android:text="REAL MADRID"
-                android:gravity="center_horizontal"
                 android:textAlignment="center"
                 android:textColor="@color/white"
                 android:textSize="11sp" />
 
-        </LinearLayout>
+        </RelativeLayout>
+        </RelativeLayout>
+        <TextView
+            android:id="@+id/tvVenueName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/RelativeLayoutTeamsContainer"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="1dp"
+            android:fontFamily="@font/poppins_regular"
+            android:text="Emirate Stadium London"
+            android:textAlignment="center"
+            android:textColor="@color/white"
+            android:textSize="12sp" />
 
 
     </RelativeLayout>

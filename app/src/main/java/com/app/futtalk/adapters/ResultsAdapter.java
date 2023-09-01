@@ -47,8 +47,8 @@ public class ResultsAdapter extends RecyclerView.Adapter<ResultsAdapter.MyHolder
         holder.tvAwayTeamName.setText(results.getTeams().getAway().getName());
         holder.tvDate.setText(Utils.getDateFromTimestamp(results.getFixture().getDate()));
         holder.tvVenueName.setText(results.getFixture().getVenue().getName());
-       // holder.tvLeagueName.setText(liveMatch.getLeague().getName());
-        //holder.tvScore.setText(liveMatch.getGoals().getHome() + " : " + liveMatch.getGoals().getAway());
+        holder.tvLeagueName.setText(results.getLeague().getName());
+        holder.tvScore.setText(results.getGoals().getHome() + " : " + results.getGoals().getAway());
         Utils.setPicture(context,holder.ivHomeIcon,results.getTeams().getHome().getLogo());
         Utils.setPicture(context,holder.ivAwayIcon,results.getTeams().getAway().getLogo());
     }
@@ -60,7 +60,7 @@ public class ResultsAdapter extends RecyclerView.Adapter<ResultsAdapter.MyHolder
     class MyHolder extends RecyclerView.ViewHolder {
         ImageView ivHomeIcon;
         ImageView ivAwayIcon;
-        TextView tvDate, tvHomeTeamName, tvAwayTeamName, tvVenueName;
+        TextView tvDate, tvHomeTeamName, tvAwayTeamName, tvVenueName, tvLeagueName, tvScore;
 
         MyHolder(View itemView) {
             super(itemView);
@@ -70,6 +70,8 @@ public class ResultsAdapter extends RecyclerView.Adapter<ResultsAdapter.MyHolder
             tvHomeTeamName = itemView.findViewById(R.id.tvHomeTeamName);
             tvAwayTeamName = itemView.findViewById(R.id.tvAwayTeamName);
             tvVenueName = itemView.findViewById(R.id.tvVenueName);
+            tvLeagueName = itemView.findViewById(R.id.tvLeagueName);
+            tvScore = itemView.findViewById(R.id.tvScore);
         }
 
     }
