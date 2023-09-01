@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.Context;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -35,19 +36,17 @@ import java.util.List;
 
 public class TeamSelectionActivity extends BaseActivity {
 
+    private static final String ALL_TEAMS = "ALL_TEAMS";
     Context context;
 
     private ChipGroup chipGroup;
 
     private List<LeagueInfo> leagueList = new ArrayList<>();
-
-    private LeagueScrollerAdapter leagueScrollerAdapter;
+    private List<Team> allTeams = new ArrayList<>();
     ImageView ivBack;
 
     private RecyclerView recyclerViewTeamSelection;
     private TeamsSelectionAdapter teamsSelectionAdapter;
-
-    private LeagueInfo leagueInfo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,8 +54,8 @@ public class TeamSelectionActivity extends BaseActivity {
         setContentView(R.layout.activity_team_selection);
         init();
         setListeners();
+        showProgressDialog("Loading..");
         loadLeaguesFromFirebase();
-        loadData();
     }
 
     private void init() {
@@ -66,6 +65,8 @@ public class TeamSelectionActivity extends BaseActivity {
 
         recyclerViewTeamSelection = findViewById(R.id.recycler_view_teams_of_leagues);
         recyclerViewTeamSelection.setLayoutManager((new LinearLayoutManager(this)));
+        teamsSelectionAdapter = new TeamsSelectionAdapter(context, allTeams, R.layout.row_team_selection);
+        recyclerViewTeamSelection.setAdapter(teamsSelectionAdapter);
     }
 
     private void setListeners() {
@@ -77,14 +78,15 @@ public class TeamSelectionActivity extends BaseActivity {
         });
     }
 
-    private void loadData() {
-
-       showProgressDialog("Loading..");
-        DataHelper.getAllTeamsFromApi(140, 2023, new TeamsDataListener() {
+    private void loadData(League league) {
+        DataHelper.getAllTeamsFromApi(league.getId(), 2023, new TeamsDataListener() {
             @Override
             public void onTeamsLoaded(List<Team> teamSelectionList) {
-                teamsSelectionAdapter = new TeamsSelectionAdapter(context, teamSelectionList, R.layout.row_team_selection);
-                recyclerViewTeamSelection.setAdapter(teamsSelectionAdapter);
+                for (Team team : teamSelectionList) {
+                    team.setLeague(league);
+                }
+                allTeams.addAll(teamSelectionList);
+                teamsSelectionAdapter.setTeamsSelectionList(allTeams);
                 closeProgressDialog();
             }
 
@@ -107,6 +109,7 @@ public class TeamSelectionActivity extends BaseActivity {
                 for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
                     LeagueInfo league = dataSnapshot.getValue(LeagueInfo.class);
                     leagueList.add(league);
+                    loadData(league.getLeague());
                 }
                 addChips();
             }
@@ -121,15 +124,48 @@ public class TeamSelectionActivity extends BaseActivity {
 
     private void addChips() {
 
-        Chip chip = (Chip) getLayoutInflater().inflate(R.layout.row_chip, null);
-        chip.setText(leagueInfo.getLeague().getName());
-        chip.setCheckable(false);
-        chip.setOnCloseIconClickListener(new View.OnClickListener() {
+        Chip all = (Chip) getLayoutInflater().inflate(R.layout.row_chip, null);
+        all.setText("All");
+        all.setChecked(true);
+        all.setCloseIconVisible(false);
+        chipGroup.addView(all);
+        all.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
-            public void onClick(View view) {
-                chipGroup.removeView(view);
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    filterTeams(ALL_TEAMS);
+                }
             }
         });
-        chipGroup.addView(chip);
+
+        for (LeagueInfo leagueInfo: leagueList) {
+            Chip chip = (Chip) getLayoutInflater().inflate(R.layout.row_chip, null);
+            chip.setText(leagueInfo.getLeague().getName());
+            chip.setCheckable(true);
+            chip.setCloseIconVisible(false);
+            chipGroup.addView(chip);
+            chip.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    if (isChecked) {
+                        filterTeams(leagueInfo.getLeague().getName());
+                    }
+                }
+            });
+        }
+    }
+
+    private void filterTeams(String filter) {
+        if (filter.equals(ALL_TEAMS)) {
+            teamsSelectionAdapter.setTeamsSelectionList(allTeams);
+        } else {
+            List<Team> filteredTeams = new ArrayList<>();
+            for (Team team : allTeams) {
+                if (team.getLeague().getName().equals(filter)) {
+                    filteredTeams.add(team);
+                }
+            }
+            teamsSelectionAdapter.setTeamsSelectionList(filteredTeams);
+        }
     }
 }

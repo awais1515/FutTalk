@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:state_checked="true"
+        android:color="@color/green_live_Home" /> <!-- Color when the Chip is checked -->
+
+    <item android:color="@color/black" /> <!-- Color when the Chip is not checked -->
+</selector>

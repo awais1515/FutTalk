@@ -36,20 +36,34 @@
             android:textSize="15sp" />
     </RelativeLayout>
 
-    <com.google.android.material.chip.ChipGroup
-        android:id="@+id/chipGroup"
-        android:layout_below="@id/RelativeLayoutTopBar"
+    <HorizontalScrollView
+        android:id="@+id/scroll_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
-    </com.google.android.material.chip.ChipGroup>
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:scrollbars="none"
+        android:layout_below="@id/RelativeLayoutTopBar">
+
+        <com.google.android.material.chip.ChipGroup
+            android:id="@+id/chipGroup"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            app:singleSelection="true"
+            android:orientation="horizontal">
+        </com.google.android.material.chip.ChipGroup>
+
+
+    </HorizontalScrollView>
+
 
     <androidx.recyclerview.widget.RecyclerView
         android:background="@color/grey"
         android:id="@+id/recycler_view_teams_of_leagues"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/chipGroup"
+        android:layout_below="@+id/scroll_view"
         android:layout_marginStart="10dp"
         android:layout_marginTop="10dp"
         android:layout_marginEnd="10dp"

@@ -7,6 +7,8 @@ public class Team implements Serializable {
     private String name;
     private String logo;
 
+    private League league;
+
     public Team() {
     }
 
@@ -38,5 +40,13 @@ public class Team implements Serializable {
 
     public void setLogo(String logo) {
         this.logo = logo;
+    }
+
+    public League getLeague() {
+        return league;
+    }
+
+    public void setLeague(League league) {
+        this.league = league;
     }
 }

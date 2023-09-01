@@ -75,6 +75,11 @@ public class TeamsSelectionAdapter extends RecyclerView.Adapter<TeamsSelectionAd
         });
     }
 
+    public void setTeamsSelectionList(List<Team> teamsSelectionList) {
+        this.teamsSelectionList = teamsSelectionList;
+        notifyDataSetChanged();
+    }
+
     @Override
     public int getItemCount() {return teamsSelectionList.size();}
 
