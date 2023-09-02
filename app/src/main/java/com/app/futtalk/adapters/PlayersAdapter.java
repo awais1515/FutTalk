@@ -63,7 +63,7 @@ public class PlayersAdapter extends RecyclerView.Adapter<PlayersAdapter.MyHolder
             tvName = itemView.findViewById(R.id.PlayerName);
             tvAge = itemView.findViewById(R.id.PlayerAge);
             tvNationality= itemView.findViewById(R.id.PlayerNationality);
-            tvPosition = itemView.findViewById(R.id.PLayerPosition);
+            tvPosition = itemView.findViewById(R.id.PlayerPosition);
         }
 
     }

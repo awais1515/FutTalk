@@ -1,6 +1,8 @@
 package com.app.futtalk.models;
 
-public class League {
+import java.io.Serializable;
+
+public class League implements Serializable {
 
     private int id;
     private String name;

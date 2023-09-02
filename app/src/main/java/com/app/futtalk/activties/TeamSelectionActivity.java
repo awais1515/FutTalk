@@ -4,6 +4,7 @@ import static com.app.futtalk.utils.DbReferences.USERS;
 import static com.app.futtalk.utils.FirebaseUtils.CURRENT_USER;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.widget.SearchView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -16,7 +17,9 @@ import android.widget.Toast;
 
 import com.app.futtalk.R;
 import com.app.futtalk.adapters.LeagueScrollerAdapter;
+import com.app.futtalk.adapters.LeaguesAdapter;
 import com.app.futtalk.adapters.TeamsSelectionAdapter;
+import com.app.futtalk.api.LeaguesInfoDataListener;
 import com.app.futtalk.api.TeamsDataListener;
 import com.app.futtalk.models.League;
 import com.app.futtalk.models.LeagueInfo;
@@ -47,6 +50,7 @@ public class TeamSelectionActivity extends BaseActivity {
 
     private RecyclerView recyclerViewTeamSelection;
     private TeamsSelectionAdapter teamsSelectionAdapter;
+    SearchView searchView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,17 +60,18 @@ public class TeamSelectionActivity extends BaseActivity {
         setListeners();
         showProgressDialog("Loading..");
         loadLeaguesFromFirebase();
+
     }
 
     private void init() {
         context = this;
         ivBack = findViewById(R.id.ivBack);
         chipGroup = findViewById(R.id.chipGroup);
-
         recyclerViewTeamSelection = findViewById(R.id.recycler_view_teams_of_leagues);
         recyclerViewTeamSelection.setLayoutManager((new LinearLayoutManager(this)));
         teamsSelectionAdapter = new TeamsSelectionAdapter(context, allTeams, R.layout.row_team_selection);
         recyclerViewTeamSelection.setAdapter(teamsSelectionAdapter);
+        searchView = findViewById(R.id.SearchViewTeams);
     }
 
     private void setListeners() {
@@ -76,6 +81,26 @@ public class TeamSelectionActivity extends BaseActivity {
                 finish();
             }
         });
+
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                List<Team> filterQueryTeams = filterQueryTeams(query, allTeams);
+                teamsSelectionAdapter.setTeamsSelectionList(filterQueryTeams);
+                Toast.makeText(context, "Search for: " + searchView.getQuery().toString(), Toast.LENGTH_LONG).show();
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                if (newText.trim().length() == 0) {
+                    teamsSelectionAdapter.setTeamsSelectionList(allTeams);
+                }
+                return false;
+            }
+        });
+
+
     }
 
     private void loadData(League league) {
@@ -96,7 +121,6 @@ public class TeamSelectionActivity extends BaseActivity {
                 Toast.makeText(context, message, Toast.LENGTH_LONG).show();
             }
         });
-
 
 
     }
@@ -138,7 +162,7 @@ public class TeamSelectionActivity extends BaseActivity {
             }
         });
 
-        for (LeagueInfo leagueInfo: leagueList) {
+        for (LeagueInfo leagueInfo : leagueList) {
             Chip chip = (Chip) getLayoutInflater().inflate(R.layout.row_chip, null);
             chip.setText(leagueInfo.getLeague().getName());
             chip.setCheckable(true);
@@ -168,4 +192,15 @@ public class TeamSelectionActivity extends BaseActivity {
             teamsSelectionAdapter.setTeamsSelectionList(filteredTeams);
         }
     }
+    private List<Team> filterQueryTeams(String searchQuery, List<Team> allTeams) {
+        List<Team> filteredList = new ArrayList<>();
+        for (Team team: allTeams) {
+            if (team.getLeague().getName().toLowerCase().trim().startsWith(searchQuery.toLowerCase().trim())
+                    || team.getLeague().getName().toLowerCase().trim().startsWith(searchQuery.toLowerCase().trim())){
+                filteredList.add(team);
+            }
+        }
+        return filteredList;
+    }
+
 }

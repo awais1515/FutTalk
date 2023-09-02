@@ -10,6 +10,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.app.futtalk.R;
@@ -36,6 +37,8 @@ public class LeaguesSelectionActivity extends AppCompatActivity {
 
     private List<LeagueInfo> allLeagues;
 
+    ImageView ivBack;
+
 
 
 
@@ -53,6 +56,7 @@ public class LeaguesSelectionActivity extends AppCompatActivity {
         recyclerViewLeaguesSelection = findViewById(R.id.recycler_view_league_selection);
         recyclerViewLeaguesSelection.setLayoutManager((new LinearLayoutManager(context)));
         searchview = findViewById(R.id.SearchViewCountries);
+        ivBack = findViewById(R.id.ivBack);
 
     }
 
@@ -73,6 +77,13 @@ public class LeaguesSelectionActivity extends AppCompatActivity {
                     leaguesAdapter.setLeaguesList(allLeagues);
                 }
                 return false;
+            }
+        });
+
+        ivBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
             }
         });
 
@@ -104,6 +115,7 @@ public class LeaguesSelectionActivity extends AppCompatActivity {
                 Toast.makeText(context, message, Toast.LENGTH_LONG).show();
             }
         });
+
     }
 
 }
