@@ -67,7 +67,6 @@ public class LeaguesSelectionActivity extends AppCompatActivity {
             public boolean onQueryTextSubmit(String query) {
                 List<LeagueInfo> filteredLeagues = filterLeagues(query, allLeagues);
                 leaguesAdapter.setLeaguesList(filteredLeagues);
-                Toast.makeText(context, "Search for: " + searchview.getQuery().toString(), Toast.LENGTH_LONG).show();
                 return false;
             }
 

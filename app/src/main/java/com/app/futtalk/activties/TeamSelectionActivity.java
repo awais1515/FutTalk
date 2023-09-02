@@ -8,7 +8,10 @@ import androidx.appcompat.widget.SearchView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.CompoundButton;
@@ -46,6 +49,7 @@ public class TeamSelectionActivity extends BaseActivity {
 
     private List<LeagueInfo> leagueList = new ArrayList<>();
     private List<Team> allTeams = new ArrayList<>();
+    private List<Team> filteredTeams = new ArrayList<>();
     ImageView ivBack;
 
     private RecyclerView recyclerViewTeamSelection;
@@ -85,16 +89,15 @@ public class TeamSelectionActivity extends BaseActivity {
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                List<Team> filterQueryTeams = filterQueryTeams(query, allTeams);
+                List<Team> filterQueryTeams = filterQueryTeams(query);
                 teamsSelectionAdapter.setTeamsSelectionList(filterQueryTeams);
-                Toast.makeText(context, "Search for: " + searchView.getQuery().toString(), Toast.LENGTH_LONG).show();
                 return false;
             }
 
             @Override
             public boolean onQueryTextChange(String newText) {
                 if (newText.trim().length() == 0) {
-                    teamsSelectionAdapter.setTeamsSelectionList(allTeams);
+                    teamsSelectionAdapter.setTeamsSelectionList(filteredTeams);
                 }
                 return false;
             }
@@ -111,6 +114,7 @@ public class TeamSelectionActivity extends BaseActivity {
                     team.setLeague(league);
                 }
                 allTeams.addAll(teamSelectionList);
+                filteredTeams.addAll(teamSelectionList);
                 teamsSelectionAdapter.setTeamsSelectionList(allTeams);
                 closeProgressDialog();
             }
@@ -148,59 +152,81 @@ public class TeamSelectionActivity extends BaseActivity {
 
     private void addChips() {
 
-        Chip all = (Chip) getLayoutInflater().inflate(R.layout.row_chip, null);
-        all.setText("All");
-        all.setChecked(true);
-        all.setCloseIconVisible(false);
-        chipGroup.addView(all);
-        all.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked) {
-                    filterTeams(ALL_TEAMS);
-                }
-            }
-        });
-
-        for (LeagueInfo leagueInfo : leagueList) {
-            Chip chip = (Chip) getLayoutInflater().inflate(R.layout.row_chip, null);
-            chip.setText(leagueInfo.getLeague().getName());
-            chip.setCheckable(true);
-            chip.setCloseIconVisible(false);
-            chipGroup.addView(chip);
-            chip.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        if (leagueList.size() > 0) {
+            Chip all = (Chip) getLayoutInflater().inflate(R.layout.row_chip, null);
+            all.setText("All");
+            all.setChecked(true);
+            all.setCloseIconVisible(false);
+            chipGroup.addView(all);
+            all.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                     if (isChecked) {
-                        filterTeams(leagueInfo.getLeague().getName());
+                        filterTeams(ALL_TEAMS);
                     }
                 }
             });
+            for (LeagueInfo leagueInfo : leagueList) {
+                Chip chip = (Chip) getLayoutInflater().inflate(R.layout.row_chip, null);
+                chip.setText(leagueInfo.getLeague().getName());
+                chip.setCheckable(true);
+                chip.setCloseIconVisible(false);
+                chipGroup.addView(chip);
+                chip.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                    @Override
+                    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                        if (isChecked) {
+                            filterTeams(leagueInfo.getLeague().getName());
+                        }
+                    }
+                });
+            }
+
+        } else {
+            // No Favourite leagues added
+            showSelectLeagueDialog();
         }
+    }
+    private void showSelectLeagueDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage("Please add your Favourite Leagues")
+                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        // Handle the "OK" button click
+                       Intent intent = new Intent(context, LeaguesSelectionActivity.class);
+                       startActivity(intent);
+                    }
+                });
+        AlertDialog alertDialog = builder.create();
+        alertDialog.show();
     }
 
     private void filterTeams(String filter) {
         if (filter.equals(ALL_TEAMS)) {
             teamsSelectionAdapter.setTeamsSelectionList(allTeams);
+            filteredTeams.clear();
+            filteredTeams.addAll(allTeams);
         } else {
-            List<Team> filteredTeams = new ArrayList<>();
+            List<Team> teams = new ArrayList<>();
             for (Team team : allTeams) {
                 if (team.getLeague().getName().equals(filter)) {
-                    filteredTeams.add(team);
+                    teams.add(team);
                 }
             }
+            filteredTeams = teams;
             teamsSelectionAdapter.setTeamsSelectionList(filteredTeams);
         }
     }
-    private List<Team> filterQueryTeams(String searchQuery, List<Team> allTeams) {
-        List<Team> filteredList = new ArrayList<>();
-        for (Team team: allTeams) {
-            if (team.getLeague().getName().toLowerCase().trim().startsWith(searchQuery.toLowerCase().trim())
-                    || team.getLeague().getName().toLowerCase().trim().startsWith(searchQuery.toLowerCase().trim())){
-                filteredList.add(team);
+    private List<Team> filterQueryTeams(String searchQuery) {
+        List<Team> teams = new ArrayList<>();
+        for (Team team: filteredTeams) {
+            if (team.getName().toLowerCase().trim().startsWith(searchQuery.toLowerCase().trim())
+                    || team.getName().toLowerCase().trim().startsWith(searchQuery.toLowerCase().trim())){
+                teams.add(team);
             }
         }
-        return filteredList;
+        return teams;
     }
 
 }

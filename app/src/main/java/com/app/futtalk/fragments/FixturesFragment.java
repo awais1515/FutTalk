@@ -26,6 +26,7 @@ import java.util.List;
 public class FixturesFragment extends Fragment {
 
     private Context context;
+    private ViewPagerAdapter adapter;
 
     @Nullable
     @Override
@@ -45,10 +46,8 @@ public class FixturesFragment extends Fragment {
         context = getActivity();
         ViewPager viewPager = getView().findViewById(R.id.viewPager);
         TabLayout tabLayout = getView().findViewById(R.id.tabLayout);
-
-        ViewPagerAdapter adapter = new ViewPagerAdapter(getActivity().getSupportFragmentManager());
+        adapter = new ViewPagerAdapter(getChildFragmentManager());
         viewPager.setAdapter(adapter);
-
         // Attach the ViewPager to the TabLayout
         tabLayout.setupWithViewPager(viewPager);
 

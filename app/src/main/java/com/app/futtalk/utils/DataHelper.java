@@ -18,6 +18,7 @@ import com.app.futtalk.models.StatusFlags;
 import com.app.futtalk.models.Team;
 import com.app.futtalk.models.FixtureData;
 import com.google.gson.Gson;
+import com.google.gson.internal.LinkedTreeMap;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -32,88 +33,6 @@ import retrofit2.Response;
 public class DataHelper {
 
     private static List<FixtureData> sharedFixturesList = new ArrayList<>();
-    public static List<LiveMatch> getLiveMatches(int count) {
-
-        LiveMatch liveMatch1 = new LiveMatch();
-        liveMatch1.setId("1");
-        liveMatch1.setHomeTeam(getAllTeams().get(0));
-        liveMatch1.setAwayTeam(getAllTeams().get(1));
-        liveMatch1.setMinutes(80);
-        liveMatch1.setLeagueName("Royal Premium League");
-        liveMatch1.setVenue("Emirates Stadium London");
-        liveMatch1.setDate("Jul 21");
-        liveMatch1.setHomeTeamScore(2);
-        liveMatch1.setAwayTeamScore(1);
-
-        LiveMatch liveMatch2 = new LiveMatch();
-        liveMatch2.setId("2");
-        liveMatch2.setHomeTeam(getAllTeams().get(2));
-        liveMatch2.setAwayTeam(getAllTeams().get(3));
-        liveMatch2.setMinutes(43);
-        liveMatch2.setLeagueName("Spain Premium League");
-        liveMatch2.setVenue("Estadio Da Luz");
-        liveMatch2.setDate("Jul 21");
-        liveMatch2.setHomeTeamScore(1);
-        liveMatch2.setAwayTeamScore(3);
-
-        List<LiveMatch> allMatches =  Arrays.asList(liveMatch1,liveMatch2,liveMatch1,liveMatch2, liveMatch1,liveMatch2,liveMatch1,liveMatch2, liveMatch1,liveMatch2,liveMatch1,liveMatch2);
-
-        if (count >= allMatches.size()) {
-            return  allMatches;
-        } else {
-            List<LiveMatch> liveMatches = new ArrayList<>();
-            for (int i = 0; i <= count; i++) {
-                liveMatches.add(allMatches.get(i));
-            }
-            return liveMatches;
-        }
-    }
-
-
-
-    // synchronized call (flow didn't break)
-    public static List<Team> getAllTeams() {
-        Team team1 = new Team(1, "Barcelona", TeamLogoUrls.BARCELONA);
-        Team team2 = new Team(2, "Real Madrid", TeamLogoUrls.REAL_MADRID);
-        Team team3 = new Team(3, "Liver Pool", TeamLogoUrls.LIVER_POOL);
-        Team team4 = new Team(4, "Manchester United", TeamLogoUrls.MANCHESTER_UNITED);
-        return Arrays.asList(team1,team2,team3,team4);
-    }
-
-    public static List<Results> getResults(int count) {
-
-        Results results1 = new Results();
-        results1.setId("1");
-        results1.setHomeTeam(getAllTeams().get(0));
-        results1.setAwayTeam(getAllTeams().get(1));
-        results1.setLeagueName("Royal Premium League");
-        results1.setVenue("Emirates Stadium London");
-        results1.setDate("Jul 21");
-        results1.setHomeTeamScore(3);
-        results1.setAwayTeamScore(1);
-
-        Results results2 = new Results();
-        results2.setId("2");
-        results2.setHomeTeam(getAllTeams().get(2));
-        results2.setAwayTeam(getAllTeams().get(3));
-        results2.setLeagueName("Spain Premium League");
-        results2.setVenue("Estadio Da Luz");
-        results2.setDate("Jul 21");
-        results2.setHomeTeamScore(1);
-        results2.setAwayTeamScore(3);
-
-        List<Results> allResults =  Arrays.asList(results1,results2,results1,results2, results1,results2,results1,results2, results1,results2,results1,results2);
-
-        if (count >= allResults.size()) {
-            return  allResults;
-        } else {
-            List<Results> results = new ArrayList<>();
-            for (int i = 0; i <= count; i++) {
-                results.add(allResults.get(i));
-            }
-            return results;
-        }
-    }
 
     public static void getAllTeamsFromApi (int leagueId, int season, TeamsDataListener teamsDataListener) {
 
@@ -154,6 +73,13 @@ public class DataHelper {
                     Gson gson= new Gson();
                     String jsonString= gson.toJson(map.get("player"));
                     Player player= gson.fromJson(jsonString, Player.class);
+                    List<LinkedTreeMap> statistics = (List<LinkedTreeMap>) map.get("statistics");
+                    if (statistics != null && statistics.size() > 0) {
+                        Map firstLeague = statistics.get(0);
+                        Map  games = (LinkedTreeMap) firstLeague.get("games");
+                        String position = (String) games.get("position");
+                        player.setPosition(position);
+                    }
                     allPlayers.add(player);
                 }
                 playersDataListener.onPlayersLoaded(allPlayers);
@@ -188,7 +114,6 @@ public class DataHelper {
             }
         });
     }
-
 
     public static void getAllFixturesFromApi(int last, UpcomingFixturesListener upcomingFixturesListener) {
         Service.getInstance().getMyApi().getAllFixtures(last).enqueue(new Callback<ApiResponse>() {

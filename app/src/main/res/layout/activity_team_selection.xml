@@ -57,7 +57,6 @@
 
 
     <androidx.recyclerview.widget.RecyclerView
-        android:background="@color/grey"
         android:id="@+id/recycler_view_teams_of_leagues"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
