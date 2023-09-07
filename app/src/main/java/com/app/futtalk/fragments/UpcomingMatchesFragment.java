@@ -13,9 +13,11 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.app.futtalk.R;
+import com.app.futtalk.activties.AddPostActivity;
 import com.app.futtalk.adapters.FixturesAdapter;
 import com.app.futtalk.api.UpcomingFixturesListener;
 import com.app.futtalk.models.FixtureData;
+import com.app.futtalk.utils.AdsHelper;
 import com.app.futtalk.utils.DataHelper;
 
 import java.util.List;

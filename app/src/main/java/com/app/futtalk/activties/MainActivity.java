@@ -31,7 +31,12 @@ import com.app.futtalk.fragments.UpcomingMatchesFragment;
 import com.app.futtalk.fragments.HomeFragment;
 import com.app.futtalk.fragments.LeaguesFragment;
 import com.app.futtalk.fragments.TeamsFragment;
+import com.app.futtalk.utils.AdsHelper;
 import com.bumptech.glide.Glide;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.LoadAdError;
+import com.google.android.gms.ads.interstitial.InterstitialAd;
+import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -137,6 +142,7 @@ public class MainActivity extends BaseActivity {
                     btnAddNewTeam.setVisibility(View.VISIBLE);
                     btnAddNewLeague.setVisibility(View.GONE);
                     loadFragment(teamsFragment, getString(R.string.teams_frag_title));
+                    AdsHelper.getInstance().showInterstitialAd(MainActivity.this);
                     return true;
                 } else if (item.getItemId() == R.id.item_fixtures) {
                     btnAddNewTeam.setVisibility(View.GONE);
@@ -147,6 +153,7 @@ public class MainActivity extends BaseActivity {
                     btnAddNewTeam.setVisibility(View.GONE);
                     btnAddNewLeague.setVisibility(View.VISIBLE);
                     loadFragment(leaguesFragment, getString(R.string.leagues_frag_title));
+                    AdsHelper.getInstance().showInterstitialAd(MainActivity.this);
                     return true;
                 } else {
                     return false;
@@ -310,4 +317,6 @@ public class MainActivity extends BaseActivity {
 
         }
     }
+
+
 }

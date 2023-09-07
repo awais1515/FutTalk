@@ -107,6 +107,11 @@
             android:name=".activties.MainActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
+
+        <meta-data
+            android:name="com.google.android.gms.ads.APPLICATION_ID"
+            android:value="ca-app-pub-4735596562347231~7238865844"/>
+
     </application>
 
 </manifest>

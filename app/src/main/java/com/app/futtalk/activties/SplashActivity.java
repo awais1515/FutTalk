@@ -15,7 +15,11 @@ import com.app.futtalk.R;
 import com.app.futtalk.api.UpcomingFixturesListener;
 import com.app.futtalk.models.FixtureData;
 import com.app.futtalk.models.User;
+import com.app.futtalk.utils.AdsHelper;
 import com.app.futtalk.utils.DataHelper;
+import com.google.android.gms.ads.MobileAds;
+import com.google.android.gms.ads.initialization.InitializationStatus;
+import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -34,6 +38,12 @@ public class SplashActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
         context = this;
+        MobileAds.initialize(context, new OnInitializationCompleteListener() {
+            @Override
+            public void onInitializationComplete(InitializationStatus initializationStatus) {
+            }
+        });
+        AdsHelper.initAdsHelper(getApplicationContext());
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         Handler handler = new Handler();
 

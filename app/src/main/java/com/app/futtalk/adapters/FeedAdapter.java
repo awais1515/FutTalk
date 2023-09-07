@@ -2,18 +2,22 @@ package com.app.futtalk.adapters;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.VideoView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.app.futtalk.R;
@@ -26,8 +30,19 @@ import com.app.futtalk.models.User;
 import com.app.futtalk.utils.DbReferences;
 import com.app.futtalk.utils.FirebaseUtils;
 import com.app.futtalk.utils.Utils;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.DataSource;
+import com.bumptech.glide.load.engine.GlideException;
+import com.bumptech.glide.request.Request;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.target.BitmapImageViewTarget;
+import com.bumptech.glide.request.target.SizeReadyCallback;
+import com.bumptech.glide.request.target.Target;
+import com.bumptech.glide.request.transition.Transition;
+import com.google.android.exoplayer2.ExoPlaybackException;
 import com.google.android.exoplayer2.ExoPlayer;
 import com.google.android.exoplayer2.MediaItem;
+import com.google.android.exoplayer2.Player;
 import com.google.android.exoplayer2.ui.StyledPlayerView;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -69,19 +84,44 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.MyHolder> {
         holder.tvComments.setText(String.valueOf(feedPost.getComments().size()));
 
         if (feedPost.getStoryType() == StoryTypes.PictureStory) {
-            Utils.setPicture(context, holder.ivStoryImage, feedPost.getStoryImageURL());
             holder.rlAttachmentContainer.setVisibility(View.VISIBLE);
             holder.ivStoryImage.setVisibility(View.VISIBLE);
             holder.ivPlay.setVisibility(View.GONE);
-
         } else if (feedPost.getStoryType() == StoryTypes.VideoStory) {
             holder.rlAttachmentContainer.setVisibility(View.VISIBLE);
             holder.ivStoryImage.setVisibility(View.VISIBLE);
             holder.ivPlay.setVisibility(View.VISIBLE);
-            Utils.setPicture(context, holder.ivStoryImage, feedPost.getStoryImageURL());
-
         } else {
             holder.rlAttachmentContainer.setVisibility(View.GONE);
+        }
+
+        if (feedPost.getStoryType() == StoryTypes.PictureStory || feedPost.getStoryType() == StoryTypes.VideoStory) {
+            //Utils.setPicture(context, holder.ivStoryImage, feedPost.getStoryImageURL());
+            if (feedPost.getStoryImageURL() != null && !feedPost.getStoryImageURL().isEmpty()) {
+                Glide.with(context)
+                        .load(feedPost.getStoryImageURL())
+                        .addListener(new RequestListener<Drawable>() {
+                            @Override
+                            public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
+                                return false;
+                            }
+
+                            @Override
+                            public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
+                                holder.ivStoryImage.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+                                    @Override
+                                    public void onGlobalLayout() {
+                                        holder.ivStoryImage.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                                        int height = holder.ivStoryImage.getHeight();
+                                        holder.playerView.setMinimumHeight(height);
+                                        Log.d("abc", "Height = " + height);
+                                    }
+                                });
+                                return false;
+                            }
+                        })
+                        .into(holder.ivStoryImage);
+            }
         }
 
         holder.ivPlay.setOnClickListener(new View.OnClickListener() {
@@ -89,12 +129,36 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.MyHolder> {
             public void onClick(View v) {
                 if (feedPost.getStoryType() == StoryTypes.VideoStory) {
                     holder.ivStoryImage.setVisibility(View.INVISIBLE);
+                    holder.ivPlay.setVisibility(View.GONE);
                     holder.playerView.setVisibility(View.VISIBLE);
                     holder.playerView.setPlayer(player);
                     MediaItem mediaItem = MediaItem.fromUri(feedPost.getStoryVideoURL());
                     player.setMediaItem(mediaItem);
                     player.prepare();
                     player.setPlayWhenReady(true);
+                    player.addListener(new ExoPlayer.Listener() {
+
+                        @Override
+                        public void onPlayerStateChanged(boolean playWhenReady, int playbackState) {
+
+                            switch(playbackState) {
+                                case ExoPlayer.STATE_BUFFERING:
+                                    break;
+                                case ExoPlayer.STATE_ENDED:
+                                    holder.ivStoryImage.setVisibility(View.VISIBLE);
+                                    holder.ivPlay.setVisibility(View.VISIBLE);
+                                    holder.playerView.setVisibility(View.GONE);
+                                    holder.playerView.setPlayer(player);
+                                    break;
+                                case ExoPlayer.STATE_IDLE:
+                                    break;
+                                case ExoPlayer.STATE_READY:
+                                    break;
+                                default:
+                                    break;
+                            }
+                        }
+                    });
                 }
             }
         });
@@ -105,7 +169,7 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.MyHolder> {
                 User user = snapshot.getValue(User.class);
                 holder.tvUserName.setText(user.getName());
                 Utils.setPicture(context, holder.ivUserPicture, user.getProfileUrl());
-                Utils.setVideo(context, holder.ivUserPicture, user.getProfileUrl());
+               // Utils.setVideo(context, holder.ivUserPicture, user.getProfileUrl());
             }
 
             @Override
@@ -140,6 +204,8 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.MyHolder> {
             }
         });
     }
+
+
 
 
 

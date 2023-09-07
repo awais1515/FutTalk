@@ -4,6 +4,7 @@ import static com.app.futtalk.utils.FirebaseUtils.CURRENT_USER;
 
 import static java.io.File.createTempFile;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -12,6 +13,7 @@ import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Environment;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -26,11 +28,19 @@ import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
+import com.abedelazizshe.lightcompressorlibrary.CompressionListener;
+import com.abedelazizshe.lightcompressorlibrary.VideoCompressor;
+import com.abedelazizshe.lightcompressorlibrary.VideoQuality;
+import com.abedelazizshe.lightcompressorlibrary.config.Configuration;
+import com.abedelazizshe.lightcompressorlibrary.config.SaveLocation;
+import com.abedelazizshe.lightcompressorlibrary.config.SharedStorageConfiguration;
 import com.app.futtalk.R;
 import com.app.futtalk.models.FeedPost;
 import com.app.futtalk.models.StoryTypes;
 import com.app.futtalk.models.Team;
+import com.app.futtalk.utils.AdsHelper;
 import com.app.futtalk.utils.DbReferences;
 import com.app.futtalk.utils.Utils;
 import com.bumptech.glide.Glide;
@@ -46,7 +56,9 @@ import com.google.firebase.storage.UploadTask;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -71,9 +83,10 @@ public class AddPostActivity extends BaseActivity {
 
     private Uri imageFilePath;
 
-    private Uri videoFilePath;
+    private Uri videoFileUri;
     private VideoView videoView;
     private StoryTypes storyType = StoryTypes.TextStory;
+    private File videoFile;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,6 +96,7 @@ public class AddPostActivity extends BaseActivity {
         init();
         setData();
         setListeners();
+        AdsHelper.getInstance().showInterstitialAd(AddPostActivity.this);
     }
 
     private void init() {
@@ -165,11 +179,69 @@ public class AddPostActivity extends BaseActivity {
             @Override
             public void onActivityResult(ActivityResult result) {
                 if (result.getData() != null) {
-                    videoFilePath = result.getData().getData();
-                    mimeType = getContentResolver().getType(videoFilePath);
+                    videoFileUri = result.getData().getData();
+                    mimeType = getContentResolver().getType(videoFileUri);
+                    Glide.with(context)
+                            .load(videoFileUri)
+                            .centerCrop()
+                            .into(ivThumbnail);
+                    rlAttachmentContainer.setVisibility(View.VISIBLE);
+                    rlVideoContainer.setVisibility(View.VISIBLE);
+                    videoView.setVisibility(View.GONE);
+                    ivThumbnail.setVisibility(View.VISIBLE);
                     if (mimeType != null && mimeType.startsWith("video/")) {
-                        storyType = StoryTypes.VideoStory;
-                        new GetThumbnailTask(context).execute(videoFilePath);
+                        if (getTempVideoFile().exists()) {
+                            getTempVideoFile().delete();
+                        }
+                        ProgressDialog progressDialog = Utils.getProgressDialog(context, "Loading 0%");
+                        List<Uri> uriList = Arrays.asList(videoFileUri);
+                        SharedStorageConfiguration sharedStorageConfiguration = new SharedStorageConfiguration(SaveLocation.movies, "futtalk");
+                        Configuration configuration = new Configuration(
+                                VideoQuality.MEDIUM,
+                                true,
+                                5,
+                                false,
+                                false,
+                                null,
+                                null,
+                                Arrays.asList("tempVideo")
+                        );
+                        VideoCompressor.start(context, uriList, false, sharedStorageConfiguration, configuration, new CompressionListener() {
+                            @Override
+                            public void onStart(int i) {
+                                progressDialog.show();
+                            }
+
+                            @Override
+                            public void onSuccess(int i, long l, @Nullable String s) {
+                                File folder = getExternalFilesDir(Environment.DIRECTORY_MOVIES);
+                                File subFolder = new File(folder, "futtalk");
+                                videoFile = new File(subFolder, "tempVideo");
+                                videoFileUri = Uri.fromFile(videoFile);
+                                storyType = StoryTypes.VideoStory;
+                                Glide.with(context)
+                                        .load(videoFileUri)
+                                        .centerCrop()
+                                        .into(ivThumbnail);
+                                progressDialog.dismiss();
+
+                            }
+
+                            @Override
+                            public void onFailure(int i, @NonNull String s) {
+                                progressDialog.dismiss();
+                            }
+
+                            @Override
+                            public void onProgress(int i, float progress) {
+                                progressDialog.setMessage("Loading " + (int) progress);
+                            }
+
+                            @Override
+                            public void onCancelled(int i) {
+                                progressDialog.dismiss();
+                            }
+                        });
                     } else {
                         showToastMessage("You did not attach a video");
                     }
@@ -192,6 +264,13 @@ public class AddPostActivity extends BaseActivity {
 
             }
         });
+    }
+
+    private File getTempVideoFile() {
+        File folder = getExternalFilesDir(Environment.DIRECTORY_MOVIES);
+        File subFolder = new File(folder, "futtalk");
+        File tempVideo = new File(subFolder, "tempVideo");
+        return tempVideo;
     }
 
     protected void getImageFromGallery(ActivityResultLauncher<Intent> getImageUriFromGallery) {
@@ -278,7 +357,7 @@ public class AddPostActivity extends BaseActivity {
     private void publishStoryWithVideo(FeedPost feedPost) {
         FirebaseStorage firebaseStorage = FirebaseStorage.getInstance();
         StorageReference storageReference = firebaseStorage.getReference("Post Videos").child(feedPost.getId());
-        storageReference.putFile(videoFilePath).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
+        storageReference.putFile(videoFileUri).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
                 if (task.isSuccessful()) {
@@ -349,9 +428,9 @@ public class AddPostActivity extends BaseActivity {
                 ivPlay.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        if (videoFilePath != null) {
+                        if (videoFileUri != null) {
                             rlVideoContainer.setVisibility(View.GONE);
-                            videoView.setVideoURI(videoFilePath);
+                            videoView.setVideoURI(videoFileUri);
                             ivThumbnail.setVisibility(View.INVISIBLE);
                             videoView.setVisibility(View.VISIBLE);
                             videoView.start();

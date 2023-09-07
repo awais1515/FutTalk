@@ -64,4 +64,11 @@
     <string name="replies">Replies</string>
     <string name="no_data_found">No data found</string>
 
+
+    <!--real ad unit ids-->
+   <!-- <string name="interstitial_ad_unit_id">ca-app-pub-4735596562347231/9460584944</string>-->
+
+    <!--test ad unit ids-->
+    <string name="interstitial_ad_unit_id">ca-app-pub-3940256099942544/1033173712</string>
+
 </resources>
