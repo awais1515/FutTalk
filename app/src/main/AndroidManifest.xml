@@ -110,7 +110,15 @@
 
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"
-            android:value="ca-app-pub-4735596562347231~7238865844"/>
+            android:value="ca-app-pub-4735596562347231~7238865844"
+           />
+
+        <meta-data
+            android:name="com.google.android.gms.ads.APPLICATION_ID"
+            android:value="ca-app-pub-4735596562347231/6602525302"/>
+
+
+
 
     </application>
 
