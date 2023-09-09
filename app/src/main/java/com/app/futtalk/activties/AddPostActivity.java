@@ -10,6 +10,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.media.MediaMetadataRetriever;
 import android.media.MediaPlayer;
+import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -18,6 +19,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -44,6 +46,10 @@ import com.app.futtalk.utils.AdsHelper;
 import com.app.futtalk.utils.DbReferences;
 import com.app.futtalk.utils.Utils;
 import com.bumptech.glide.Glide;
+import com.google.android.gms.ads.AdListener;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdSize;
+import com.google.android.gms.ads.AdView;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -96,11 +102,11 @@ public class AddPostActivity extends BaseActivity {
         init();
         setData();
         setListeners();
-        AdsHelper.getInstance().showInterstitialAd(AddPostActivity.this);
     }
 
     private void init() {
         context = this;
+        AdsHelper.getInstance().showBannerAd(context, getWindow().getDecorView().getRootView());
         tvTeamName = findViewById(R.id.tv_team_name);
         etStory = findViewById(R.id.etStory);
         ivProfilePic = findViewById(R.id.ivProfilePic);
@@ -217,13 +223,25 @@ public class AddPostActivity extends BaseActivity {
                                 File folder = getExternalFilesDir(Environment.DIRECTORY_MOVIES);
                                 File subFolder = new File(folder, "futtalk");
                                 videoFile = new File(subFolder, "tempVideo");
-                                videoFileUri = Uri.fromFile(videoFile);
-                                storyType = StoryTypes.VideoStory;
-                                Glide.with(context)
-                                        .load(videoFileUri)
-                                        .centerCrop()
-                                        .into(ivThumbnail);
-                                progressDialog.dismiss();
+                                boolean fileExist = videoFile.exists();
+                                MediaScannerConnection.scanFile(context,
+                                        new String[] { videoFile.getAbsolutePath() }, null,
+                                        new MediaScannerConnection.OnScanCompletedListener() {
+                                            public void onScanCompleted(String path, Uri uri) {
+                                                runOnUiThread(new Runnable() {
+                                                    @Override
+                                                    public void run() {
+                                                        videoFileUri = uri;
+                                                        storyType = StoryTypes.VideoStory;
+                                                        Glide.with(context)
+                                                                .load(videoFileUri)
+                                                                .centerCrop()
+                                                                .into(ivThumbnail);
+                                                        progressDialog.dismiss();
+                                                    }
+                                                });
+                                            }
+                                        });
 
                             }
 
@@ -456,4 +474,5 @@ public class AddPostActivity extends BaseActivity {
         }
         return uri;
     }
+
 }

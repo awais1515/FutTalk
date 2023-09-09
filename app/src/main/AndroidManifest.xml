@@ -13,6 +13,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.FutTalk"
+        android:requestLegacyExternalStorage="true"
         tools:targetApi="31" >
         <activity
             android:name=".activties.SelectCountryActivity"
@@ -112,13 +113,6 @@
             android:name="com.google.android.gms.ads.APPLICATION_ID"
             android:value="ca-app-pub-4735596562347231~7238865844"
            />
-
-        <meta-data
-            android:name="com.google.android.gms.ads.APPLICATION_ID"
-            android:value="ca-app-pub-4735596562347231/6602525302"/>
-
-
-
 
     </application>
 

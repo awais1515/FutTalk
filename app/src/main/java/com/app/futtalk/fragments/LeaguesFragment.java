@@ -22,6 +22,7 @@ import com.app.futtalk.R;
 import com.app.futtalk.adapters.LeaguesAdapter;
 import com.app.futtalk.models.League;
 import com.app.futtalk.models.LeagueInfo;
+import com.app.futtalk.utils.AdsHelper;
 import com.app.futtalk.utils.DbReferences;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -59,6 +60,7 @@ public class LeaguesFragment extends Fragment {
 
     private void init() {
         context = getActivity();
+        AdsHelper.getInstance().showBannerAd(context, getView());
         recyclerViewLeagues = getView().findViewById(R.id.recycler_view_leagues);
         recyclerViewLeagues.setLayoutManager(new LinearLayoutManager(context));
         leaguesAdapter = new LeaguesAdapter(context, leagueList, R.layout.row_league_selection,false);

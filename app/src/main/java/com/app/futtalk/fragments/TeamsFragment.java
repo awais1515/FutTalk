@@ -20,6 +20,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.app.futtalk.R;
 import com.app.futtalk.adapters.TeamsAdapter;
 import com.app.futtalk.models.Team;
+import com.app.futtalk.utils.AdsHelper;
 import com.app.futtalk.utils.DbReferences;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -56,6 +57,7 @@ public class TeamsFragment extends Fragment {
 
     private void init() {
         context = getActivity();
+        AdsHelper.getInstance().showBannerAd(context, getView());
         recyclerViewTeams = getView().findViewById(R.id.recycler_view_teams);
         recyclerViewTeams.setLayoutManager(new LinearLayoutManager(context));
         teamsAdapter= new TeamsAdapter(context, teamsList ,R.layout.row_view_teams);

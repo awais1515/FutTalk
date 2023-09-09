@@ -66,9 +66,15 @@
 
 
     <!--real ad unit ids-->
-   <!-- <string name="interstitial_ad_unit_id">ca-app-pub-4735596562347231/9460584944</string>-->
+   <!--
+    <string name="interstitial_ad_unit_id">ca-app-pub-4735596562347231/9460584944</string>
+    <string name="rewarded_interstitial_ad_unit_id">ca-app-pub-4735596562347231/7392862798</string>
+    <string name="banner_ad_unit_id">ca-app-pub-4735596562347231/6602525302</string>
+    -->
 
     <!--test ad unit ids-->
     <string name="interstitial_ad_unit_id">ca-app-pub-3940256099942544/1033173712</string>
+    <string name="rewarded_interstitial_ad_unit_id">ca-app-pub-3940256099942544/5354046379</string>
+    <string name="banner_ad_unit_id">ca-app-pub-3940256099942544/6300978111</string>
 
 </resources>

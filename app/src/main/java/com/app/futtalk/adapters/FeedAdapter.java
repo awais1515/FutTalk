@@ -11,8 +11,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.VideoView;
 
@@ -87,12 +89,15 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.MyHolder> {
             holder.rlAttachmentContainer.setVisibility(View.VISIBLE);
             holder.ivStoryImage.setVisibility(View.VISIBLE);
             holder.ivPlay.setVisibility(View.GONE);
+            holder.switchFeatured.setVisibility(View.GONE);
         } else if (feedPost.getStoryType() == StoryTypes.VideoStory) {
             holder.rlAttachmentContainer.setVisibility(View.VISIBLE);
             holder.ivStoryImage.setVisibility(View.VISIBLE);
             holder.ivPlay.setVisibility(View.VISIBLE);
+            holder.switchFeatured.setVisibility(View.VISIBLE);
         } else {
             holder.rlAttachmentContainer.setVisibility(View.GONE);
+            holder.switchFeatured.setVisibility(View.GONE);
         }
 
         if (feedPost.getStoryType() == StoryTypes.PictureStory || feedPost.getStoryType() == StoryTypes.VideoStory) {
@@ -163,6 +168,17 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.MyHolder> {
             }
         });
 
+        holder.switchFeatured.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    FirebaseDatabase.getInstance().getReference(DbReferences.FEATURED_POSTS).child(feedPost.getId()).setValue(feedPost.getId());
+                } else {
+                    FirebaseDatabase.getInstance().getReference(DbReferences.FEATURED_POSTS).child(feedPost.getId()).removeValue();
+                }
+            }
+        });
+
         FirebaseDatabase.getInstance().getReference(DbReferences.USERS).child(feedPost.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -220,6 +236,7 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.MyHolder> {
         ImageView ivStoryImage, ivPlay;
         StyledPlayerView playerView;
         RelativeLayout rlAttachmentContainer;
+        Switch switchFeatured;
         MyHolder(View itemView) {
             super(itemView);
             ivUserPicture = itemView.findViewById(R.id.ivProfilePic);
@@ -232,7 +249,7 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.MyHolder> {
             rlAttachmentContainer = itemView.findViewById(R.id.rl_attachment_container);
             ivPlay = itemView.findViewById(R.id.ic_play);
             playerView = itemView.findViewById(R.id.player_view);
-
+            switchFeatured = itemView.findViewById(R.id.switchFeatured);
         }
 
     }
