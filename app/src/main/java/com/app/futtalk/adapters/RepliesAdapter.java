@@ -15,7 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.app.futtalk.R;
 import com.app.futtalk.models.Reply;
 import com.app.futtalk.models.User;
-import com.app.futtalk.utils.DbReferences;
+import com.app.futtalk.utils.References;
 import com.app.futtalk.utils.Utils;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -61,7 +61,7 @@ public class RepliesAdapter extends RecyclerView.Adapter<RepliesAdapter.MyHolder
         holder.tvTimeAgo.setText(Utils.getTimeAgo(reply.getDateTime()));
 
 
-        FirebaseDatabase.getInstance().getReference(DbReferences.USERS).child(reply.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
+        FirebaseDatabase.getInstance().getReference(References.USERS).child(reply.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 User user= snapshot.getValue(User.class);

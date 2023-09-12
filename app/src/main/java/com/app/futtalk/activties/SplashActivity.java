@@ -13,10 +13,12 @@ import android.widget.Toast;
 
 import com.app.futtalk.R;
 import com.app.futtalk.api.UpcomingFixturesListener;
+import com.app.futtalk.models.FeedPost;
 import com.app.futtalk.models.FixtureData;
 import com.app.futtalk.models.User;
 import com.app.futtalk.utils.AdsHelper;
 import com.app.futtalk.utils.DataHelper;
+import com.app.futtalk.utils.References;
 import com.google.android.gms.ads.MobileAds;
 import com.google.android.gms.ads.initialization.InitializationStatus;
 import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
@@ -27,6 +29,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class SplashActivity extends BaseActivity {
@@ -91,9 +94,26 @@ public class SplashActivity extends BaseActivity {
             @Override
             public void onUpcomingFixturesLoaded(List<FixtureData> fixtureDataList) {
                 DataHelper.setSharedFixturesList(fixtureDataList);
-                Intent intent = new Intent(SplashActivity.this, MainActivity.class);
-                startActivity(intent);
-                finish();
+                FirebaseDatabase.getInstance().getReference(References.FEATURED_POSTS).addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        List<FeedPost> featuredPosts = new ArrayList<>();
+                        for (DataSnapshot dataSnapshot: snapshot.getChildren()) {
+                            FeedPost feedPost = dataSnapshot.getValue(FeedPost.class);
+                            feedPost.setId(dataSnapshot.getKey());
+                            featuredPosts.add(feedPost);
+                        }
+                        DataHelper.setSharedFeaturedPostsList(featuredPosts);
+                        Intent intent = new Intent(SplashActivity.this, MainActivity.class);
+                        startActivity(intent);
+                        finish();
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+
+                    }
+                });
             }
 
             @Override

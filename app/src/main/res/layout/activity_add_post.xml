@@ -126,7 +126,7 @@
                     android:layout_height="wrap_content"
                     android:layout_centerInParent="true"
                     android:visibility="gone"
-                    android:src="@drawable/img_slider1"/>
+                    android:src="@drawable/img_slider"/>
 
                 <VideoView
                     android:id="@+id/videView"

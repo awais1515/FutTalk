@@ -1,6 +1,6 @@
 package com.app.futtalk.adapters;
 
-import static com.app.futtalk.utils.DbReferences.USERS;
+import static com.app.futtalk.utils.References.USERS;
 
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
@@ -19,7 +19,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.app.futtalk.R;
 import com.app.futtalk.models.LeagueInfo;
-import com.app.futtalk.utils.DbReferences;
+import com.app.futtalk.utils.References;
 import com.app.futtalk.utils.FirebaseUtils;
 import com.app.futtalk.utils.Utils;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -69,7 +69,7 @@ public class LeaguesAdapter extends RecyclerView.Adapter<LeaguesAdapter.MyHolder
                     progressDialog.setTitle("Adding..");
                     progressDialog.show();
 
-                    FirebaseDatabase.getInstance().getReference().child(DbReferences.USERS).child(FirebaseUtils.CURRENT_USER.getId()).child(DbReferences.FOLLOW_LEAGUES).child(String.valueOf(leagueInfo.getLeague().getId())).setValue(leagueInfo).addOnCompleteListener(new OnCompleteListener<Void>() {
+                    FirebaseDatabase.getInstance().getReference().child(References.USERS).child(FirebaseUtils.CURRENT_USER.getId()).child(References.FOLLOW_LEAGUES).child(String.valueOf(leagueInfo.getLeague().getId())).setValue(leagueInfo).addOnCompleteListener(new OnCompleteListener<Void>() {
                         @Override
                         public void onComplete(@NonNull Task<Void> task) {
                             if (task.isSuccessful()) {
@@ -101,7 +101,7 @@ public class LeaguesAdapter extends RecyclerView.Adapter<LeaguesAdapter.MyHolder
                             .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int id) {
                                     ProgressDialog progressDialog = Utils.getProgressDialog(context, "Removing");
-                                    FirebaseDatabase.getInstance().getReference(USERS).child(FirebaseUtils.CURRENT_USER.getId()).child(DbReferences.FOLLOW_LEAGUES).child(String.valueOf(leagueInfo.getLeague().getId())).removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
+                                    FirebaseDatabase.getInstance().getReference(USERS).child(FirebaseUtils.CURRENT_USER.getId()).child(References.FOLLOW_LEAGUES).child(String.valueOf(leagueInfo.getLeague().getId())).removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
                                         @Override
                                         public void onComplete(@NonNull Task<Void> task) {
 

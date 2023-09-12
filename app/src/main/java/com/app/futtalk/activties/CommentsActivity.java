@@ -1,16 +1,14 @@
 package com.app.futtalk.activties;
 
-import static com.app.futtalk.utils.DbReferences.COMMENTS;
-import static com.app.futtalk.utils.DbReferences.FEED;
+import static com.app.futtalk.utils.References.COMMENTS;
+import static com.app.futtalk.utils.References.FEED;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
@@ -34,7 +32,6 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 

@@ -18,10 +18,11 @@ import android.widget.Toast;
 
 import com.app.futtalk.R;
 import com.app.futtalk.api.UpcomingFixturesListener;
+import com.app.futtalk.models.FeedPost;
 import com.app.futtalk.models.FixtureData;
 import com.app.futtalk.models.User;
 import com.app.futtalk.utils.DataHelper;
-import com.app.futtalk.utils.DbReferences;
+import com.app.futtalk.utils.References;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.common.api.ApiException;
@@ -37,6 +38,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class LoginActivity extends BaseActivity {
@@ -176,11 +178,28 @@ public class LoginActivity extends BaseActivity {
         DataHelper.getAllFixturesFromApi(99, new UpcomingFixturesListener() {
             @Override
             public void onUpcomingFixturesLoaded(List<FixtureData> fixtureDataList) {
-                progressDialog.dismiss();
                 DataHelper.setSharedFixturesList(fixtureDataList);
-                Intent intent = new Intent(context, MainActivity.class);
-                startActivity(intent);
-                finish();
+                FirebaseDatabase.getInstance().getReference(References.FEATURED_POSTS).addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        List<FeedPost> featuredPosts = new ArrayList<>();
+                        for (DataSnapshot dataSnapshot: snapshot.getChildren()) {
+                            FeedPost feedPost = dataSnapshot.getValue(FeedPost.class);
+                            feedPost.setId(dataSnapshot.getKey());
+                            featuredPosts.add(feedPost);
+                        }
+                        progressDialog.dismiss();
+                        DataHelper.setSharedFeaturedPostsList(featuredPosts);
+                        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                        startActivity(intent);
+                        finish();
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+
+                    }
+                });
             }
 
             @Override
@@ -213,7 +232,7 @@ public class LoginActivity extends BaseActivity {
                                     user.setEmail(mAuth.getCurrentUser().getDisplayName());
                                     user.setName(mAuth.getCurrentUser().getEmail());
                                     FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
-                                    DatabaseReference databaseReference = firebaseDatabase.getReference(DbReferences.USERS).child(mAuth.getUid());
+                                    DatabaseReference databaseReference = firebaseDatabase.getReference(References.USERS).child(mAuth.getUid());
                                     databaseReference.setValue(user).addOnCompleteListener(new OnCompleteListener<Void>() {
                                         @Override
                                         public void onComplete(@NonNull Task<Void> task) {

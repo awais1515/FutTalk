@@ -13,14 +13,12 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.app.futtalk.R;
-import com.app.futtalk.fragments.TeamsFragment;
 import com.app.futtalk.models.Team;
-import com.app.futtalk.utils.DbReferences;
+import com.app.futtalk.utils.References;
 import com.app.futtalk.utils.FirebaseUtils;
 import com.app.futtalk.utils.Utils;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.List;
@@ -58,7 +56,7 @@ public class TeamsSelectionAdapter extends RecyclerView.Adapter<TeamsSelectionAd
                 progressDialog.setCancelable(false);
                 progressDialog.setTitle("Adding..");
                 progressDialog.show();
-                FirebaseDatabase.getInstance().getReference().child(DbReferences.USERS).child(FirebaseUtils.CURRENT_USER.getId()).child(DbReferences.FOLLOW_TEAMS).child(String.valueOf(team.getId())).setValue(team).addOnCompleteListener(new OnCompleteListener<Void>() {
+                FirebaseDatabase.getInstance().getReference().child(References.USERS).child(FirebaseUtils.CURRENT_USER.getId()).child(References.FOLLOW_TEAMS).child(String.valueOf(team.getId())).setValue(team).addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
                         if (task.isSuccessful()) {

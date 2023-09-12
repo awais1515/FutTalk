@@ -31,7 +31,9 @@ import com.app.futtalk.fragments.UpcomingMatchesFragment;
 import com.app.futtalk.fragments.HomeFragment;
 import com.app.futtalk.fragments.LeaguesFragment;
 import com.app.futtalk.fragments.TeamsFragment;
+import com.app.futtalk.models.FeedPost;
 import com.app.futtalk.utils.AdsHelper;
+import com.app.futtalk.utils.DataHelper;
 import com.bumptech.glide.Glide;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.LoadAdError;
@@ -49,6 +51,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+
+import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -81,6 +85,7 @@ public class MainActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         init();
+        List<FeedPost> featuredPosts = DataHelper.getSharedFeaturedPostsList();
         setCurrentUserData();
         setListeners();
         setupDrawer();

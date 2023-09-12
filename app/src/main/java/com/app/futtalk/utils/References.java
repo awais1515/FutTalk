@@ -1,6 +1,6 @@
 package com.app.futtalk.utils;
 
-public class DbReferences {
+public class References {
     public static String USERS = "users";
     public static String FEED = "feed";
     public static String COMMENTS = "comments";

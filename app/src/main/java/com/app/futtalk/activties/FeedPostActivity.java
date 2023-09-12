@@ -20,12 +20,10 @@ import com.app.futtalk.adapters.FeedAdapter;
 import com.app.futtalk.models.FeedPost;
 import com.app.futtalk.models.Team;
 import com.app.futtalk.utils.AdsHelper;
-import com.app.futtalk.utils.DbReferences;
+import com.app.futtalk.utils.References;
 import com.app.futtalk.utils.Settings;
 import com.app.futtalk.utils.Utils;
 import com.google.android.exoplayer2.ExoPlayer;
-import com.google.android.gms.ads.OnUserEarnedRewardListener;
-import com.google.android.gms.ads.rewarded.RewardItem;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -117,7 +115,7 @@ public class FeedPostActivity extends BaseActivity {
     }
 
     private void fetchPostsData() {
-        FirebaseDatabase.getInstance().getReference(DbReferences.FEED).child(team.getName()).addChildEventListener(new ChildEventListener() {
+        FirebaseDatabase.getInstance().getReference(References.FEED).child(team.getName()).addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
                 isDataLoaded = true;

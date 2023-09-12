@@ -1,6 +1,6 @@
 package com.app.futtalk.fragments;
 
-import static com.app.futtalk.utils.DbReferences.USERS;
+import static com.app.futtalk.utils.References.USERS;
 import static com.app.futtalk.utils.FirebaseUtils.CURRENT_USER;
 
 import android.content.Context;
@@ -20,10 +20,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.app.futtalk.R;
 import com.app.futtalk.adapters.LeaguesAdapter;
-import com.app.futtalk.models.League;
 import com.app.futtalk.models.LeagueInfo;
 import com.app.futtalk.utils.AdsHelper;
-import com.app.futtalk.utils.DbReferences;
+import com.app.futtalk.utils.References;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
@@ -71,7 +70,7 @@ public class LeaguesFragment extends Fragment {
     }
 
     private void loadLeaguesFromFirebase() {
-        FirebaseDatabase.getInstance().getReference(USERS).child(CURRENT_USER.getId()).child(DbReferences.FOLLOW_LEAGUES).addValueEventListener(new ValueEventListener() {
+        FirebaseDatabase.getInstance().getReference(USERS).child(CURRENT_USER.getId()).child(References.FOLLOW_LEAGUES).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 leagueList.clear();

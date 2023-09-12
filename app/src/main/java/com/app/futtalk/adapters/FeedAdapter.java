@@ -2,10 +2,7 @@ package com.app.futtalk.adapters;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
-import android.media.MediaPlayer;
-import android.net.Uri;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,7 +13,6 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.Switch;
 import android.widget.TextView;
-import android.widget.VideoView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -24,27 +20,20 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.app.futtalk.R;
 import com.app.futtalk.activties.CommentsActivity;
-import com.app.futtalk.activties.VideoPlayerActivity;
 import com.app.futtalk.models.FeedPost;
 import com.app.futtalk.models.StoryTypes;
 import com.app.futtalk.models.Team;
 import com.app.futtalk.models.User;
-import com.app.futtalk.utils.DbReferences;
+import com.app.futtalk.utils.References;
 import com.app.futtalk.utils.FirebaseUtils;
 import com.app.futtalk.utils.Utils;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.DataSource;
 import com.bumptech.glide.load.engine.GlideException;
-import com.bumptech.glide.request.Request;
 import com.bumptech.glide.request.RequestListener;
-import com.bumptech.glide.request.target.BitmapImageViewTarget;
-import com.bumptech.glide.request.target.SizeReadyCallback;
 import com.bumptech.glide.request.target.Target;
-import com.bumptech.glide.request.transition.Transition;
-import com.google.android.exoplayer2.ExoPlaybackException;
 import com.google.android.exoplayer2.ExoPlayer;
 import com.google.android.exoplayer2.MediaItem;
-import com.google.android.exoplayer2.Player;
 import com.google.android.exoplayer2.ui.StyledPlayerView;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -172,14 +161,14 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.MyHolder> {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
-                    FirebaseDatabase.getInstance().getReference(DbReferences.FEATURED_POSTS).child(feedPost.getId()).setValue(feedPost.getId());
+                    FirebaseDatabase.getInstance().getReference(References.FEATURED_POSTS).child(feedPost.getId()).setValue(feedPost);
                 } else {
-                    FirebaseDatabase.getInstance().getReference(DbReferences.FEATURED_POSTS).child(feedPost.getId()).removeValue();
+                    FirebaseDatabase.getInstance().getReference(References.FEATURED_POSTS).child(feedPost.getId()).removeValue();
                 }
             }
         });
 
-        FirebaseDatabase.getInstance().getReference(DbReferences.USERS).child(feedPost.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
+        FirebaseDatabase.getInstance().getReference(References.USERS).child(feedPost.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 User user = snapshot.getValue(User.class);
@@ -216,7 +205,7 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.MyHolder> {
                     feedPost.getLikes().add(FirebaseUtils.CURRENT_USER.getId());
                     notifyDataSetChanged();
                 }
-                FirebaseDatabase.getInstance().getReference(DbReferences.FEED).child(team.getName()).child(feedPost.getId()).setValue(feedPost);
+                FirebaseDatabase.getInstance().getReference(References.FEED).child(team.getName()).child(feedPost.getId()).setValue(feedPost);
             }
         });
     }

@@ -24,7 +24,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.app.futtalk.R;
-import com.app.futtalk.utils.DbReferences;
+import com.app.futtalk.utils.References;
 import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -163,7 +163,7 @@ public class EditProfileActivity extends BaseActivity {
             }
         }
         showProgressDialog("Saving...");
-        FirebaseDatabase.getInstance().getReference(DbReferences.USERS).child(CURRENT_USER.getId()).setValue(CURRENT_USER).addOnCompleteListener(new OnCompleteListener<Void>() {
+        FirebaseDatabase.getInstance().getReference(References.USERS).child(CURRENT_USER.getId()).setValue(CURRENT_USER).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 closeProgressDialog();

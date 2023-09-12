@@ -1,6 +1,6 @@
 package com.app.futtalk.adapters;
 
-import static com.app.futtalk.utils.DbReferences.USERS;
+import static com.app.futtalk.utils.References.USERS;
 import static com.app.futtalk.utils.FirebaseUtils.CURRENT_USER;
 
 import android.app.AlertDialog;
@@ -23,7 +23,7 @@ import com.app.futtalk.activties.FixturesActivity;
 import com.app.futtalk.activties.FeedPostActivity;
 import com.app.futtalk.activties.PlayersActivity;
 import com.app.futtalk.models.Team;
-import com.app.futtalk.utils.DbReferences;
+import com.app.futtalk.utils.References;
 import com.app.futtalk.utils.Utils;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -90,7 +90,7 @@ public class TeamsAdapter extends RecyclerView.Adapter<TeamsAdapter.MyHolder> {
                         .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
                                 ProgressDialog progressDialog = Utils.getProgressDialog(context, "Removing");
-                                FirebaseDatabase.getInstance().getReference(USERS).child(CURRENT_USER.getId()).child(DbReferences.FOLLOW_TEAMS).child(String.valueOf(team.getId())).removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
+                                FirebaseDatabase.getInstance().getReference(USERS).child(CURRENT_USER.getId()).child(References.FOLLOW_TEAMS).child(String.valueOf(team.getId())).removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
                                     @Override
                                     public void onComplete(@NonNull Task<Void> task) {
 

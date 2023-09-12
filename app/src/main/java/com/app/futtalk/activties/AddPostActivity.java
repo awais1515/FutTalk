@@ -10,16 +10,13 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.media.MediaMetadataRetriever;
 import android.media.MediaPlayer;
-import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Environment;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -43,13 +40,9 @@ import com.app.futtalk.models.FeedPost;
 import com.app.futtalk.models.StoryTypes;
 import com.app.futtalk.models.Team;
 import com.app.futtalk.utils.AdsHelper;
-import com.app.futtalk.utils.DbReferences;
+import com.app.futtalk.utils.References;
 import com.app.futtalk.utils.Utils;
 import com.bumptech.glide.Glide;
-import com.google.android.gms.ads.AdListener;
-import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.AdSize;
-import com.google.android.gms.ads.AdView;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -58,6 +51,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.smarteist.autoimageslider.SliderView;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -93,6 +87,7 @@ public class AddPostActivity extends BaseActivity {
     private VideoView videoView;
     private StoryTypes storyType = StoryTypes.TextStory;
     private File videoFile;
+    private ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -187,19 +182,12 @@ public class AddPostActivity extends BaseActivity {
                 if (result.getData() != null) {
                     videoFileUri = result.getData().getData();
                     mimeType = getContentResolver().getType(videoFileUri);
-                    Glide.with(context)
-                            .load(videoFileUri)
-                            .centerCrop()
-                            .into(ivThumbnail);
-                    rlAttachmentContainer.setVisibility(View.VISIBLE);
-                    rlVideoContainer.setVisibility(View.VISIBLE);
-                    videoView.setVisibility(View.GONE);
-                    ivThumbnail.setVisibility(View.VISIBLE);
+
                     if (mimeType != null && mimeType.startsWith("video/")) {
-                        if (getTempVideoFile().exists()) {
+                       /* if (getTempVideoFile().exists()) {
                             getTempVideoFile().delete();
-                        }
-                        ProgressDialog progressDialog = Utils.getProgressDialog(context, "Loading 0%");
+                        }*/
+                        progressDialog = Utils.getProgressDialog(context, "Loading 0%");
                         List<Uri> uriList = Arrays.asList(videoFileUri);
                         SharedStorageConfiguration sharedStorageConfiguration = new SharedStorageConfiguration(SaveLocation.movies, "futtalk");
                         Configuration configuration = new Configuration(
@@ -210,7 +198,7 @@ public class AddPostActivity extends BaseActivity {
                                 false,
                                 null,
                                 null,
-                                Arrays.asList("tempVideo")
+                                Arrays.asList(new Date().getTime()+"")
                         );
                         VideoCompressor.start(context, uriList, false, sharedStorageConfiguration, configuration, new CompressionListener() {
                             @Override
@@ -220,29 +208,16 @@ public class AddPostActivity extends BaseActivity {
 
                             @Override
                             public void onSuccess(int i, long l, @Nullable String s) {
-                                File folder = getExternalFilesDir(Environment.DIRECTORY_MOVIES);
-                                File subFolder = new File(folder, "futtalk");
-                                videoFile = new File(subFolder, "tempVideo");
-                                boolean fileExist = videoFile.exists();
-                                MediaScannerConnection.scanFile(context,
-                                        new String[] { videoFile.getAbsolutePath() }, null,
-                                        new MediaScannerConnection.OnScanCompletedListener() {
-                                            public void onScanCompleted(String path, Uri uri) {
-                                                runOnUiThread(new Runnable() {
-                                                    @Override
-                                                    public void run() {
-                                                        videoFileUri = uri;
-                                                        storyType = StoryTypes.VideoStory;
-                                                        Glide.with(context)
-                                                                .load(videoFileUri)
-                                                                .centerCrop()
-                                                                .into(ivThumbnail);
-                                                        progressDialog.dismiss();
-                                                    }
-                                                });
-                                            }
-                                        });
-
+                                videoFile = new File(s);
+                                Uri.fromFile(videoFile);
+                                videoFileUri = Uri.fromFile(videoFile);
+                                storyType = StoryTypes.VideoStory;
+                                new GetThumbnailTask(context).execute(videoFileUri);
+                                /*progressDialog.dismiss();
+                                rlAttachmentContainer.setVisibility(View.VISIBLE);
+                                rlVideoContainer.setVisibility(View.VISIBLE);
+                                videoView.setVisibility(View.GONE);
+                                ivThumbnail.setVisibility(View.VISIBLE);*/
                             }
 
                             @Override
@@ -284,12 +259,10 @@ public class AddPostActivity extends BaseActivity {
         });
     }
 
-    private File getTempVideoFile() {
-        File folder = getExternalFilesDir(Environment.DIRECTORY_MOVIES);
-        File subFolder = new File(folder, "futtalk");
-        File tempVideo = new File(subFolder, "tempVideo");
+   /* private File getTempVideoFile() {
+        File tempVideo = new File("/data/user/0/com.app.futtalk/files/tempVideo.mp4");
         return tempVideo;
-    }
+    }*/
 
     protected void getImageFromGallery(ActivityResultLauncher<Intent> getImageUriFromGallery) {
         Intent intentGallery = new Intent(Intent.ACTION_PICK);
@@ -323,12 +296,12 @@ public class AddPostActivity extends BaseActivity {
     }
 
     private String getKeyForStory() {
-        String key = FirebaseDatabase.getInstance().getReference(DbReferences.FEED).child(team.getName()).push().getKey();
+        String key = FirebaseDatabase.getInstance().getReference(References.FEED).child(team.getName()).push().getKey();
         return key;
     }
 
     private void publishStoryText(FeedPost feedPost) {
-        FirebaseDatabase.getInstance().getReference(DbReferences.FEED).child(team.getName()).child(feedPost.getId()).setValue(feedPost).addOnCompleteListener(new OnCompleteListener<Void>() {
+        FirebaseDatabase.getInstance().getReference(References.FEED).child(team.getName()).child(feedPost.getId()).setValue(feedPost).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 closeProgressDialog();
@@ -437,12 +410,17 @@ public class AddPostActivity extends BaseActivity {
         protected void onPostExecute(Bitmap bitmap) {
             closeProgressDialog();
             if (bitmap != null) {
-                ivThumbnail.setImageBitmap(bitmap);
+
+                Glide.with(context)
+                        .load(bitmap)
+                        .centerCrop()
+                        .into(ivThumbnail);
                 rlAttachmentContainer.setVisibility(View.VISIBLE);
                 rlVideoContainer.setVisibility(View.VISIBLE);
                 videoView.setVisibility(View.GONE);
                 ivThumbnail.setVisibility(View.VISIBLE);
                 imageFilePath = getUriFromBitmap(bitmap);
+                progressDialog.dismiss();
                 ivPlay.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
@@ -459,7 +437,7 @@ public class AddPostActivity extends BaseActivity {
         }
     }
 
-    private static Uri getUriFromBitmap(Bitmap bitmap) {
+    private Uri getUriFromBitmap(Bitmap bitmap) {
         Uri uri = null;
         try {
              // Create a temporary file
@@ -468,6 +446,7 @@ public class AddPostActivity extends BaseActivity {
             bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fos);
             fos.flush();
             fos.close();
+            // Todo compress image before building uri
             uri = Uri.fromFile(localFile);
         } catch (IOException e) {
 

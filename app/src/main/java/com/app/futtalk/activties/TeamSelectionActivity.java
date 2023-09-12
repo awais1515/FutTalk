@@ -1,6 +1,6 @@
 package com.app.futtalk.activties;
 
-import static com.app.futtalk.utils.DbReferences.USERS;
+import static com.app.futtalk.utils.References.USERS;
 import static com.app.futtalk.utils.FirebaseUtils.CURRENT_USER;
 
 import androidx.annotation.NonNull;
@@ -19,16 +19,13 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.app.futtalk.R;
-import com.app.futtalk.adapters.LeagueScrollerAdapter;
-import com.app.futtalk.adapters.LeaguesAdapter;
 import com.app.futtalk.adapters.TeamsSelectionAdapter;
-import com.app.futtalk.api.LeaguesInfoDataListener;
 import com.app.futtalk.api.TeamsDataListener;
 import com.app.futtalk.models.League;
 import com.app.futtalk.models.LeagueInfo;
 import com.app.futtalk.models.Team;
 import com.app.futtalk.utils.DataHelper;
-import com.app.futtalk.utils.DbReferences;
+import com.app.futtalk.utils.References;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
 import com.google.firebase.database.DataSnapshot;
@@ -37,7 +34,6 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 public class TeamSelectionActivity extends BaseActivity {
@@ -130,7 +126,7 @@ public class TeamSelectionActivity extends BaseActivity {
     }
 
     private void loadLeaguesFromFirebase() {
-        FirebaseDatabase.getInstance().getReference(USERS).child(CURRENT_USER.getId()).child(DbReferences.FOLLOW_LEAGUES).addValueEventListener(new ValueEventListener() {
+        FirebaseDatabase.getInstance().getReference(USERS).child(CURRENT_USER.getId()).child(References.FOLLOW_LEAGUES).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 leagueList.clear();

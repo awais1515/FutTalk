@@ -1,6 +1,6 @@
 package com.app.futtalk.activties;
 
-import static com.app.futtalk.utils.DbReferences.FEED;
+import static com.app.futtalk.utils.References.FEED;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -22,7 +22,7 @@ import com.app.futtalk.models.FeedPost;
 import com.app.futtalk.models.Reply;
 import com.app.futtalk.models.Team;
 import com.app.futtalk.models.User;
-import com.app.futtalk.utils.DbReferences;
+import com.app.futtalk.utils.References;
 import com.app.futtalk.utils.FirebaseUtils;
 import com.app.futtalk.utils.Settings;
 import com.app.futtalk.utils.Utils;
@@ -118,7 +118,7 @@ public class RepliesActivity extends BaseActivity {
         comment.getReplies().add(reply);
         repliesAdapter.notifyDataSetChanged();
         showPublishInProgress(true);
-        FirebaseDatabase.getInstance().getReference(FEED).child(team.getName()).child(feedPost.getId()).child(DbReferences.COMMENTS).child(comment.getId()).setValue(comment).addOnCompleteListener(new OnCompleteListener<Void>() {
+        FirebaseDatabase.getInstance().getReference(FEED).child(team.getName()).child(feedPost.getId()).child(References.COMMENTS).child(comment.getId()).setValue(comment).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 showPublishInProgress(false);
@@ -141,7 +141,7 @@ public class RepliesActivity extends BaseActivity {
         if (comment.getReplies().size() > 0) {
             tvNoReplyFound.setVisibility(View.GONE);
         }
-        FirebaseDatabase.getInstance().getReference(DbReferences.USERS).child(comment.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
+        FirebaseDatabase.getInstance().getReference(References.USERS).child(comment.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 User user = snapshot.getValue(User.class);

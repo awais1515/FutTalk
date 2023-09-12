@@ -10,6 +10,7 @@ import com.app.futtalk.api.ApiResponse;
 import com.app.futtalk.api.TeamsDataListener;
 import com.app.futtalk.api.UpcomingFixturesListener;
 import com.app.futtalk.models.Country;
+import com.app.futtalk.models.FeedPost;
 import com.app.futtalk.models.LeagueInfo;
 import com.app.futtalk.models.LiveMatch;
 import com.app.futtalk.models.Player;
@@ -33,6 +34,7 @@ import retrofit2.Response;
 public class DataHelper {
 
     private static List<FixtureData> sharedFixturesList = new ArrayList<>();
+    private static List<FeedPost> sharedFeaturedPostsList = new ArrayList<>();
 
     public static void getAllTeamsFromApi (int leagueId, int season, TeamsDataListener teamsDataListener) {
 
@@ -184,6 +186,14 @@ public class DataHelper {
 
     public static void setSharedFixturesList(List<FixtureData> sharedFixturesList) {
         DataHelper.sharedFixturesList = sharedFixturesList;
+    }
+
+    public static List<FeedPost> getSharedFeaturedPostsList() {
+        return sharedFeaturedPostsList;
+    }
+
+    public static void setSharedFeaturedPostsList(List<FeedPost> sharedFeaturedPostsList) {
+        DataHelper.sharedFeaturedPostsList = sharedFeaturedPostsList;
     }
 
     public static List<FixtureData> getUpComingMatches() {

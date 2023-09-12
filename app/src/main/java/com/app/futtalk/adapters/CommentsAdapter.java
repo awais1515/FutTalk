@@ -17,7 +17,7 @@ import com.app.futtalk.models.Comment;
 import com.app.futtalk.models.FeedPost;
 import com.app.futtalk.models.Team;
 import com.app.futtalk.models.User;
-import com.app.futtalk.utils.DbReferences;
+import com.app.futtalk.utils.References;
 import com.app.futtalk.utils.Utils;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -60,7 +60,7 @@ public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.MyHold
         holder.tvComment.setText(comment.getText());
         holder.tvTimeAgo.setText(Utils.getTimeAgo(comment.getDateTime()));
         holder.tvViewReplies.setText(getTextForReplies(comment.getReplies().size()));
-        FirebaseDatabase.getInstance().getReference(DbReferences.USERS).child(comment.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
+        FirebaseDatabase.getInstance().getReference(References.USERS).child(comment.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 User user = snapshot.getValue(User.class);
