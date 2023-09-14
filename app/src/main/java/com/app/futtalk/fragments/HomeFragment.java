@@ -19,7 +19,10 @@ import com.app.futtalk.activties.FixturesActivity;
 import com.app.futtalk.activties.LiveMatchesActivity;
 import com.app.futtalk.adapters.FixturesAdapter;
 import com.app.futtalk.adapters.LiveMatchesAdapter;
+import com.app.futtalk.adapters.SliderAdapter;
 import com.app.futtalk.utils.DataHelper;
+import com.smarteist.autoimageslider.SliderAnimations;
+import com.smarteist.autoimageslider.SliderView;
 
 public class HomeFragment extends Fragment {
 
@@ -31,6 +34,8 @@ public class HomeFragment extends Fragment {
 
     private TextView tvViewAllLiveMatches;
     private TextView tvViewAllUpcomingMatches;
+    private SliderAdapter sliderAdapter;
+    private SliderView sliderView;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -58,6 +63,14 @@ public class HomeFragment extends Fragment {
         recyclerViewUpcomingMatches = view.findViewById(R.id.recycler_view_fixtures);
         tvViewAllUpcomingMatches = view.findViewById(R.id.tv_all_upcoming_matches);
         recyclerViewUpcomingMatches.setLayoutManager((new LinearLayoutManager(getActivity())));
+
+        //setup slider
+        sliderView = view.findViewById(R.id.slider);
+        sliderAdapter = new SliderAdapter(context);
+        sliderAdapter.renewItems(DataHelper.getSharedFeaturedPostsList());
+        sliderView.setSliderAdapter(sliderAdapter);
+        sliderView.startAutoCycle();
+        sliderView.setSliderTransformAnimation(SliderAnimations.SIMPLETRANSFORMATION);
 
     }
 

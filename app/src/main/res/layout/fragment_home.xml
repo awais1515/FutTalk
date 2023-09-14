@@ -13,10 +13,10 @@
             android:id="@+id/slider"
             android:layout_width="match_parent"
             android:layout_height="200dp"
-            app:sliderAnimationDuration="600"
+            app:sliderAnimationDuration="1000"
             app:sliderAutoCycleDirection="back_and_forth"
             app:sliderAutoCycleEnabled="true"
-            app:sliderIndicatorAnimationDuration="600"
+            app:sliderIndicatorAnimationDuration="1000"
             app:sliderIndicatorGravity="center_horizontal|bottom"
             app:sliderIndicatorMargin="15dp"
             app:sliderIndicatorOrientation="horizontal"
@@ -24,7 +24,7 @@
             app:sliderIndicatorRadius="2dp"
             app:sliderIndicatorSelectedColor="#5A5A5A"
             app:sliderIndicatorUnselectedColor="#FFF"
-            app:sliderScrollTimeInSec="1"
+            app:sliderScrollTimeInSec="3"
             app:sliderStartAutoCycle="true" />
 
         <TextView

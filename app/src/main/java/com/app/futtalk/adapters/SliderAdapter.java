@@ -1,6 +1,7 @@
 package com.app.futtalk.adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,6 +11,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.app.futtalk.R;
+import com.app.futtalk.activties.VideoPlayerActivity;
 import com.app.futtalk.models.FeedPost;
 import com.bumptech.glide.Glide;
 import com.smarteist.autoimageslider.SliderViewAdapter;
@@ -17,12 +19,12 @@ import com.smarteist.autoimageslider.SliderViewAdapter;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SliderAdapterExample extends SliderViewAdapter<SliderAdapterExample.SliderAdapterVH> {
+public class SliderAdapter extends SliderViewAdapter<SliderAdapter.SliderAdapterVH> {
 
     private Context context;
     private List<FeedPost> mSliderItems = new ArrayList<>();
 
-    public SliderAdapterExample(Context context) {
+    public SliderAdapter(Context context) {
         this.context = context;
     }
 
@@ -51,7 +53,6 @@ public class SliderAdapterExample extends SliderViewAdapter<SliderAdapterExample
     public void onBindViewHolder(SliderAdapterVH viewHolder, final int position) {
 
         FeedPost sliderItem = mSliderItems.get(position);
-
         viewHolder.textViewDescription.setText(sliderItem.getText());
         viewHolder.textViewDescription.setTextSize(16);
         viewHolder.textViewDescription.setTextColor(Color.WHITE);
@@ -63,7 +64,10 @@ public class SliderAdapterExample extends SliderViewAdapter<SliderAdapterExample
         viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(context, "This is item in position " + position, Toast.LENGTH_SHORT).show();
+               // Toast.makeText(context, "This is item in position " + position, Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(context, VideoPlayerActivity.class);
+                intent.putExtra("feed_post", sliderItem);
+                context.startActivity(intent);
             }
         });
     }

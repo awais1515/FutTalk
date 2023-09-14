@@ -13,6 +13,7 @@ import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -43,6 +44,12 @@ import com.app.futtalk.utils.AdsHelper;
 import com.app.futtalk.utils.References;
 import com.app.futtalk.utils.Utils;
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.DataSource;
+import com.bumptech.glide.load.engine.GlideException;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.target.SimpleTarget;
+import com.bumptech.glide.request.target.Target;
+import com.bumptech.glide.request.transition.Transition;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -61,6 +68,7 @@ import java.util.Date;
 import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
+import id.zelory.compressor.Compressor;
 
 public class AddPostActivity extends BaseActivity {
 
@@ -165,13 +173,22 @@ public class AddPostActivity extends BaseActivity {
                     storyType = StoryTypes.PictureStory;
                     imageFilePath = result.getData().getData();
                     Glide.with(context)
+                            .asBitmap()
                             .load(imageFilePath)
-                            .centerCrop()
-                            .into(ivThumbnail);
-                    rlAttachmentContainer.setVisibility(View.VISIBLE);
-                    ivThumbnail.setVisibility(View.VISIBLE);
-                    videoView.setVisibility(View.GONE);
-                    rlVideoContainer.setVisibility(View.GONE);
+                            .into(new SimpleTarget<Bitmap>() {
+                                @Override
+                                public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
+                                    ivThumbnail.setImageBitmap(resource);
+                                    rlAttachmentContainer.setVisibility(View.VISIBLE);
+                                    ivThumbnail.setVisibility(View.VISIBLE);
+                                    videoView.setVisibility(View.GONE);
+                                    rlVideoContainer.setVisibility(View.GONE);
+                                    imageFilePath = getUriFromBitmap(resource);
+                                }
+                            });
+                }
+                else {
+                    Log.d("abc", "result is null");
                 }
             }
         });
@@ -446,12 +463,23 @@ public class AddPostActivity extends BaseActivity {
             bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fos);
             fos.flush();
             fos.close();
-            // Todo compress image before building uri
-            uri = Uri.fromFile(localFile);
+            File compressedFile = new Compressor(context).compressToFile(localFile);
+            double localFileSize = getFileSizeInKB(localFile);
+            double compressedFileSize = getFileSizeInKB(compressedFile);
+            uri = Uri.fromFile(compressedFile);
         } catch (IOException e) {
 
         }
         return uri;
+    }
+
+    public static double getFileSizeInKB(File file) {
+        if (file.exists()) {
+            long fileSizeInBytes = file.length();
+            return (double) fileSizeInBytes / 1024;
+        } else {
+            return -1; // Return a negative value to indicate that the file doesn't exist
+        }
     }
 
 }

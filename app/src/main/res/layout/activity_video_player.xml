@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/black"
     tools:context=".activties.VideoPlayerActivity">
 
     <ImageView
@@ -18,5 +19,14 @@
         android:id="@+id/player_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
+
+    <TextView
+        android:id="@+id/tv_feed_text"
+        android:textColor="@color/white"
+        android:background="#AB000000"
+        android:layout_alignParentBottom="true"
+        android:padding="16dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
 
 </RelativeLayout>
