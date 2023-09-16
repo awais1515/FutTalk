@@ -64,11 +64,9 @@ public class HomeFragment extends Fragment {
         tvViewAllUpcomingMatches = view.findViewById(R.id.tv_all_upcoming_matches);
         recyclerViewUpcomingMatches.setLayoutManager((new LinearLayoutManager(getActivity())));
 
-        //setup slider
-        sliderView = view.findViewById(R.id.slider);
+        // setupSlider
+        sliderView = getView().findViewById(R.id.slider);
         sliderAdapter = new SliderAdapter(context);
-        sliderAdapter.renewItems(DataHelper.getSharedFeaturedPostsList());
-        sliderView.setSliderAdapter(sliderAdapter);
         sliderView.startAutoCycle();
         sliderView.setSliderTransformAnimation(SliderAnimations.SIMPLETRANSFORMATION);
 
@@ -101,5 +99,17 @@ public class HomeFragment extends Fragment {
         liveMatchesAdapter = new LiveMatchesAdapter(getActivity(),DataHelper.getLiveMatches(), R.layout.row_view_live_match_home);
         recyclerViewLiveMatches.setAdapter(liveMatchesAdapter);
 
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        setUpSlider();
+    }
+
+    private void setUpSlider() {
+        //setup slider
+        sliderAdapter.renewItems(DataHelper.getSharedFeaturedPostsList());
+        sliderView.setSliderAdapter(sliderAdapter);
     }
 }

@@ -196,6 +196,15 @@ public class DataHelper {
         DataHelper.sharedFeaturedPostsList = sharedFeaturedPostsList;
     }
 
+    public static void deleteFeaturedPost(FeedPost feedPost) {
+        for (int i = 0; i < sharedFeaturedPostsList.size(); i++) {
+            if (sharedFeaturedPostsList.get(i).getId().equals(feedPost.getId())) {
+                sharedFeaturedPostsList.remove(i);
+                break;
+            }
+        }
+    }
+
     public static List<FixtureData> getUpComingMatches() {
         List<FixtureData> upComingMatches = new ArrayList<>();
         for (FixtureData fixtureData: sharedFixturesList) {
