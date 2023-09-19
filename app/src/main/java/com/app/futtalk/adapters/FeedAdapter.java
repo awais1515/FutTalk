@@ -3,6 +3,7 @@ package com.app.futtalk.adapters;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -34,7 +35,12 @@ import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
 import com.google.android.exoplayer2.ExoPlayer;
 import com.google.android.exoplayer2.MediaItem;
+import com.google.android.exoplayer2.Player;
+import com.google.android.exoplayer2.SimpleExoPlayer;
+import com.google.android.exoplayer2.source.MediaSource;
+import com.google.android.exoplayer2.source.ProgressiveMediaSource;
 import com.google.android.exoplayer2.ui.StyledPlayerView;
+import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
@@ -48,14 +54,14 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.MyHolder> {
     private List<FeedPost> feedPosts;
     private Team team;
     private int rowLayout;
-    private ExoPlayer player;
+   // private ExoPlayer player;
 
 
     public FeedAdapter(Context context, Team team, List<FeedPost> feedPosts, ExoPlayer player, int rowLayout) {
         this.context = context;
         this.rowLayout = rowLayout;
         this.feedPosts = feedPosts;
-        this.player = player;
+      //  this.player = player;
         this.team = team;
     }
 
@@ -69,6 +75,16 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.MyHolder> {
     @Override
     public void onBindViewHolder(@NonNull MyHolder holder, int position) {
         FeedPost feedPost = feedPosts.get(holder.getAdapterPosition());
+
+        if(feedPost.getStoryType() == StoryTypes.VideoStory) {
+            // Release the previous player if any
+            holder.releasePlayer();
+            // Initialize and set up the player
+            holder.initializePlayer();
+            holder.preparePlayer(feedPost.getStoryVideoURL());
+        }
+
+
         holder.tvStory.setText(feedPost.getText());
         holder.tvTimeAgo.setText(Utils.getTimeAgo(feedPost.getDateTime()));
         holder.tvLikes.setText(String.valueOf(feedPost.getLikes().size()));
@@ -125,7 +141,8 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.MyHolder> {
                     holder.ivStoryImage.setVisibility(View.INVISIBLE);
                     holder.ivPlay.setVisibility(View.GONE);
                     holder.playerView.setVisibility(View.VISIBLE);
-                    holder.playerView.setPlayer(player);
+                    holder.handlePlayClick();
+                   /* holder.playerView.setPlayer(player);
                     MediaItem mediaItem = MediaItem.fromUri(feedPost.getStoryVideoURL());
                     player.setMediaItem(mediaItem);
                     player.prepare();
@@ -135,7 +152,7 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.MyHolder> {
                         @Override
                         public void onPlayerStateChanged(boolean playWhenReady, int playbackState) {
 
-                            switch(playbackState) {
+                            switch (playbackState) {
                                 case ExoPlayer.STATE_BUFFERING:
                                     break;
                                 case ExoPlayer.STATE_ENDED:
@@ -152,7 +169,7 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.MyHolder> {
                                     break;
                             }
                         }
-                    });
+                    });*/
                 }
             }
         });
@@ -174,7 +191,7 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.MyHolder> {
                 User user = snapshot.getValue(User.class);
                 holder.tvUserName.setText(user.getName());
                 Utils.setPicture(context, holder.ivUserPicture, user.getProfileUrl());
-               // Utils.setVideo(context, holder.ivUserPicture, user.getProfileUrl());
+                // Utils.setVideo(context, holder.ivUserPicture, user.getProfileUrl());
             }
 
             @Override
@@ -211,9 +228,6 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.MyHolder> {
     }
 
 
-
-
-
     @Override
     public int getItemCount() {
         return feedPosts.size();
@@ -226,6 +240,8 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.MyHolder> {
         StyledPlayerView playerView;
         RelativeLayout rlAttachmentContainer;
         Switch switchFeatured;
+        private ExoPlayer player;
+
         MyHolder(View itemView) {
             super(itemView);
             ivUserPicture = itemView.findViewById(R.id.ivProfilePic);
@@ -240,6 +256,38 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.MyHolder> {
             playerView = itemView.findViewById(R.id.player_view);
             switchFeatured = itemView.findViewById(R.id.switchFeatured);
         }
+
+        public void initializePlayer() {
+            if (player == null) {
+                player = new ExoPlayer.Builder(context).build();
+                playerView.setPlayer(player);
+            }
+        }
+
+        public void preparePlayer(String videoUrl) {
+            MediaItem mediaItem = MediaItem.fromUri(videoUrl);
+            player.setMediaItem(mediaItem);
+            player.prepare();
+            player.setPlayWhenReady(false);
+        }
+
+        public void releasePlayer() {
+            if (player != null) {
+                player.release();
+                player = null;
+            }
+        }
+
+        public void handlePlayClick() {
+            if (player != null) {
+                if (player.getPlayWhenReady()) {
+                    player.setPlayWhenReady(false); // Pause the video
+                } else {
+                    player.setPlayWhenReady(true); // Play the video
+                }
+            }
+        }
+
 
     }
 

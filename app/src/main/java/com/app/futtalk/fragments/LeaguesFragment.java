@@ -79,7 +79,7 @@ public class LeaguesFragment extends Fragment {
                     LeagueInfo league = dataSnapshot.getValue(LeagueInfo.class);
                     leagueList.add(league);
                 }
-                Collections.reverse(leagueList);
+                //Collections.reverse(leagueList);
                 leaguesAdapter.notifyDataSetChanged();
                 if (leagueList.size() == 0) {
                     tvNoDataFound.setVisibility(View.VISIBLE);
