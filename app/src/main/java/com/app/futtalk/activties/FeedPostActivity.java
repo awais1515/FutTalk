@@ -70,7 +70,7 @@ public class FeedPostActivity extends BaseActivity {
         recyclerView = findViewById(R.id.recycler_view);
         feedPosts = new ArrayList<>();
         player = new ExoPlayer.Builder(context).build();
-        feedAdapter = new FeedAdapter(context, team, feedPosts, player, R.layout.row_layout_feed);
+        feedAdapter = new FeedAdapter(context, team, feedPosts, player, R.layout.row_feed);
         recyclerView.setLayoutManager(new LinearLayoutManager(context));
         recyclerView.setAdapter(feedAdapter);
         progressBar = findViewById(R.id.progressBar);
@@ -134,7 +134,6 @@ public class FeedPostActivity extends BaseActivity {
 
             @Override
             public void onChildRemoved(@NonNull DataSnapshot snapshot) {
-
             }
 
             @Override

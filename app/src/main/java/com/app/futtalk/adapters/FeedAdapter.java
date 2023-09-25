@@ -1,6 +1,8 @@
 package com.app.futtalk.adapters;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
@@ -25,6 +27,7 @@ import com.app.futtalk.models.FeedPost;
 import com.app.futtalk.models.StoryTypes;
 import com.app.futtalk.models.Team;
 import com.app.futtalk.models.User;
+import com.app.futtalk.utils.DataHelper;
 import com.app.futtalk.utils.References;
 import com.app.futtalk.utils.FirebaseUtils;
 import com.app.futtalk.utils.Utils;
@@ -45,6 +48,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
 
 
 import java.util.List;
@@ -99,10 +103,24 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.MyHolder> {
             holder.rlAttachmentContainer.setVisibility(View.VISIBLE);
             holder.ivStoryImage.setVisibility(View.VISIBLE);
             holder.ivPlay.setVisibility(View.VISIBLE);
-            holder.switchFeatured.setVisibility(View.VISIBLE);
+            if (DataHelper.isAdmin()) {
+                holder.switchFeatured.setVisibility(View.VISIBLE);
+            }
         } else {
             holder.rlAttachmentContainer.setVisibility(View.GONE);
             holder.switchFeatured.setVisibility(View.GONE);
+        }
+
+        if (DataHelper.isAdmin()) {
+            holder.tvDelete.setVisibility(View.VISIBLE);
+            holder.tvDelete.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    showConfirmationDialog(feedPost, holder.getAbsoluteAdapterPosition());
+                }
+            });
+        } else {
+            holder.tvDelete.setVisibility(View.GONE);
         }
 
         if (feedPost.getStoryType() == StoryTypes.PictureStory || feedPost.getStoryType() == StoryTypes.VideoStory) {
@@ -228,6 +246,47 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.MyHolder> {
     }
 
 
+    private void showConfirmationDialog(FeedPost feedPost, int index) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setMessage("Are you sure you want to delete this post");
+
+        // Add buttons
+        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                FirebaseDatabase.getInstance().getReference(References.FEED).child(team.getName()).child(feedPost.getId()).removeValue();
+                feedPosts.remove(index);
+                notifyDataSetChanged();
+                if (feedPost.getStoryType() == StoryTypes.TextStory) {
+                    // we have to do nothing here
+                }
+                else if (feedPost.getStoryType() == StoryTypes.PictureStory) {
+                    FirebaseStorage.getInstance().getReference(References.STORAGE_PICTURES).child(feedPost.getId()).delete();
+                } else {
+                    FirebaseStorage.getInstance().getReference(References.STORAGE_PICTURES).child(feedPost.getId()).delete();
+                    FirebaseStorage.getInstance().getReference(References.STORAGE_VIDEOS).child(feedPost.getId()).delete();
+                    FirebaseDatabase.getInstance().getReference(References.FEATURED_POSTS).child(feedPost.getId()).removeValue();
+
+                }
+            }
+        });
+
+
+        builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                // Do nothing or handle the cancel action
+                dialog.dismiss();
+            }
+        });
+
+        // Create and show the dialog
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
+
+
+
     @Override
     public int getItemCount() {
         return feedPosts.size();
@@ -235,7 +294,7 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.MyHolder> {
 
     class MyHolder extends RecyclerView.ViewHolder {
         ImageView ivUserPicture;
-        TextView tvTimeAgo, tvUserName, tvStory, tvLikes, tvComments;
+        TextView tvTimeAgo, tvUserName, tvStory, tvLikes, tvComments, tvDelete;
         ImageView ivStoryImage, ivPlay;
         StyledPlayerView playerView;
         RelativeLayout rlAttachmentContainer;
@@ -255,6 +314,7 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.MyHolder> {
             ivPlay = itemView.findViewById(R.id.ic_play);
             playerView = itemView.findViewById(R.id.player_view);
             switchFeatured = itemView.findViewById(R.id.switchFeatured);
+            tvDelete = itemView.findViewById(R.id.tvDelete);
         }
 
         public void initializePlayer() {

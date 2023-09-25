@@ -236,4 +236,12 @@ public class DataHelper {
         }
         return completedMatches;
     }
+
+    public static boolean isAdmin() {
+        String adminEmail = "dante@gmail.com";
+        if (FirebaseUtils.CURRENT_USER.getEmail().equals(adminEmail)) {
+            return true;
+        }
+        return false;
+    }
 }

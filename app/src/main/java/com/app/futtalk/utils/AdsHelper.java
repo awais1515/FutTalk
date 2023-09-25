@@ -26,7 +26,7 @@ public class AdsHelper {
     public interface AdWatchListener {
         void onAdWatched();
     }
-    public static boolean isPremiumUser = true;
+    public static boolean isPremiumUser = false;
     private static InterstitialAd mInterstitialAd;
     private static Context mContext;
     private static AdsHelper adsHelper;

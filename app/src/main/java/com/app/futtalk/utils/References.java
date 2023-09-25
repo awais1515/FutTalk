@@ -9,4 +9,7 @@ public class References {
     public static String FOLLOW_LEAGUES = "follow_leagues";
     public static String FEATURED_POSTS = "featured_posts";
 
+    public static String STORAGE_VIDEOS = "Post Videos";
+    public static String STORAGE_PICTURES = "PostPictures";
+
 }

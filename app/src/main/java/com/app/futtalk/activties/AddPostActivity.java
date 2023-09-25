@@ -334,7 +334,7 @@ public class AddPostActivity extends BaseActivity {
 
     private void publishStoryWithPicture(FeedPost feedPost) {
         FirebaseStorage firebaseStorage = FirebaseStorage.getInstance();
-        StorageReference storageReference = firebaseStorage.getReference("PostPictures").child(feedPost.getId());
+        StorageReference storageReference = firebaseStorage.getReference(References.FEATURED_POSTS).child(feedPost.getId());
         storageReference.putFile(imageFilePath).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
@@ -364,7 +364,7 @@ public class AddPostActivity extends BaseActivity {
 
     private void publishStoryWithVideo(FeedPost feedPost) {
         FirebaseStorage firebaseStorage = FirebaseStorage.getInstance();
-        StorageReference storageReference = firebaseStorage.getReference("Post Videos").child(feedPost.getId());
+        StorageReference storageReference = firebaseStorage.getReference(References.STORAGE_VIDEOS).child(feedPost.getId());
         storageReference.putFile(videoFileUri).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
