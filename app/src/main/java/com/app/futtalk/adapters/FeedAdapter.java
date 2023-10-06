@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
-import android.net.Uri;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,6 +22,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.app.futtalk.R;
 import com.app.futtalk.activties.CommentsActivity;
+import com.app.futtalk.activties.SendReportActivity;
 import com.app.futtalk.models.FeedPost;
 import com.app.futtalk.models.StoryTypes;
 import com.app.futtalk.models.Team;
@@ -38,12 +38,7 @@ import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
 import com.google.android.exoplayer2.ExoPlayer;
 import com.google.android.exoplayer2.MediaItem;
-import com.google.android.exoplayer2.Player;
-import com.google.android.exoplayer2.SimpleExoPlayer;
-import com.google.android.exoplayer2.source.MediaSource;
-import com.google.android.exoplayer2.source.ProgressiveMediaSource;
 import com.google.android.exoplayer2.ui.StyledPlayerView;
-import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
@@ -111,25 +106,16 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.MyHolder> {
             holder.switchFeatured.setVisibility(View.GONE);
         }
 
-        if (DataHelper.isAdmin()) {
-            holder.tvDelete.setVisibility(View.VISIBLE);
-            holder.tvDelete.setOnClickListener(new View.OnClickListener() {
+        if (DataHelper.isAdmin() || DataHelper.isOwner(feedPost.getUid())) {
+            holder.ivDelete.setVisibility(View.VISIBLE);
+            holder.ivDelete.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     showConfirmationDialog(feedPost, holder.getAbsoluteAdapterPosition());
                 }
             });
-        } else if (DataHelper.isOwner()) {
-            holder.deletePost.setVisibility(View.VISIBLE);
-            holder.deletePost.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    showConfirmationDialog(feedPost, holder.getAbsoluteAdapterPosition());
-                }
-            });
-
         } else {
-            holder.tvDelete.setVisibility(View.GONE);
+            holder.ivDelete.setVisibility(View.GONE);
         }
 
         if (feedPost.getStoryType() == StoryTypes.PictureStory || feedPost.getStoryType() == StoryTypes.VideoStory) {
@@ -169,35 +155,16 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.MyHolder> {
                     holder.ivPlay.setVisibility(View.GONE);
                     holder.playerView.setVisibility(View.VISIBLE);
                     holder.handlePlayClick();
-                   /* holder.playerView.setPlayer(player);
-                    MediaItem mediaItem = MediaItem.fromUri(feedPost.getStoryVideoURL());
-                    player.setMediaItem(mediaItem);
-                    player.prepare();
-                    player.setPlayWhenReady(true);
-                    player.addListener(new ExoPlayer.Listener() {
-
-                        @Override
-                        public void onPlayerStateChanged(boolean playWhenReady, int playbackState) {
-
-                            switch (playbackState) {
-                                case ExoPlayer.STATE_BUFFERING:
-                                    break;
-                                case ExoPlayer.STATE_ENDED:
-                                    holder.ivStoryImage.setVisibility(View.VISIBLE);
-                                    holder.ivPlay.setVisibility(View.VISIBLE);
-                                    holder.playerView.setVisibility(View.GONE);
-                                    holder.playerView.setPlayer(player);
-                                    break;
-                                case ExoPlayer.STATE_IDLE:
-                                    break;
-                                case ExoPlayer.STATE_READY:
-                                    break;
-                                default:
-                                    break;
-                            }
-                        }
-                    });*/
                 }
+            }
+        });
+
+        holder.tvReport.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(context, SendReportActivity.class);
+                intent.putExtra("post",feedPost);
+                context.startActivity(intent);
             }
         });
 
@@ -303,8 +270,8 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.MyHolder> {
 
     class MyHolder extends RecyclerView.ViewHolder {
         ImageView ivUserPicture;
-        TextView tvTimeAgo, tvUserName, tvStory, tvLikes, tvComments, tvDelete;
-        ImageView ivStoryImage, ivPlay, deletePost;
+        TextView tvTimeAgo, tvUserName, tvStory, tvLikes, tvComments, tvReport;
+        ImageView ivStoryImage, ivPlay, ivDelete;
         StyledPlayerView playerView;
         RelativeLayout rlAttachmentContainer;
         Switch switchFeatured;
@@ -323,8 +290,9 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.MyHolder> {
             ivPlay = itemView.findViewById(R.id.ic_play);
             playerView = itemView.findViewById(R.id.player_view);
             switchFeatured = itemView.findViewById(R.id.switchFeatured);
-            tvDelete = itemView.findViewById(R.id.tvDelete);
-            deletePost = itemView.findViewById(R.id.delete_your_post);
+           // tvDelete = itemView.findViewById(R.id.tvDelete);
+            ivDelete = itemView.findViewById(R.id.delete_your_post);
+            tvReport = itemView.findViewById(R.id.tvReport);
         }
 
         public void initializePlayer() {

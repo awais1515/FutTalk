@@ -85,6 +85,7 @@
             <com.google.android.exoplayer2.ui.StyledPlayerView
                 android:id="@+id/player_view"
                 android:visibility="gone"
+                app:show_buffering="when_playing"
                 app:use_controller="false"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
@@ -142,7 +143,21 @@
                     android:layout_centerVertical="true"
                     android:textColor="@color/white"
                     android:textSize="11sp" />
+
                 <TextView
+                    android:id="@+id/tvReport"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="25dp"
+                    android:layout_toLeftOf="@id/tvComments"
+                    android:drawableLeft="@drawable/ic_report"
+                    android:drawablePadding="4dp"
+                    android:fontFamily="@font/poppins_regular"
+                    android:layout_centerVertical="true"
+                    android:textColor="@color/white"
+                    android:textSize="11sp" />
+
+               <!-- <TextView
                     tools:visibility="visible"
                     android:visibility="gone"
                     android:id="@+id/tvDelete"
@@ -157,7 +172,7 @@
                     android:text="Delete"
                     android:layout_centerVertical="true"
                     android:textColor="@color/white"
-                    android:textSize="11sp" />
+                    android:textSize="11sp" />-->
 
                 <Switch
                     android:layout_marginLeft="5dp"
