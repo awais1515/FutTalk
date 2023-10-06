@@ -20,6 +20,7 @@ import com.app.futtalk.adapters.FeedAdapter;
 import com.app.futtalk.models.FeedPost;
 import com.app.futtalk.models.Team;
 import com.app.futtalk.utils.AdsHelper;
+import com.app.futtalk.utils.FirebaseUtils;
 import com.app.futtalk.utils.References;
 import com.app.futtalk.utils.Settings;
 import com.app.futtalk.utils.Utils;
@@ -159,5 +160,6 @@ public class FeedPostActivity extends BaseActivity {
             }
         },15000);
     }
+
 
 }

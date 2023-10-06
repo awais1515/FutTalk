@@ -119,6 +119,15 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.MyHolder> {
                     showConfirmationDialog(feedPost, holder.getAbsoluteAdapterPosition());
                 }
             });
+        } else if (DataHelper.isOwner()) {
+            holder.deletePost.setVisibility(View.VISIBLE);
+            holder.deletePost.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    showConfirmationDialog(feedPost, holder.getAbsoluteAdapterPosition());
+                }
+            });
+
         } else {
             holder.tvDelete.setVisibility(View.GONE);
         }
@@ -295,7 +304,7 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.MyHolder> {
     class MyHolder extends RecyclerView.ViewHolder {
         ImageView ivUserPicture;
         TextView tvTimeAgo, tvUserName, tvStory, tvLikes, tvComments, tvDelete;
-        ImageView ivStoryImage, ivPlay;
+        ImageView ivStoryImage, ivPlay, deletePost;
         StyledPlayerView playerView;
         RelativeLayout rlAttachmentContainer;
         Switch switchFeatured;
@@ -315,6 +324,7 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.MyHolder> {
             playerView = itemView.findViewById(R.id.player_view);
             switchFeatured = itemView.findViewById(R.id.switchFeatured);
             tvDelete = itemView.findViewById(R.id.tvDelete);
+            deletePost = itemView.findViewById(R.id.delete_your_post);
         }
 
         public void initializePlayer() {

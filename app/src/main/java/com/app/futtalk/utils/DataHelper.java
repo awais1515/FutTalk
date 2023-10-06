@@ -244,4 +244,12 @@ public class DataHelper {
         }
         return false;
     }
+
+    public static boolean isOwner() {
+        if (FirebaseUtils.CURRENT_USER.getId().equals(FirebaseUtils.CURRENT_USER.getId())) {
+            return true;
+        }
+        return false;
+    }
+
 }
