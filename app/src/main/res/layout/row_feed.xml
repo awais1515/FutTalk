@@ -38,6 +38,8 @@
                 android:textColor="@color/white"
                 android:textSize="11sp" />
 
+
+
             <TextView
                 android:id="@+id/tvTimeAgo"
                 android:layout_width="wrap_content"
@@ -50,6 +52,15 @@
                 android:text="10 ming ago"
                 android:textColor="@color/white"
                 android:textSize="10sp" />
+
+            <ImageView
+                android:id="@+id/tvReport"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:src="@drawable/ic_report"
+                android:drawablePadding="4dp"
+                />
         </LinearLayout>
 
 
@@ -144,18 +155,7 @@
                     android:textColor="@color/white"
                     android:textSize="11sp" />
 
-                <TextView
-                    android:id="@+id/tvReport"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="25dp"
-                    android:layout_toLeftOf="@id/tvComments"
-                    android:drawableLeft="@drawable/ic_report"
-                    android:drawablePadding="4dp"
-                    android:fontFamily="@font/poppins_regular"
-                    android:layout_centerVertical="true"
-                    android:textColor="@color/white"
-                    android:textSize="11sp" />
+
 
                <!-- <TextView
                     tools:visibility="visible"

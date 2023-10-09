@@ -270,8 +270,8 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.MyHolder> {
 
     class MyHolder extends RecyclerView.ViewHolder {
         ImageView ivUserPicture;
-        TextView tvTimeAgo, tvUserName, tvStory, tvLikes, tvComments, tvReport;
-        ImageView ivStoryImage, ivPlay, ivDelete;
+        TextView tvTimeAgo, tvUserName, tvStory, tvLikes, tvComments;
+        ImageView ivStoryImage, ivPlay, ivDelete, tvReport;
         StyledPlayerView playerView;
         RelativeLayout rlAttachmentContainer;
         Switch switchFeatured;
