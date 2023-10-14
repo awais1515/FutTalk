@@ -22,6 +22,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.app.futtalk.R;
 import com.app.futtalk.activties.CommentsActivity;
+import com.app.futtalk.activties.ReportsDetailActivity;
 import com.app.futtalk.activties.SendReportActivity;
 import com.app.futtalk.models.FeedPost;
 import com.app.futtalk.models.StoryTypes;
@@ -55,12 +56,14 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.MyHolder> {
     private int rowLayout;
    // private ExoPlayer player;
 
+    private boolean isReportingMode;
 
-    public FeedAdapter(Context context, Team team, List<FeedPost> feedPosts, ExoPlayer player, int rowLayout) {
+
+    public FeedAdapter(Context context, Team team, List<FeedPost> feedPosts, int rowLayout, boolean isReportingMode) {
         this.context = context;
         this.rowLayout = rowLayout;
         this.feedPosts = feedPosts;
-      //  this.player = player;
+        this.isReportingMode = isReportingMode;
         this.team = team;
     }
 
@@ -83,6 +86,20 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.MyHolder> {
             holder.preparePlayer(feedPost.getStoryVideoURL());
         }
 
+        if (isReportingMode) {
+            holder.tvNoOfReports.setVisibility(View.VISIBLE);
+            holder.tvNoOfReports.setText("("+feedPost.getReports().size()+")");
+            holder.tvNoOfReports.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(context, ReportsDetailActivity.class);
+                    intent.putExtra("post", feedPost);
+                    context.startActivity(intent);
+                }
+            });
+        } else {
+            holder.tvNoOfReports.setVisibility(View.GONE);
+        }
 
         holder.tvStory.setText(feedPost.getText());
         holder.tvTimeAgo.setText(Utils.getTimeAgo(feedPost.getDateTime()));
@@ -162,11 +179,19 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.MyHolder> {
         holder.tvReport.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(context, SendReportActivity.class);
-                intent.putExtra("post",feedPost);
+                Intent intent;
+                if (isReportingMode) {
+                    intent = new Intent(context, ReportsDetailActivity.class);
+                    intent.putExtra("post", feedPost);
+                } else {
+                    intent = new Intent(context, SendReportActivity.class);
+                    intent.putExtra("post",feedPost);
+                    intent.putExtra("team", team);
+                }
                 context.startActivity(intent);
             }
         });
+
 
         holder.switchFeatured.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -230,7 +255,13 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.MyHolder> {
         builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                FirebaseDatabase.getInstance().getReference(References.FEED).child(team.getName()).child(feedPost.getId()).removeValue();
+
+                if (isReportingMode) {
+                    FirebaseDatabase.getInstance().getReference(References.FEED).child(feedPost.getReports().get(0).getTeamName()).child(feedPost.getId()).removeValue();
+                } else {
+                    FirebaseDatabase.getInstance().getReference(References.FEED).child(team.getName()).child(feedPost.getId()).removeValue();
+                }
+                FirebaseDatabase.getInstance().getReference(References.reports).child(feedPost.getId()).removeValue();
                 feedPosts.remove(index);
                 notifyDataSetChanged();
                 if (feedPost.getStoryType() == StoryTypes.TextStory) {
@@ -270,7 +301,7 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.MyHolder> {
 
     class MyHolder extends RecyclerView.ViewHolder {
         ImageView ivUserPicture;
-        TextView tvTimeAgo, tvUserName, tvStory, tvLikes, tvComments;
+        TextView tvTimeAgo, tvUserName, tvStory, tvLikes, tvComments, tvNoOfReports;
         ImageView ivStoryImage, ivPlay, ivDelete, tvReport;
         StyledPlayerView playerView;
         RelativeLayout rlAttachmentContainer;
@@ -285,6 +316,7 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.MyHolder> {
             tvStory = itemView.findViewById(R.id.tvStory);
             tvLikes = itemView.findViewById(R.id.tvLikes);
             tvComments = itemView.findViewById(R.id.tvComments);
+            tvNoOfReports = itemView.findViewById(R.id.tvNoOfReports);
             ivStoryImage = itemView.findViewById(R.id.ivThumbnail);
             rlAttachmentContainer = itemView.findViewById(R.id.rl_attachment_container);
             ivPlay = itemView.findViewById(R.id.ic_play);

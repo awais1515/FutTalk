@@ -17,42 +17,40 @@ import com.app.futtalk.R;
 import com.app.futtalk.adapters.FeedAdapter;
 import com.app.futtalk.adapters.TeamsAdapter;
 import com.app.futtalk.models.FeedPost;
+import com.app.futtalk.models.Report;
 import com.app.futtalk.models.Team;
+import com.app.futtalk.utils.FirebaseUtils;
 import com.app.futtalk.utils.References;
 import com.google.android.exoplayer2.ExoPlayer;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.util.Date;
 import java.util.List;
 
-public class SendReportActivity extends AppCompatActivity {
-
-    private Context context;
-    private Team team;
-    private ExoPlayer player;
-
-    private List<FeedPost> feedPosts;
-
+public class SendReportActivity extends BaseActivity {
+    
     EditText etWriteComplaint;
-
     FeedPost feedPost;
-
-    FeedAdapter feedAdapter;
-
     ImageView ivBack;
+    Team team;
 
     Button submitReport;
+    private Context context;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_send_report);
         feedPost = (FeedPost) getIntent().getSerializableExtra("post");
-        feedAdapter = new FeedAdapter(context, team, feedPosts,player, R.layout.row_feed);
+        team = (Team) getIntent().getSerializableExtra("team");
         init();
         setListeners();
-        isValid();
 
     }
 
@@ -68,7 +66,9 @@ public class SendReportActivity extends AppCompatActivity {
         submitReport.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                if(isValid()) {
+                    submitReport();
+                }
             }
         });
 
@@ -100,5 +100,29 @@ public class SendReportActivity extends AppCompatActivity {
     }
 
 
+    private void submitReport() {
+        Report report = new Report();
+        report.setReporterId(CURRENT_USER.getId());
+        report.setPostId(feedPost.getId());
+        report.setDateTime(new Date().toString());
+        report.setReason(etWriteComplaint.getText().toString());
+        report.setTeamName(team.getName());
 
+        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference(References.reports).child(feedPost.getId());
+        String reportId = databaseReference.push().getKey();
+        report.setId(reportId);
+        showProgressDialog("Submitting..");
+        databaseReference.child(reportId).setValue(report).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                closeProgressDialog();
+                if (task.isSuccessful()) {
+                    showToastMessage("Reported successfully, admin will take the action soon");
+                    finish();
+                } else {
+                    showToastMessage("Failed to submit the report");
+                }
+            }
+        });
+    }
 }

@@ -61,6 +61,19 @@
                 android:src="@drawable/ic_report"
                 android:drawablePadding="4dp"
                 />
+
+            <TextView
+                android:id="@+id/tvNoOfReports"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:alpha="0.67"
+                android:fontFamily="@font/poppins_bold"
+                android:paddingTop="8dp"
+                android:paddingRight="12dp"
+                android:text="(3)"
+                android:textColor="@color/red_lite"
+                android:textSize="12sp" />
         </LinearLayout>
 
 

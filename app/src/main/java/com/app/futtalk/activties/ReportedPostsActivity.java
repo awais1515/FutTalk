@@ -2,11 +2,6 @@ package com.app.futtalk.activties;
 
 import static com.app.futtalk.utils.FirebaseUtils.CURRENT_USER;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -15,12 +10,17 @@ import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.app.futtalk.R;
 import com.app.futtalk.adapters.FeedAdapter;
 import com.app.futtalk.models.FeedPost;
+import com.app.futtalk.models.Report;
 import com.app.futtalk.models.Team;
 import com.app.futtalk.utils.AdsHelper;
-import com.app.futtalk.utils.FirebaseUtils;
 import com.app.futtalk.utils.References;
 import com.app.futtalk.utils.Settings;
 import com.app.futtalk.utils.Utils;
@@ -29,16 +29,16 @@ import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class FeedPostActivity extends BaseActivity {
+public class ReportedPostsActivity extends BaseActivity {
 
     private Context context;
-    private Team team;
     private TextView tvTeamName;
     private CircleImageView ivProfilePic;
     private FeedAdapter feedAdapter;
@@ -55,12 +55,9 @@ public class FeedPostActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_feed_posts);
-        team = (Team) getIntent().getSerializableExtra("team");
+        setContentView(R.layout.activity_reported_posts);
         init();
-        setData();
-        fetchPostsData();
-        postChecker();
+        //postChecker();
         setListeners();
     }
 
@@ -71,11 +68,12 @@ public class FeedPostActivity extends BaseActivity {
         recyclerView = findViewById(R.id.recycler_view);
         feedPosts = new ArrayList<>();
         player = new ExoPlayer.Builder(context).build();
-        feedAdapter = new FeedAdapter(context, team, feedPosts, R.layout.row_feed, false);
+        feedAdapter = new FeedAdapter(context, null, feedPosts, R.layout.row_feed, true);
         recyclerView.setLayoutManager(new LinearLayoutManager(context));
         recyclerView.setAdapter(feedAdapter);
         progressBar = findViewById(R.id.progressBar);
         tvNoDataFound = findViewById(R.id.tvNoDataFound);
+        getReportsData();
         handler = new Handler();
         taskRunnable = new Runnable() {
             @Override
@@ -88,19 +86,6 @@ public class FeedPostActivity extends BaseActivity {
     }
 
     private void setListeners() {
-        findViewById(R.id.btnAddPost).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                AdsHelper.getInstance().showRewardedInterstitialAd(FeedPostActivity.this, new AdsHelper.AdWatchListener() {
-                    @Override
-                    public void onAdWatched() {
-                        Intent intent = new Intent(context, AddPostActivity.class);
-                        intent.putExtra("team", team);
-                        startActivity(intent);
-                    }
-                });
-            }
-        });
 
         findViewById(R.id.ivBack).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -110,35 +95,46 @@ public class FeedPostActivity extends BaseActivity {
         });
     }
 
-    private void setData() {
-        tvTeamName.setText(team.getName());
-        Utils.setPicture(this, ivProfilePic, CURRENT_USER.getProfileUrl());
-    }
 
-    private void fetchPostsData() {
-        FirebaseDatabase.getInstance().getReference(References.FEED).child(team.getName()).addChildEventListener(new ChildEventListener() {
+
+    private void getReportsData() {
+        FirebaseDatabase.getInstance().getReference(References.reports).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
-            public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-                isDataLoaded = true;
-                progressBar.setVisibility(View.GONE);
-                tvNoDataFound.setVisibility(View.GONE);
-                FeedPost feedPost = snapshot.getValue(FeedPost.class);
-                feedPost.setId(snapshot.getKey());
-                feedPosts.add(0, feedPost);
-                feedAdapter.notifyDataSetChanged();
-            }
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (!snapshot.hasChildren()) {
+                    progressBar.setVisibility(View.GONE);
+                    tvNoDataFound.setVisibility(View.VISIBLE);
+                }
+                for(DataSnapshot dataSnapshot: snapshot.getChildren()) {
+                    // for each reported post
+                    List<Report> reports = new ArrayList<>();
+                    for(DataSnapshot reportSnapShot : dataSnapshot.getChildren()) {
+                        Report report = reportSnapShot.getValue(Report.class);
+                        reports.add(report);
+                    }
 
-            @Override
-            public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+                    if (reports.size() > 0) {
+                        Report report1 = reports.get(0);
+                        FirebaseDatabase.getInstance().getReference(References.FEED).child(report1.getTeamName()).child(report1.getPostId()).addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                FeedPost feedPost = snapshot.getValue(FeedPost.class);
+                                feedPost.setReports(reports);
+                                isDataLoaded = true;
+                                progressBar.setVisibility(View.GONE);
+                                tvNoDataFound.setVisibility(View.GONE);
+                                feedPost.setId(dataSnapshot.getKey());
+                                feedPosts.add(feedPost);
+                                feedAdapter.notifyDataSetChanged();
+                            }
 
-            }
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError error) {
 
-            @Override
-            public void onChildRemoved(@NonNull DataSnapshot snapshot) {
-            }
-
-            @Override
-            public void onChildMoved(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+                            }
+                        });
+                    }
+                }
 
             }
 
@@ -149,7 +145,7 @@ public class FeedPostActivity extends BaseActivity {
         });
     }
 
-    private void postChecker() {
+    /*private void postChecker() {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -159,7 +155,7 @@ public class FeedPostActivity extends BaseActivity {
                 }
             }
         },15000);
-    }
+    }*/
 
 
 }

@@ -16,6 +16,9 @@
         android:theme="@style/Theme.FutTalk"
         tools:targetApi="31">
         <activity
+            android:name=".activties.ReportsDetailActivity"
+            android:exported="false" />
+        <activity
             android:name=".activties.SendReportActivity"
             android:exported="false" />
         <activity
@@ -115,6 +118,8 @@
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"
             android:value="ca-app-pub-4735596562347231~7238865844" />
+
+        <activity android:name=".activties.ReportedPostsActivity" />
     </application>
 
 </manifest>

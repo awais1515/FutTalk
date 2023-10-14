@@ -65,6 +65,7 @@
             android:layout_marginTop="10dp"/>
 
 
+
         <TextView
             android:id="@+id/tvAboutUs"
             android:layout_width="match_parent"
@@ -122,6 +123,20 @@
             android:layout_height="1dp"
             android:alpha="0.24"
             android:background="@color/white" />
+
+        <TextView
+            android:id="@+id/tvReports"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            android:drawableLeft="@drawable/ic_report"
+            android:drawablePadding="30dp"
+            android:fontFamily="@font/poppins_regular"
+            android:padding="10dp"
+            android:text="Reports"
+            android:textColor="@color/white"
+            android:textSize="12sp" />
+
 
 
     </LinearLayout>

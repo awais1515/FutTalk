@@ -1,5 +1,7 @@
 package com.app.futtalk.models;
 
+import com.google.firebase.database.Exclude;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -18,6 +20,8 @@ public class FeedPost implements Serializable{
     private List<Comment> comments = new ArrayList<>();
     private List<String> likes = new ArrayList<>();
     private StoryTypes storyType;
+    @Exclude
+    private List<Report> reports = new ArrayList<>();
 
 
     public String getId() {
@@ -88,5 +92,13 @@ public class FeedPost implements Serializable{
 
     public void setStoryType(StoryTypes storyType) {
         this.storyType = storyType;
+    }
+
+    public List<Report> getReports() {
+        return reports;
+    }
+
+    public void setReports(List<Report> reports) {
+        this.reports = reports;
     }
 }

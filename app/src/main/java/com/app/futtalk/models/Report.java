@@ -1,11 +1,14 @@
 package com.app.futtalk.models;
 
-public class Report {
+import java.io.Serializable;
+
+public class Report implements Serializable {
     private String id;
     private String reporterId;
     private String postId;
     private String reason;
     private String dateTime;
+    private String teamName;
 
     public String getId() {
         return id;
@@ -45,5 +48,13 @@ public class Report {
 
     public void setDateTime(String dateTime) {
         this.dateTime = dateTime;
+    }
+
+    public String getTeamName() {
+        return teamName;
+    }
+
+    public void setTeamName(String teamName) {
+        this.teamName = teamName;
     }
 }

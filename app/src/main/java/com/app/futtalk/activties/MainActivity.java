@@ -34,6 +34,9 @@ import com.app.futtalk.fragments.TeamsFragment;
 import com.app.futtalk.models.FeedPost;
 import com.app.futtalk.utils.AdsHelper;
 import com.app.futtalk.utils.DataHelper;
+import com.app.futtalk.utils.FirebaseUtils;
+import com.app.futtalk.utils.References;
+import com.app.futtalk.utils.Utils;
 import com.bumptech.glide.Glide;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.LoadAdError;
@@ -46,8 +49,11 @@ import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -80,11 +86,14 @@ public class MainActivity extends BaseActivity {
     private TextView tvName;
     private TextView tvEmail;
 
+    private TextView tvReports;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         init();
+        loadReports();
         List<FeedPost> featuredPosts = DataHelper.getSharedFeaturedPostsList();
         setCurrentUserData();
         setListeners();
@@ -99,6 +108,7 @@ public class MainActivity extends BaseActivity {
         tvName = findViewById(R.id.tvName);
         tvEmail = findViewById(R.id.tvEmail);
         tvLogout = findViewById(R.id.tvLogout);
+        tvReports = findViewById(R.id.tvReports);
         tvScreenTitle = findViewById(R.id.tvScreenTitle);
         ivProfilePic = findViewById(R.id.ivProfilePic);
         btnViewProfile = findViewById(R.id.btnViewProfile);
@@ -220,6 +230,17 @@ public class MainActivity extends BaseActivity {
             }
         });
 
+        if (DataHelper.isAdmin()) {
+            tvReports.setVisibility(View.VISIBLE);
+            tvReports.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    startActivity(new Intent(context, ReportedPostsActivity.class));
+                }
+            });
+        }
+
+
         btnAddNewTeam.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -321,6 +342,20 @@ public class MainActivity extends BaseActivity {
             }
 
         }
+    }
+
+    private void loadReports() {
+        FirebaseDatabase.getInstance().getReference(References.reports).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                tvReports.setText("Reports ("+snapshot.getChildrenCount()+")");
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
     }
 
 
