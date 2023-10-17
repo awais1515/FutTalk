@@ -1,33 +1,34 @@
 {
   "project_info": {
-    "project_number": "829308165235",
-    "project_id": "futtalk-795b7",
-    "storage_bucket": "futtalk-795b7.appspot.com"
+    "project_number": "280484951518",
+    "firebase_url": "https://futtalk-dced2-default-rtdb.firebaseio.com",
+    "project_id": "futtalk-dced2",
+    "storage_bucket": "futtalk-dced2.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:829308165235:android:0ee7cef01159abff7a1e06",
+        "mobilesdk_app_id": "1:280484951518:android:d8bdafa6ba2eeed49e594f",
         "android_client_info": {
           "package_name": "com.app.futtalk"
         }
       },
       "oauth_client": [
         {
-          "client_id": "829308165235-k1ahfle4oaqrrbctllua9aat2f69a8uj.apps.googleusercontent.com",
+          "client_id": "280484951518-68jru76n6hisv9brpmkii80sn73a6ect.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyCNNh8lVyue9-mIWOqqfM4R0EwpdVNv62s"
+          "current_key": "AIzaSyCLVp3hm1lz0G2HKGj680kdpFOtksCjU3Q"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "829308165235-k1ahfle4oaqrrbctllua9aat2f69a8uj.apps.googleusercontent.com",
+              "client_id": "280484951518-68jru76n6hisv9brpmkii80sn73a6ect.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
