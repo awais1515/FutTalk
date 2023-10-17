@@ -110,7 +110,10 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.MyHolder> {
             holder.rlAttachmentContainer.setVisibility(View.VISIBLE);
             holder.ivStoryImage.setVisibility(View.VISIBLE);
             holder.ivPlay.setVisibility(View.GONE);
-            holder.switchFeatured.setVisibility(View.GONE);
+            //holder.switchFeatured.setVisibility(View.GONE);
+            if (DataHelper.isAdmin()) {
+                holder.switchFeatured.setVisibility(View.VISIBLE);
+            }
         } else if (feedPost.getStoryType() == StoryTypes.VideoStory) {
             holder.rlAttachmentContainer.setVisibility(View.VISIBLE);
             holder.ivStoryImage.setVisibility(View.VISIBLE);

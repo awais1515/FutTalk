@@ -2,6 +2,7 @@ package com.app.futtalk.fragments;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -68,6 +69,9 @@ public class HomeFragment extends Fragment {
         sliderView = getView().findViewById(R.id.slider);
         sliderAdapter = new SliderAdapter(context);
         sliderView.startAutoCycle();
+        sliderView.setIndicatorVisibility(false);
+        sliderView.setIndicatorSelectedColor(Color.TRANSPARENT);
+        sliderView.setIndicatorUnselectedColor(Color.TRANSPARENT);
         sliderView.setSliderTransformAnimation(SliderAnimations.SIMPLETRANSFORMATION);
 
     }

@@ -26,6 +26,8 @@ import com.app.futtalk.models.LeagueInfo;
 import com.app.futtalk.models.Team;
 import com.app.futtalk.utils.DataHelper;
 import com.app.futtalk.utils.References;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
 import com.google.firebase.database.DataSnapshot;
@@ -102,14 +104,15 @@ public class TeamSelectionActivity extends BaseActivity {
 
     }
 
-    private void loadData(League league) {
+    private void loadDataFromApi(League league) {
         DataHelper.getAllTeamsFromApi(league.getId(), 2023, new TeamsDataListener() {
             @Override
             public void onTeamsLoaded(List<Team> teamSelectionList) {
                 for (Team team : teamSelectionList) {
                     team.setLeague(league);
                 }
-                allTeams.addAll(teamSelectionList);
+                uploadTeamsToFirebase(league, teamSelectionList);
+                allTeams.addAll(teamSelectionList);;
                 filteredTeams.addAll(teamSelectionList);
                 teamsSelectionAdapter.setTeamsSelectionList(allTeams);
                 closeProgressDialog();
@@ -125,6 +128,44 @@ public class TeamSelectionActivity extends BaseActivity {
 
     }
 
+    private void loadDataFromFirebase(League league) {
+        FirebaseDatabase.getInstance().getReference(References.TEAMS).child(league.getId()+"").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                List<Team> teamSelectionList = new ArrayList<>();
+                for (DataSnapshot dataSnapshot: snapshot.getChildren()) {
+                    Team team = dataSnapshot.getValue(Team.class);
+                    teamSelectionList.add(team);
+                }
+                allTeams.addAll(teamSelectionList);;
+                filteredTeams.addAll(teamSelectionList);
+                teamsSelectionAdapter.setTeamsSelectionList(allTeams);
+                closeProgressDialog();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
+
+    private void uploadTeamsToFirebase(League league, List<Team> teams) {
+        if (DataHelper.isAdmin()) {
+            FirebaseDatabase.getInstance().getReference(References.TEAMS).child(league.getId()+"").setValue(teams).addOnCompleteListener(new OnCompleteListener<Void>() {
+                @Override
+                public void onComplete(@NonNull Task<Void> task) {
+                    if (task.isSuccessful()) {
+                        Toast.makeText(context, "successfully uploaded " + league.getName() + " teams", Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(context, "failed to upload leagues " + league.getName() + " teams", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            });
+        }
+
+    }
+
     private void loadLeaguesFromFirebase() {
         FirebaseDatabase.getInstance().getReference(USERS).child(CURRENT_USER.getId()).child(References.FOLLOW_LEAGUES).addValueEventListener(new ValueEventListener() {
             @Override
@@ -133,7 +174,11 @@ public class TeamSelectionActivity extends BaseActivity {
                 for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
                     LeagueInfo league = dataSnapshot.getValue(LeagueInfo.class);
                     leagueList.add(league);
-                    loadData(league.getLeague());
+                    if (DataHelper.isAdmin()) {
+                        loadDataFromApi(league.getLeague());
+                    } else {
+                        loadDataFromFirebase(league.getLeague());
+                    }
                 }
                 addChips();
             }

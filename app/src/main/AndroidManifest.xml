@@ -16,6 +16,9 @@
         android:theme="@style/Theme.FutTalk"
         tools:targetApi="31">
         <activity
+            android:name=".activties.FullImageViewActivity"
+            android:exported="false" />
+        <activity
             android:name=".activties.ReportsDetailActivity"
             android:exported="false" />
         <activity

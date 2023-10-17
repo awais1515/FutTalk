@@ -1,26 +1,27 @@
 package com.app.futtalk.activties;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.app.futtalk.R;
 import com.app.futtalk.adapters.LeaguesAdapter;
-import com.app.futtalk.api.CountriesDataListener;
 import com.app.futtalk.api.LeaguesInfoDataListener;
-import com.app.futtalk.models.Country;
-import com.app.futtalk.models.League;
 import com.app.futtalk.models.LeagueInfo;
 import com.app.futtalk.utils.DataHelper;
+import com.app.futtalk.utils.References;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -47,7 +48,11 @@ public class LeaguesSelectionActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_leagues_selection);
         init();
-       loadLeagues();
+        if (DataHelper.isAdmin()) {
+            loadLeaguesFromApi();
+        } else {
+            loadLeaguesFromFirebase();
+        }
        setListeners();
     }
 
@@ -99,8 +104,28 @@ public class LeaguesSelectionActivity extends AppCompatActivity {
         return filteredList;
     }
 
+    private void loadLeaguesFromFirebase() {
+        FirebaseDatabase.getInstance().getReference(References.LEAGUES).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                allLeagues = new ArrayList<>();
+               for (DataSnapshot dataSnapshot: snapshot.getChildren()) {
+                   LeagueInfo league = dataSnapshot.getValue(LeagueInfo.class);
+                   allLeagues.add(league);
+               }
+                leaguesAdapter = new LeaguesAdapter(context, allLeagues, R.layout.row_league_selection, true);
+                recyclerViewLeaguesSelection.setAdapter(leaguesAdapter);
+            }
 
-    private void loadLeagues() {
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
+
+
+    private void loadLeaguesFromApi() {
         DataHelper.getLeaguesFromApi(2023, new LeaguesInfoDataListener() {
             @Override
             public void onLeaguesLoaded(List<LeagueInfo> leagueList) {
@@ -114,7 +139,7 @@ public class LeaguesSelectionActivity extends AppCompatActivity {
                 Toast.makeText(context, message, Toast.LENGTH_LONG).show();
             }
         });
-
     }
+
 
 }

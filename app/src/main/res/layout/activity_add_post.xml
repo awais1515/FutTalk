@@ -96,13 +96,14 @@
 
             <ImageView
                 android:id="@+id/ivSelectPicture"
-                android:layout_toStartOf="@id/ivSelectVideo"
+                android:layout_alignParentRight="true"
                 android:src="@drawable/ic_select_picture"
                 android:layout_width="18dp"
                 android:layout_marginRight="16dp"
                 android:layout_height="18dp"/>
 
             <ImageView
+                android:visibility="invisible"
                 android:id="@+id/ivSelectVideo"
                 android:layout_alignParentRight="true"
                 android:src="@drawable/ic_select_video"

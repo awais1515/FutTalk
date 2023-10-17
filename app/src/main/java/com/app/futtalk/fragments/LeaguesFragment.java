@@ -22,7 +22,10 @@ import com.app.futtalk.R;
 import com.app.futtalk.adapters.LeaguesAdapter;
 import com.app.futtalk.models.LeagueInfo;
 import com.app.futtalk.utils.AdsHelper;
+import com.app.futtalk.utils.DataHelper;
 import com.app.futtalk.utils.References;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
@@ -85,6 +88,7 @@ public class LeaguesFragment extends Fragment {
                     tvNoDataFound.setVisibility(View.VISIBLE);
                 } else {
                     tvNoDataFound.setVisibility(View.GONE);
+                    uploadLeaguesToFirebase(leagueList);
                 }
 
             }
@@ -94,6 +98,22 @@ public class LeaguesFragment extends Fragment {
                 Toast.makeText(context, error.getMessage(), Toast.LENGTH_LONG).show();
             }
         });
+
+    }
+
+    private void uploadLeaguesToFirebase(List<LeagueInfo> leagueInfoList) {
+        if (DataHelper.isAdmin()) {
+            FirebaseDatabase.getInstance().getReference(References.LEAGUES).setValue(leagueInfoList).addOnCompleteListener(new OnCompleteListener<Void>() {
+                @Override
+                public void onComplete(@NonNull Task<Void> task) {
+                    if (task.isSuccessful()) {
+                        Toast.makeText(context, "successfully uploaded", Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(context, "failed to upload leagues", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            });
+        }
 
     }
 

@@ -11,6 +11,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.app.futtalk.R;
+import com.app.futtalk.activties.FullImageViewActivity;
 import com.app.futtalk.activties.VideoPlayerActivity;
 import com.app.futtalk.models.FeedPost;
 import com.bumptech.glide.Glide;
@@ -65,7 +66,7 @@ public class SliderAdapter extends SliderViewAdapter<SliderAdapter.SliderAdapter
             @Override
             public void onClick(View v) {
                // Toast.makeText(context, "This is item in position " + position, Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent(context, VideoPlayerActivity.class);
+                Intent intent = new Intent(context, FullImageViewActivity.class);
                 intent.putExtra("feed_post", sliderItem);
                 context.startActivity(intent);
             }

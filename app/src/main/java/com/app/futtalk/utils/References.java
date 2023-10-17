@@ -5,6 +5,8 @@ public class References {
     public static String FEED = "feed";
     public static String COMMENTS = "comments";
     public static String reports = "reports";
+    public static String LEAGUES = "leagues";
+    public static String TEAMS = "teams";
 
     public static String FOLLOW_TEAMS = "follow_teams";
     public static String FOLLOW_LEAGUES = "follow_leagues";
