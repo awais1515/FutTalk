@@ -136,8 +136,9 @@ public class SignupActivity extends BaseActivity {
                                 @Override
                                 public void onComplete(@NonNull Task<Void> task) {
                                     if(task.isSuccessful()){
-                                        Intent intent = new Intent(context, MainActivity.class);
+                                        Intent intent = new Intent(context, LoginActivity.class);
                                         startActivity(intent);
+                                        finish();
                                         showToastMessage("Account Successfully created");
                                     } else{
                                         showToastMessage("Failed to print user data, please contact support");
