@@ -34,11 +34,12 @@
     </RelativeLayout>
 
     <ScrollView
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="10dp"
         android:layout_below="@id/RelativeLayoutTopBar"
         android:layout_width="match_parent"
         android:scrollbars="none"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:padding="10dp">
 
     <LinearLayout
         android:orientation="vertical"
@@ -49,9 +50,36 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:fontFamily="@font/poppins_light"
-        android:text="@string/lorem_text"
+        android:text="     At Futtalk, we protect all user data and personal information. We collect information provided directly, including your name, email address, and any other information you voluntarily provide. When you use our app, we may collect certain information: device information, log data, analytics, and data related to advertisements."
         android:textColor="@color/white"
         android:textSize="16sp" />
+
+        <TextView
+            android:layout_marginTop="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/poppins_light"
+            android:text="     We use the information provided for various purposes to help provide and maintain the application, personalize your experience, and help deliver optimal advertisements. Importantly, we take considerable measures to protect your data, but no data transmission or storage is completely secure. By using this application, you are away and accept these risks."
+            android:textColor="@color/white"
+            android:textSize="16sp" />
+
+        <TextView
+            android:layout_marginTop="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/poppins_light"
+            android:text="     We may disclose your information in the following circumstances: consent, to comply with legal obligations, and to protect our privacy and safety. Our application also contains advertisements provided by third-party ad networks. These third-party networks may collect information to display targeted ads. Lastly, you can manage your settings through the account settings. Our app is not intended for users under the age of 17. We do not knowingly collect or solicit personal information from anyone under this age range."
+            android:textColor="@color/white"
+            android:textSize="16sp" />
+
+        <TextView
+            android:layout_marginTop="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/poppins_light"
+            android:text="If you have any further questions, please contact us!"
+            android:textColor="@color/white"
+            android:textSize="16sp" />
     </LinearLayout>
     </ScrollView>
 </RelativeLayout>

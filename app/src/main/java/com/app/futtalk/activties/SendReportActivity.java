@@ -3,8 +3,6 @@ package com.app.futtalk.activties;
 import static com.app.futtalk.utils.FirebaseUtils.CURRENT_USER;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -12,26 +10,24 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.app.futtalk.R;
-import com.app.futtalk.adapters.FeedAdapter;
-import com.app.futtalk.adapters.TeamsAdapter;
 import com.app.futtalk.models.FeedPost;
 import com.app.futtalk.models.Report;
 import com.app.futtalk.models.Team;
-import com.app.futtalk.utils.FirebaseUtils;
+import com.app.futtalk.models.User;
 import com.app.futtalk.utils.References;
-import com.google.android.exoplayer2.ExoPlayer;
+import com.app.futtalk.utils.Utils;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.Date;
-import java.util.List;
 
 public class SendReportActivity extends BaseActivity {
     
@@ -39,6 +35,14 @@ public class SendReportActivity extends BaseActivity {
     FeedPost feedPost;
     ImageView ivBack;
     Team team;
+
+    TextView tvPostStory;
+
+    TextView tvTimePassed;
+
+    TextView tvUserName;
+
+    ImageView ivProfilePic;
 
     Button submitReport;
     private Context context;
@@ -51,6 +55,7 @@ public class SendReportActivity extends BaseActivity {
         team = (Team) getIntent().getSerializableExtra("team");
         init();
         setListeners();
+        setPostData();
 
     }
 
@@ -59,6 +64,9 @@ public class SendReportActivity extends BaseActivity {
         ivBack= findViewById(R.id.ivBackArrow);
         etWriteComplaint= findViewById(R.id.etReport);
         submitReport = findViewById(R.id.btnSubmitReport);
+        tvTimePassed = findViewById(R.id.tvTimeAgo);
+        tvUserName = findViewById(R.id.tvName);
+        ivProfilePic = findViewById(R.id.ivProfilePic);
 
     }
 
@@ -125,4 +133,24 @@ public class SendReportActivity extends BaseActivity {
             }
         });
     }
+
+    private void setPostData() {
+        tvPostStory = findViewById(R.id.tvStory);
+        tvPostStory.setText(feedPost.getText());
+        tvTimePassed.setText(Utils.getTimeAgo(feedPost.getDateTime()));
+        FirebaseDatabase.getInstance().getReference(References.USERS).child(feedPost.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                User user = snapshot.getValue(User.class);
+                tvUserName.setText(user.getFirstName());
+                Utils.setPicture(context,ivProfilePic, user.getProfileUrl());
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
+
 }

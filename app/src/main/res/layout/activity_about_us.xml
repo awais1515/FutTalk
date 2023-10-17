@@ -33,11 +33,14 @@
             android:textSize="21sp" />
     </RelativeLayout>
     <ScrollView
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="10dp"
         android:layout_below="@id/RelativeLayoutTopBar"
         android:layout_width="match_parent"
         android:scrollbars="none"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:paddingLeft="12dp"
+        android:paddingRight="12dp"
+        android:paddingBottom="12dp">
 
         <LinearLayout
             android:orientation="vertical"
@@ -48,7 +51,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/poppins_light"
-                android:text="@string/lorem_text"
+                android:text="     Welcome to FUTTalk, the ultimate destination for the football fanbase! At FutTalk, we are passionate about football and understand the unique bond that connects fans worldwide. Our vision is to bring football fans together on a single platform where they can share their passion, engage in vibrant discussions, and stay up-to-date with the latest football news. We aim to foster a sense of belonging and create lasting connections among fans from vast areas around the globe."
                 android:textColor="@color/white"
                 android:textSize="16sp" />
 
@@ -57,7 +60,7 @@
                 android:textColor="@color/white"
                 android:textSize="16sp"
                 android:fontFamily="@font/poppins_light"
-                android:text="@string/lorem_text"
+                android:text="     Our application consists of three main features. First, we offer a way for fans to stay updated with live scores of their favorite teams and thus be notified of upcoming fixtures for their squad. We have a live feed where the community can post videos or images from their favorite club, Lastly, we include featured posts to help the community stay up to date with football news."
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
 
@@ -66,25 +69,17 @@
                 android:textColor="@color/white"
                 android:textSize="16sp"
                 android:fontFamily="@font/poppins_light"
-                android:text="@string/lorem_text"
+                android:text="     Lastly, our platform aims to elevate your passion for the sport, while creating an interactive and user-friendly platform, designed specifically for the fans to enjoy the football experience."
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
+
 
             <TextView
                 android:layout_marginTop="20dp"
                 android:textColor="@color/white"
                 android:textSize="16sp"
                 android:fontFamily="@font/poppins_light"
-                android:text="@string/lorem_text"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
-
-            <TextView
-                android:layout_marginTop="20dp"
-                android:textColor="@color/white"
-                android:textSize="16sp"
-                android:fontFamily="@font/poppins_light"
-                android:text="@string/lorem_text"
+                android:text="     Thank you for choosing FUTTalk. We offer you a warm welcome to our community and hope you enjoy every moment you spend on this platform. Our team is available for support at any moment, so don’t hesitate to ask questions or reach out for any concerns you may have."
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
 
