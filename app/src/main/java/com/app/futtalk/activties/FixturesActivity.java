@@ -11,6 +11,7 @@ import com.app.futtalk.R;
 import com.app.futtalk.adapters.FixturesAdapter;
 import com.app.futtalk.api.UpcomingFixturesListener;
 import com.app.futtalk.models.FixtureData;
+import com.app.futtalk.models.Team;
 import com.app.futtalk.utils.DataHelper;
 
 import java.util.List;
@@ -20,6 +21,8 @@ public class FixturesActivity extends BaseActivity {
     private Context context;
     private RecyclerView recyclerViewLiveMatches;
     private FixturesAdapter fixturesAdapter;
+    private Team team;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,6 +33,8 @@ public class FixturesActivity extends BaseActivity {
         recyclerViewLiveMatches.setLayoutManager((new LinearLayoutManager(this)));
         setListeners();
         loadData();
+        team = (Team) getIntent().getSerializableExtra("team");
+
     }
 
     private void setListeners() {

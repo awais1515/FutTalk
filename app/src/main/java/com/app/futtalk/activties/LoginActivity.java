@@ -2,6 +2,10 @@ package com.app.futtalk.activties;
 
 import static com.app.futtalk.utils.FirebaseUtils.CURRENT_USER;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
@@ -22,9 +26,13 @@ import com.app.futtalk.models.FeedPost;
 import com.app.futtalk.models.FixtureData;
 import com.app.futtalk.models.User;
 import com.app.futtalk.utils.DataHelper;
+import com.app.futtalk.utils.FirebaseUtils;
 import com.app.futtalk.utils.References;
+import com.google.android.gms.auth.api.identity.SignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -57,7 +65,7 @@ public class LoginActivity extends BaseActivity {
 
     ProgressDialog progressDialog;
 
-    // private GoogleSignInClient googleSignInClient=
+
     private FirebaseAuth mAuth;
 
     @Override
@@ -66,6 +74,8 @@ public class LoginActivity extends BaseActivity {
         setContentView(R.layout.activity_login);
         init();
         setListeners();
+        signInWithGoogle();
+
     }
 
     private void init() {
@@ -81,6 +91,7 @@ public class LoginActivity extends BaseActivity {
         progressDialog.setCancelable(false);
         mAuth = FirebaseAuth.getInstance();
 
+
       /*  GoogleSignInOptions googleSignInOptions = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(GOOGLE_CLIENT_ID)
                 .requestEmail()
@@ -89,6 +100,8 @@ public class LoginActivity extends BaseActivity {
         // Initialize sign in client
         googleSignInClient = GoogleSignIn.getClient(LoginActivity.this, googleSignInOptions);
 */
+
+
     }
 
     private void setListeners() {
@@ -126,14 +139,7 @@ public class LoginActivity extends BaseActivity {
                 Intent intent = new Intent(context, ForgotPasswordActivity.class);
             }
         });
-        /* btnGoogle_SignIn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                 Intent intent = googleSignInClient.getSignInIntent();
-                startActivityForResult(intent, 100);
-            }
 
-        });*/
     }
 
     private void login(String email, String password, FirebaseAuth mAuth) {
@@ -274,4 +280,59 @@ public class LoginActivity extends BaseActivity {
         Log.d("ToastMessage", message);
     }
 
+    private void signInWithGoogle(){
+        GoogleSignInOptions googleSignInOptions= new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestEmail()
+                .build();
+        GoogleSignInClient googleSignInClient = GoogleSignIn.getClient(this, googleSignInOptions);
+
+        GoogleSignInAccount googleSignInAccount = GoogleSignIn.getLastSignedInAccount(this);
+
+        if (googleSignInAccount != null){
+            FirebaseAuth mAuth = FirebaseAuth.getInstance();
+            AuthCredential credential = GoogleAuthProvider.getCredential(googleSignInAccount.getIdToken(), null);
+            mAuth.signInWithCredential(credential)
+                    .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                        @Override
+                        public void onComplete(@NonNull Task<AuthResult> task) {
+                            if (task.isSuccessful()) {
+                                getCurrentUserData();
+                            } else {
+                                // Handle sign-in failure
+                                progressDialog.dismiss();
+                                showToastMessage("Google Sign-In failed.");
+                            }
+                        }
+                    });
+        }
+
+        ActivityResultLauncher<Intent> activityResultLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
+            @Override
+            public void onActivityResult(ActivityResult result) {
+                Task <GoogleSignInAccount> task= GoogleSignIn.getSignedInAccountFromIntent(result.getData());
+                handleSignInTask(task);
+            }
+        });
+
+        btnGoogle_SignIn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = googleSignInClient.getSignInIntent();
+                activityResultLauncher.launch(intent);
+            }
+
+        });
+    }
+
+    private void handleSignInTask(Task<GoogleSignInAccount> task){
+        try {
+
+            GoogleSignInAccount account = task.getResult(ApiException.class);
+            startActivity(new Intent(LoginActivity.this, MainActivity.class));
+            finish();
+        } catch (ApiException e) {
+            throw new RuntimeException(e);
+        }
+
+    }
 }

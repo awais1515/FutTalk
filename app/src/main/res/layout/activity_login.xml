@@ -107,20 +107,9 @@ android:background="@drawable/app_bg"
         android:fontFamily="@font/poppins_semi_bold"
         android:textSize="17sp"
         android:layout_centerHorizontal="true"/>
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:fontFamily="@font/poppins_regular"
-        android:textSize="15dp"
-        android:text="Don't have an Account?"
-        android:textColor="@color/white"
-        android:layout_gravity="center"
-        android:layout_below="@+id/btnSignUp"
-        android:id="@+id/Text_Other_Options"/>
-</LinearLayout>
+
 <RelativeLayout
-    android:paddingLeft="20dp"
-    android:paddingRight="20dp"
+
     android:paddingTop="10dp"
     android:paddingBottom="10dp"
     android:layout_below="@id/LinearLayout"
@@ -139,14 +128,25 @@ android:background="@drawable/app_bg"
         android:backgroundTint="@color/red_main"
         />
 
+    <TextView
+        android:layout_below="@id/btnGoogleLogin"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/poppins_regular"
+        android:textSize="15dp"
+        android:layout_centerHorizontal="true"
+        android:text="Don't have an Account?"
+        android:textColor="@color/white"
+        android:layout_marginTop="10dp"
+        android:id="@+id/Text_Other_Options"/>
+
 
     <Button
         android:id="@+id/btnCreateAccount"
         android:layout_width="match_parent"
         android:layout_height="54dp"
-        android:layout_below="@+id/btnGoogleLogin"
-
-        android:layout_marginTop="34dp"
+        android:layout_below="@+id/Text_Other_Options"
+        android:layout_marginTop="20dp"
         android:layout_marginBottom="20dp"
         android:backgroundTint="@color/green_main"
         android:fontFamily="@font/poppins_semi_bold"
@@ -157,6 +157,8 @@ android:background="@drawable/app_bg"
 
 
 </RelativeLayout>
+</LinearLayout>
+
 
 </RelativeLayout>
 
