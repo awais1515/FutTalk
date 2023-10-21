@@ -1,164 +1,162 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-xmlns:app="http://schemas.android.com/apk/res-auto"
-xmlns:tools="http://schemas.android.com/tools"
-android:layout_width="fill_parent"
-android:layout_height="fill_parent"
-android:clipToPadding="true"
-android:background="@drawable/app_bg"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:clipToPadding="true"
+    android:background="@drawable/app_bg"
     >
 
 
-<RelativeLayout
-    android:id="@+id/circle"
-    android:layout_width="270dp"
-    android:layout_marginTop="-100dp"
-    android:layout_marginLeft="-100dp"
-    android:layout_height="270dp">
+    <RelativeLayout
+        android:id="@+id/circle"
+        android:layout_width="270dp"
+        android:layout_marginTop="-100dp"
+        android:layout_marginLeft="-100dp"
+        android:layout_height="270dp">
 
-    <ImageView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:clipChildren="true"
-        android:src="@drawable/ic_soccerball"
-        app:tint="@color/white"/>
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:clipChildren="true"
+            android:src="@drawable/ic_soccerball"
+            app:tint="@color/white"/>
 
-</RelativeLayout>
-<RelativeLayout
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"/>
-<TextView
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_marginTop="100dp"
-    android:layout_marginStart="200dp"
-    android:layout_marginBottom="100dp"
-    android:fontFamily="@font/poppins_bold"
-    android:gravity="center"
-    android:text="@string/sign_in"
-    android:textColor="@color/white"
-    android:textSize="30sp" />
-<LinearLayout
-    android:paddingLeft="30dp"
-    android:paddingRight="30dp"
-    android:orientation="vertical"
-    android:layout_below="@id/circle"
-    android:layout_marginTop="10dp"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:id="@+id/LinearLayout">
-
-
-
-    <EditText
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:maxLength="50"
-        android:layout_marginTop="10dp"
-        android:hint="@string/username"
-        android:text=""
-        android:inputType="textEmailAddress"
-        android:fontFamily="@font/poppins_semi_bold"
-        android:textSize="15sp"
-        android:backgroundTint="@color/white"
-        android:textColorHint="@color/white"
-        android:textColor="@color/white"
-        android:id="@+id/etEmail"
-        />
-
-    <EditText
-        android:id="@+id/etPassword"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="@string/password"
-        android:maxLength="30"
-        android:text=""
-        android:layout_marginTop="10dp"
-        android:inputType="textPassword"
-        android:fontFamily="@font/poppins_semi_bold"
-        android:textSize="15sp"
-        android:backgroundTint="@color/white"
-        android:textColorHint="@color/white"
-        android:textColor="@color/white"
-        />
-
-
+    </RelativeLayout>
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/forgot_password"
-        android:fontFamily="@font/poppins_regular"
-        android:textColor="@color/white"
-        android:layout_below="@+id/btnPassword"
-        android:layout_gravity="right"
-        android:id="@+id/tvForgotPassword"/>
-
-    <Button
-        android:id="@+id/btnLogin"
-        android:layout_below="@+id/tvForgotPassword"
-        android:layout_width="match_parent"
-        android:layout_height="54dp"
-        android:layout_alignParentBottom="true"
-        android:backgroundTint="@color/green_main"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="100dp"
+        android:layout_marginStart="200dp"
+        android:layout_marginBottom="100dp"
+        android:fontFamily="@font/poppins_bold"
+        android:gravity="center"
         android:text="@string/sign_in"
         android:textColor="@color/white"
-        android:layout_marginBottom="24dp"
-        android:fontFamily="@font/poppins_semi_bold"
-        android:textSize="17sp"
-        android:layout_centerHorizontal="true"/>
-
-<RelativeLayout
-
-    android:paddingTop="10dp"
-    android:paddingBottom="10dp"
-    android:layout_below="@id/LinearLayout"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
-
-    <Button
-        android:id="@+id/btnGoogleLogin"
-        android:layout_width="match_parent"
-        android:drawableLeft="@drawable/ic_google"
-        android:layout_height="54dp"
-        android:text="Sign in with Google"
-        android:textSize="17sp"
-        android:fontFamily="@font/poppins_semi_bold"
-        android:textColor="@color/white"
-        android:backgroundTint="@color/red_main"
-        />
-
-    <TextView
-        android:layout_below="@id/btnGoogleLogin"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:fontFamily="@font/poppins_regular"
-        android:textSize="15dp"
-        android:layout_centerHorizontal="true"
-        android:text="Don't have an Account?"
-        android:textColor="@color/white"
+        android:textSize="30sp" />
+    <LinearLayout
+        android:paddingLeft="30dp"
+        android:paddingRight="30dp"
+        android:orientation="vertical"
+        android:layout_below="@id/circle"
         android:layout_marginTop="10dp"
-        android:id="@+id/Text_Other_Options"/>
-
-
-    <Button
-        android:id="@+id/btnCreateAccount"
         android:layout_width="match_parent"
-        android:layout_height="54dp"
-        android:layout_below="@+id/Text_Other_Options"
-        android:layout_marginTop="20dp"
-        android:layout_marginBottom="20dp"
-        android:backgroundTint="@color/green_main"
-        android:fontFamily="@font/poppins_semi_bold"
-        android:outlineSpotShadowColor="@color/green_main"
-        android:text="Create Account"
-        android:textColor="@color/white"
-        android:textSize="17sp" />
+        android:layout_height="wrap_content"
+        android:id="@+id/LinearLayout">
 
 
-</RelativeLayout>
-</LinearLayout>
 
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:maxLength="50"
+            android:layout_marginTop="10dp"
+            android:hint="@string/username"
+            android:text=""
+            android:inputType="textEmailAddress"
+            android:fontFamily="@font/poppins_semi_bold"
+            android:textSize="15sp"
+            android:backgroundTint="@color/white"
+            android:textColorHint="@color/white"
+            android:textColor="@color/white"
+            android:id="@+id/etEmail"
+            />
+
+        <EditText
+            android:id="@+id/etPassword"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/password"
+            android:maxLength="30"
+            android:text=""
+            android:layout_marginTop="10dp"
+            android:inputType="textPassword"
+            android:fontFamily="@font/poppins_semi_bold"
+            android:textSize="15sp"
+            android:backgroundTint="@color/white"
+            android:textColorHint="@color/white"
+            android:textColor="@color/white"
+            />
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/forgot_password"
+            android:fontFamily="@font/poppins_regular"
+            android:textColor="@color/white"
+            android:layout_below="@+id/btnPassword"
+            android:layout_gravity="right"
+            android:id="@+id/tvForgotPassword"/>
+
+        <Button
+            android:id="@+id/btnLogin"
+            android:layout_below="@+id/tvForgotPassword"
+            android:layout_width="match_parent"
+            android:layout_height="54dp"
+            android:layout_alignParentBottom="true"
+            android:backgroundTint="@color/green_main"
+            android:layout_marginTop="20dp"
+            android:text="@string/sign_in"
+            android:textColor="@color/white"
+            android:layout_marginBottom="24dp"
+            android:fontFamily="@font/poppins_semi_bold"
+            android:textSize="17sp"
+            android:layout_centerHorizontal="true"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/poppins_regular"
+            android:textSize="15dp"
+            android:text="Don't have an Account?"
+            android:textColor="@color/white"
+            android:layout_gravity="center"
+            android:layout_below="@+id/btnSignUp"
+            android:id="@+id/Text_Other_Options"/>
+    </LinearLayout>
+    <RelativeLayout
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+        android:layout_below="@id/LinearLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <Button
+            android:id="@+id/btnGoogleLogin"
+            android:layout_width="match_parent"
+            android:drawableLeft="@drawable/ic_google"
+            android:layout_height="54dp"
+            android:text="Sign in with Google"
+            android:textSize="17sp"
+            android:fontFamily="@font/poppins_semi_bold"
+            android:textColor="@color/white"
+            android:backgroundTint="@color/red_main"
+            />
+
+
+        <Button
+            android:id="@+id/btnCreateAccount"
+            android:layout_width="match_parent"
+            android:layout_height="54dp"
+            android:layout_below="@+id/btnGoogleLogin"
+
+            android:layout_marginTop="34dp"
+            android:layout_marginBottom="20dp"
+            android:backgroundTint="@color/green_main"
+            android:fontFamily="@font/poppins_semi_bold"
+            android:outlineSpotShadowColor="@color/green_main"
+            android:text="Create Account"
+            android:textColor="@color/white"
+            android:textSize="17sp" />
+
+
+    </RelativeLayout>
 
 </RelativeLayout>
 
