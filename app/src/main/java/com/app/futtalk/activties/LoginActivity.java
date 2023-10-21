@@ -25,6 +25,8 @@ import com.app.futtalk.utils.DataHelper;
 import com.app.futtalk.utils.References;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -57,8 +59,9 @@ public class LoginActivity extends BaseActivity {
 
     ProgressDialog progressDialog;
 
-    // private GoogleSignInClient googleSignInClient=
+    private GoogleSignInClient googleSignInClient;
     private FirebaseAuth mAuth;
+    public static final String GOOGLE_CLIENT_ID = "280484951518-68jru76n6hisv9brpmkii80sn73a6ect.apps.googleusercontent.com";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,14 +84,14 @@ public class LoginActivity extends BaseActivity {
         progressDialog.setCancelable(false);
         mAuth = FirebaseAuth.getInstance();
 
-      /*  GoogleSignInOptions googleSignInOptions = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+        GoogleSignInOptions googleSignInOptions = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(GOOGLE_CLIENT_ID)
                 .requestEmail()
                 .build();
 
         // Initialize sign in client
         googleSignInClient = GoogleSignIn.getClient(LoginActivity.this, googleSignInOptions);
-*/
+
     }
 
     private void setListeners() {
@@ -126,14 +129,14 @@ public class LoginActivity extends BaseActivity {
                 Intent intent = new Intent(context, ForgotPasswordActivity.class);
             }
         });
-        /* btnGoogle_SignIn.setOnClickListener(new View.OnClickListener() {
+         btnGoogle_SignIn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                  Intent intent = googleSignInClient.getSignInIntent();
                 startActivityForResult(intent, 100);
             }
 
-        });*/
+        });
     }
 
     private void login(String email, String password, FirebaseAuth mAuth) {
@@ -237,10 +240,7 @@ public class LoginActivity extends BaseActivity {
                                         @Override
                                         public void onComplete(@NonNull Task<Void> task) {
                                             if (task.isSuccessful()) {
-                                                Intent intent = new Intent(context, SignupActivity.class);
-                                                startActivity(intent);
-                                                showToastMessage("Logged in Successfully");
-                                                progressDialog.dismiss();
+                                                getCurrentUserData();
                                             } else {
                                                 progressDialog.dismiss();
                                                 showToastMessage("There was a problem updating user information");
